@@ -1,0 +1,163 @@
+Package: com.mak.amnezia6
+Name: Amnezia6
+Version: 1.2.0
+Architecture: iphoneos-arm
+Description: Lightweight AmneziaWG client for iOS 4-7
+ A small native AmneziaWG client: a root daemon owns the UTUN device,
+ routing, DNS and the WireGuard/AmneziaWG 3.1 protocol, and a UIKit app
+ controls it over a Unix socket.
+ .
+ Supports header protection, junk packets, I1-I5 signatures, S1-S4 and
+ H1-H4. Requires a jailbroken device with root access.
+Depends: firmware (>= 4.3), firmware (<< 8.0), mobilesubstrate
+Section: Networking
+Priority: optional
+Maintainer: mak
+Author: mak
+Installed-Size: 1113
+Homepage: https://github.com/fronik22/legacy-cydia
+Icon: https://fronik22.github.io/legacy-cydia/assets/amnezia6.png
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.mak.amnezia6.html
+Filename: ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
+Size: 785548
+MD5sum: 27971a3fde2b6fc8146cca257b9020b4
+SHA256: 35840338a3bfb163ee8e6dd404b123000c3922eba97df7f30e0e3b5e55ca9734
+
+Package: local.perfoverlay
+Name: Performance Overlay
+Version: 0.1.9
+Architecture: iphoneos-arm
+Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
+ Shows live system counters in a small non-interactive overlay.
+ Includes an NCSettings toggle on iOS 5/6.
+Depends: mobilesubstrate, preferenceloader, firmware (>= 4.3), firmware (<< 10.0)
+Section: Tweaks
+Maintainer: Local
+Installed-Size: 334
+Homepage: https://github.com/fronik22/legacy-cydia
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.perfoverlay.html
+Filename: ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
+Size: 52844
+MD5sum: 5529c83902c935e80064da54d22f636e
+SHA256: 33d9bf1c35cc567021b52fc560fd252655d90b5095c702139d238055fb23761e
+
+Package: local.legacypower
+Name: Power Logger
+Version: 1.1.0
+Architecture: iphoneos-arm
+Description: Switchable local battery and per-process CPU logger for iOS6-7 (armv7/arm64).
+ Records signed battery current, charging, process CPU, GPU and traffic.
+ No per-app watt claims, network probes or wake assertions. Bounded logs.
+Depends: preferenceloader, firmware (>= 6.0), firmware (<< 8.0)
+Section: Utilities
+Maintainer: Local
+Installed-Size: 295
+Homepage: https://github.com/fronik22/legacy-cydia
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.legacypower.html
+Filename: ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
+Size: 45644
+MD5sum: caddcb80922517ff5c0b999301902e21
+SHA256: 4aaff413669915b58b5f6322e27cfbc69a00062119911ca36140c8067e45f383
+
+Package: local.legacy-game-fps
+Name: Legacy Game FPS
+Version: 0.2.1
+Architecture: iphoneos-arm
+Description: Per-game frame pacing for explicitly verified legacy game builds.
+ Reopen supported games after installation; reopen Settings if already running. No respring.
+Depends: mobilesubstrate, preferenceloader, firmware (>= 6.0), firmware (<< 8.0)
+Section: Tweaks
+Maintainer: Local
+Installed-Size: 159
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.legacy-game-fps.html
+Filename: ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
+Size: 18194
+MD5sum: 3751093eddd9a4919b2ff5c67c630588
+SHA256: 38a10672dee107c2dc7fdc6da66df26e56fee400d12d392b7ade53ff01132a5e
+
+Package: local.codex.veteris-ipad
+Name: Veteris Native iPad
+Version: 1.2.0
+Architecture: iphoneos-arm
+Description: Native iPad layout and suspension crash fix for Veteris 4.
+ Removes iPhone compatibility sizing, fixes storyboard selection, and adapts
+ home and application-list layouts. Fixes SGX shader-cache suspension kills
+ so Veteris's existing background download support can work normally.
+Depends: firmware (>= 5.0), firmware (<< 8.0), mobilesubstrate (>= 0.9.5000), com.victorlobe.veteris (= 4)
+Section: Tweaks
+Maintainer: Legacy iPad Tools
+Author: Legacy iPad Tools
+Installed-Size: 120
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.veteris-ipad.html
+Filename: ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
+Size: 26468
+MD5sum: 7d4bb58387c2c2f1aa862c7d930e975b
+SHA256: c2d0835167701bbf5e348dd91e7b4e124dfe6ec0bdee06458aa9ad66a931982f
+
+Package: com.unlocalsend.ios6
+Name: LocalSend 6
+Version: 0.5.7
+Architecture: iphoneos-arm
+Description: Minimal LocalSend v2 client for iOS 6
+Depends: firmware (>= 6.0)
+Section: Networking
+Maintainer: LocalSend6
+Author: LocalSend6
+Installed-Size: 1920
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.unlocalsend.ios6.html
+Filename: ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
+Size: 848274
+MD5sum: d3aa801a808b317aa76f18d72a591960
+SHA256: b022bf6e05aa46bca1a490c7fa459fd68cc0158a73ae3512e8fe7dcd007c3c24
+
+Package: local.codex.blastron-revival
+Name: Blastron Revival
+Version: 0.1.15
+Architecture: iphoneos-arm
+Description: Experimental Blastron2.2.0 private backend and native bot loadout fix.
+ Reversible endpoint redirect, missing AI ammunition initialization, and
+ obsolete service suppression. Requires the exact supported Blastron build.
+Depends: firmware (>= 6.0), firmware (<< 7.0), mobilesubstrate
+Section: Tweaks
+Maintainer: Legacy iPad Tools
+Author: Legacy iPad Tools
+Installed-Size: 183
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.blastron-revival.html
+Filename: ./debs/blastron-revival_0.1.15_iphoneos-arm.deb
+Size: 55538
+MD5sum: 08d908cd88be424325509803834e9b23
+SHA256: a1ebcff5c515435672ec819bf510d97a6aa1f0098f9cc39b5ad27eef6d99b23a
+
+Package: local.codex.legacy-timezone
+Name: Legacy Timezone Update
+Version: 2026e-1
+Architecture: iphoneos-arm
+Description: IANA 2026e time rules for iOS 4.3-6 on armv7 devices.
+ Updates system and ICU timezone data, including Russian UTC offsets.
+ Preserves chosen timezone and UTC clock. Removal restores original data.
+Depends: firmware (>= 4.3), firmware (<< 7.0), gsc.armv7
+Section: System
+Priority: optional
+Maintainer: Legacy iOS compatibility project
+Installed-Size: 1124
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.legacy-timezone.html
+Filename: ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
+Size: 359420
+MD5sum: e665a505e8974c76d12ded96cbc2d583
+SHA256: 5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405
+
+Package: local.codex.device-access
+Name: Legacy Device Access
+Version: 1.0.1
+Architecture: iphoneos-arm
+Description: Explicit root-operated no-passcode screen access for device tests.
+ Tested on iOS 4.3.3 and 6.1.3. No daemon or boot auto-unlock.
+Depends: mobilesubstrate, firmware (>= 4.3), firmware (<< 7.0)
+Section: Development
+Maintainer: Legacy iPad Tools
+Installed-Size: 121
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.device-access.html
+Filename: ./debs/device-access_1.0.1_iphoneos-arm.deb
+Size: 25938
+MD5sum: 99bea9b6780300293eece4626b9c8470
+SHA256: 9f6387b4cc8f845fb53c581dc47330e4f9c3686a96fec9b1189a836921f61b20

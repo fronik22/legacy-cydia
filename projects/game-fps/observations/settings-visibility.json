@@ -1,0 +1,12 @@
+{
+  "cause": "Settings process PID 2989 retained its pre-install PreferenceLoader root list. No entry before Settings-only restart; entry visible after restart (PID 4703).",
+  "settingsOnlyRestart": true,
+  "rootEntryScreenshot": "settings-entry-after-refresh.png",
+  "openedPaneScreenshot": "settings-pane-opened.png",
+  "preservedProcesses": {
+    "com.apple.SpringBoard": "146",
+    "com.senko.senkod": "3943",
+    "senkoApp": "359"
+  },
+  "packageChanged": false
+}

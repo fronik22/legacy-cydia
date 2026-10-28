@@ -1,0 +1,55 @@
+{
+  "appBuild": "5.7.4340",
+  "device": "iPad2,2",
+  "OS": "6.1.3",
+  "defaultOff": true,
+  "manualScanWithoutTimer": true,
+  "automaticOnRepeats": true,
+  "onAndOffPersistAcrossRelaunch": true,
+  "disabledTimerStaysOff": true,
+  "lifecycleCallbacksChecked": true,
+  "settingsLayoutsAndLanguages": 9,
+  "receiverAndPassiveDiscoveryRetained": true,
+  "originalPreferencesPreserved": true,
+  "phases": {
+    "A": {
+      "announcementCalls": 3,
+      "automaticDiscovery": 1,
+      "defaultOffNoRepeat12s": true,
+      "enabledPeriodicScan12s": true,
+      "localizedLayoutChecks": 9,
+      "passed": true,
+      "phase": "A",
+      "receiverAndPassiveDiscoveryReady": true,
+      "timerValid": true
+    },
+    "B": {
+      "announcementCalls": 2,
+      "automaticDiscovery": 0,
+      "disabledNoRepeat12s": true,
+      "lifecycleTimerCallbacks": true,
+      "onSurvivedRelaunch": true,
+      "passed": true,
+      "phase": "B",
+      "receiverAndPassiveDiscoveryReady": true,
+      "timerValid": false
+    },
+    "C": {
+      "announcementCalls": 0,
+      "automaticDiscovery": 0,
+      "offSurvivedRelaunch": true,
+      "passed": true,
+      "phase": "C",
+      "receiverAndPassiveDiscoveryReady": true,
+      "timerValid": false
+    }
+  },
+  "onlyExecutableInfoAndThreeCatalogsChanged": true,
+  "HEICModulesAndOtherResourcesUnchanged": true,
+  "cleanFinalAppRelaunched": true,
+  "temporaryObserversRemoved": true,
+  "executableSHA256": "1ce8db9da4fffe1150da69af183ce9c0eadd0a87cae122f74750ab796b666b11",
+  "ipaSHA256": "bbd259f7da4c4a316f9d315019e8b22d54cd31aae553712c0a22245bf5bede28",
+  "iOS4PhysicalRetest": false,
+  "batteryMeasured": false
+}

@@ -1,0 +1,13 @@
+{
+  "version": "0.1.0",
+  "normalPID": 4393,
+  "installedEqualsBuild": true,
+  "dylibSHA256": "f307de88ae6d32eb89eadc34d668ccbb8b1121825b8f2892de016220b6723aff",
+  "debSHA256": "4506f85cc9635414b88823e078f99cc849dfd6c47983967a6f5eb0acb968a25d",
+  "preservedProcesses": {
+    "com.senko.senkod": "3943",
+    "com.apple.SpringBoard": "146"
+  },
+  "senkoAppPID": "359",
+  "settingsModelRoundTrip": true
+}

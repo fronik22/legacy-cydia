@@ -1,0 +1,22 @@
+[
+  {
+    "CFBundleIdentifier": "com.chillingo.minigorehd",
+    "CFBundleVersion": "6.2",
+    "sha256": "a1ad0cb0bf3fa33f57f121c6840a2fb9976b2c2ae1d3e5d8f036d819dd16f179"
+  },
+  {
+    "CFBundleIdentifier": "com.team17.worms2",
+    "CFBundleVersion": "1.25",
+    "sha256": "bc4e0d74eb67fa2aaa100f36dd5f8368b8c0a198e85257db2935857f95dec940"
+  },
+  {
+    "CFBundleIdentifier": "com.team17.worms3",
+    "CFBundleVersion": "1.16",
+    "sha256": "0172a8cf67029eb5f5d19ca355eb82bd3d4b0e03e7b94fd115d260db48346631"
+  },
+  {
+    "CFBundleIdentifier": "ms.games.minigore2",
+    "CFBundleVersion": "1.4",
+    "sha256": "0b909e642003ba469d38209574619014db57ff35130d1d5958e6826c3890cd9d"
+  }
+]

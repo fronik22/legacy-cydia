@@ -1,0 +1,296 @@
+{
+  "version": "0.1.0",
+  "identity": {
+    "version": "0.1.0",
+    "normalPID": 4393,
+    "installedEqualsBuild": true,
+    "dylibSHA256": "f307de88ae6d32eb89eadc34d668ccbb8b1121825b8f2892de016220b6723aff",
+    "debSHA256": "4506f85cc9635414b88823e078f99cc849dfd6c47983967a6f5eb0acb968a25d",
+    "preservedProcesses": {
+      "com.senko.senkod": "3943",
+      "com.apple.SpringBoard": "146"
+    },
+    "senkoAppPID": "359",
+    "settingsModelRoundTrip": true
+  },
+  "diagnosticMatchComparisons": [
+    {
+      "enabled": false,
+      "windows": 4,
+      "presentFPSMean": 31.39838875146798,
+      "presentFPSMin": 31.24641942197249,
+      "simulationMillisecondsPerWallSecond": 1007.7834881953222,
+      "logicCallbacksPerSecond": 31.39838875146798
+    },
+    {
+      "enabled": true,
+      "windows": 4,
+      "presentFPSMean": 60.198187842760895,
+      "presentFPSMin": 60.19454286304938,
+      "simulationMillisecondsPerWallSecond": 1004.1364403571022,
+      "logicCallbacksPerSecond": 60.198187842760895
+    },
+    {
+      "enabled": false,
+      "windows": 4,
+      "presentFPSMean": 31.398350448182423,
+      "presentFPSMin": 31.24394897246469,
+      "simulationMillisecondsPerWallSecond": 1007.0857504145279,
+      "logicCallbacksPerSecond": 31.398350448182423
+    },
+    {
+      "enabled": true,
+      "windows": 4,
+      "presentFPSMean": 59.50709292730176,
+      "presentFPSMin": 57.65381730487893,
+      "simulationMillisecondsPerWallSecond": 1005.6069445268247,
+      "logicCallbacksPerSecond": 59.50709292730176
+    }
+  ],
+  "normalValidation": {
+    "pid": 4393,
+    "samePID": true,
+    "phases": [
+      {
+        "enabled": false,
+        "samples": [
+          {
+            "pid": 4393,
+            "drawMs": 5.147571656084582,
+            "enabled": false,
+            "ts": 1792659510.684357,
+            "seconds": 5.024441249999654,
+            "logicCalls": 157,
+            "drawFPS": 31.24725560280176,
+            "presentMs": 0.6096733012996691,
+            "event": "sample",
+            "presentFPS": 31.24725560280176
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.123902601009171,
+            "enabled": false,
+            "ts": 1792659515.740401,
+            "seconds": 5.023518791665992,
+            "logicCalls": 157,
+            "drawFPS": 31.25299347152093,
+            "presentMs": 0.608925424710103,
+            "event": "sample",
+            "presentFPS": 31.25299347152093
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.109015658056062,
+            "enabled": false,
+            "ts": 1792659520.796174,
+            "seconds": 5.023693541668763,
+            "logicCalls": 157,
+            "drawFPS": 31.25190633102352,
+            "presentMs": 0.605313163586213,
+            "event": "sample",
+            "presentFPS": 31.25190633102352
+          }
+        ]
+      },
+      {
+        "enabled": true,
+        "samples": [
+          {
+            "pid": 4393,
+            "drawMs": 12.56781905860609,
+            "enabled": true,
+            "ts": 1792659486.663762,
+            "seconds": 5.012550666666357,
+            "logicCalls": 217,
+            "drawFPS": 43.09183375170805,
+            "presentMs": 3.659003472084468,
+            "event": "sample",
+            "presentFPS": 43.09183375170805
+          },
+          {
+            "pid": 4393,
+            "drawMs": 9.135052543599276,
+            "enabled": true,
+            "ts": 1792659491.680551,
+            "seconds": 5.000130916665512,
+            "logicCalls": 249,
+            "drawFPS": 49.79869610415184,
+            "presentMs": 2.040327476676162,
+            "event": "sample",
+            "presentFPS": 49.79869610415184
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.557794850383923,
+            "enabled": true,
+            "ts": 1792659496.713989,
+            "seconds": 5.017129666666733,
+            "logicCalls": 301,
+            "drawFPS": 59.99446296949657,
+            "presentMs": 1.015227574731229,
+            "event": "sample",
+            "presentFPS": 59.99446296949657
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.620842638733545,
+            "enabled": true,
+            "ts": 1792659501.73012,
+            "seconds": 5.000801750000392,
+            "logicCalls": 300,
+            "drawFPS": 59.99038054247531,
+            "presentMs": 1.100286388815827,
+            "event": "sample",
+            "presentFPS": 59.99038054247531
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.181648394232055,
+            "enabled": true,
+            "ts": 1792659529.249233,
+            "seconds": 5.016169499998796,
+            "logicCalls": 301,
+            "drawFPS": 60.00594676875896,
+            "presentMs": 0.595308970190539,
+            "event": "sample",
+            "presentFPS": 60.00594676875896
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.159250138919258,
+            "enabled": true,
+            "ts": 1792659534.266024,
+            "seconds": 5.000825291666843,
+            "logicCalls": 300,
+            "drawFPS": 59.99009813438332,
+            "presentMs": 0.5923352779185128,
+            "event": "sample",
+            "presentFPS": 59.99009813438332
+          },
+          {
+            "pid": 4393,
+            "drawMs": 5.18721847221362,
+            "enabled": true,
+            "ts": 1792659539.282673,
+            "seconds": 5.000365125000826,
+            "logicCalls": 300,
+            "drawFPS": 59.99561881992576,
+            "presentMs": 0.5977783333340388,
+            "event": "sample",
+            "presentFPS": 59.99561881992576
+          },
+          {
+            "pid": 4393,
+            "drawMs": 6.114494650921335,
+            "enabled": true,
+            "ts": 1792659753.863489,
+            "seconds": 5.011884874998941,
+            "logicCalls": 296,
+            "drawFPS": 59.05961676744671,
+            "presentMs": 1.461139921355278,
+            "event": "sample",
+            "presentFPS": 59.05961676744671
+          },
+          {
+            "pid": 4393,
+            "drawMs": 7.572726111066004,
+            "enabled": true,
+            "ts": 1792659758.880328,
+            "seconds": 5.001131583332608,
+            "logicCalls": 300,
+            "drawFPS": 59.98642407246736,
+            "presentMs": 2.936361805453392,
+            "event": "sample",
+            "presentFPS": 59.98642407246736
+          },
+          {
+            "pid": 4393,
+            "drawMs": 7.478904761953656,
+            "enabled": true,
+            "ts": 1792659763.912559,
+            "seconds": 5.015434041666595,
+            "logicCalls": 301,
+            "drawFPS": 60.0147459819808,
+            "presentMs": 2.876933554726563,
+            "event": "sample",
+            "presentFPS": 60.0147459819808
+          }
+        ]
+      }
+    ],
+    "resumeSamples": [
+      {
+        "pid": 4393,
+        "drawMs": 6.114494650921335,
+        "enabled": true,
+        "ts": 1792659753.863489,
+        "seconds": 5.011884874998941,
+        "logicCalls": 296,
+        "drawFPS": 59.05961676744671,
+        "presentMs": 1.461139921355278,
+        "event": "sample",
+        "presentFPS": 59.05961676744671
+      },
+      {
+        "pid": 4393,
+        "drawMs": 7.572726111066004,
+        "enabled": true,
+        "ts": 1792659758.880328,
+        "seconds": 5.001131583332608,
+        "logicCalls": 300,
+        "drawFPS": 59.98642407246736,
+        "presentMs": 2.936361805453392,
+        "event": "sample",
+        "presentFPS": 59.98642407246736
+      },
+      {
+        "pid": 4393,
+        "drawMs": 7.478904761953656,
+        "enabled": true,
+        "ts": 1792659763.912559,
+        "seconds": 5.015434041666595,
+        "logicCalls": 301,
+        "drawFPS": 60.0147459819808,
+        "presentMs": 2.876933554726563,
+        "event": "sample",
+        "presentFPS": 60.0147459819808
+      }
+    ],
+    "settingsModelRoundTrip": true,
+    "nativeCPPDiagnosticHookExcluded": true,
+    "memoryWarnings": 0,
+    "unsupportedRuntime": 0,
+    "senkoAppAndDaemonPreserved": true,
+    "resumeNote": "Original iTunes push alert acknowledged before sampling resumed frames"
+  },
+  "normalEnabledAllSamplesFPS": {
+    "mean": 57.192782391279465,
+    "min": 43.09183375170805,
+    "max": 60.0147459819808
+  },
+  "normalResumeFPS": [
+    59.05961676744671,
+    59.98642407246736,
+    60.0147459819808
+  ],
+  "hostPackageScopeTest": "passed",
+  "limitations": [
+    "Other builds/devices unverified",
+    "Online synchronization and exhaustive weapon trajectories unverified",
+    "Uncapped internal rendering not implemented/tested; device display60Hz",
+    "Higher CPU/GPU/power use expected"
+  ],
+  "normalNativeCPPObserverExcluded": true,
+  "settingsVisibility": {
+    "cause": "Settings process PID 2989 retained its pre-install PreferenceLoader root list. No entry before Settings-only restart; entry visible after restart (PID 4703).",
+    "settingsOnlyRestart": true,
+    "rootEntryScreenshot": "settings-entry-after-refresh.png",
+    "openedPaneScreenshot": "settings-pane-opened.png",
+    "preservedProcesses": {
+      "com.apple.SpringBoard": "146",
+      "com.senko.senkod": "3943",
+      "senkoApp": "359"
+    },
+    "packageChanged": false
+  }
+}

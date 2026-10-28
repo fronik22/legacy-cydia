@@ -1,0 +1,26 @@
+[
+  {
+    "mode": 0,
+    "windows": 4,
+    "presentFPS": 31.45512800186158,
+    "simulationMillisecondsPerWallSecond": 1005.0204265837706
+  },
+  {
+    "mode": 1,
+    "windows": 4,
+    "presentFPS": 60.1945455461958,
+    "simulationMillisecondsPerWallSecond": 1003.2257987856044
+  },
+  {
+    "mode": 0,
+    "windows": 4,
+    "presentFPS": 31.44308640012193,
+    "simulationMillisecondsPerWallSecond": 1006.9248745659569
+  },
+  {
+    "mode": 1,
+    "windows": 4,
+    "presentFPS": 60.187790978376086,
+    "simulationMillisecondsPerWallSecond": 1002.7966472635535
+  }
+]

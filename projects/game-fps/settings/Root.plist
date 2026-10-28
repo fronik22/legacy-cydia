@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Verified build1.25. Original or60FPS rendering; game timing is checked separately.</string>
+			<key>label</key>
+			<string>WORMS 2: Armageddon</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>0</integer>
+			<key>defaults</key>
+			<string>com.local.legacygamefps</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Worms2Enabled</string>
+			<key>label</key>
+			<string>Frame limit</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Original (~31 FPS)</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Exact tested build 1.16. Target 60 FPS; actual FPS depends on game load.</string>
+			<key>label</key>
+			<string>WORMS 3</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>0</integer>
+			<key>defaults</key>
+			<string>com.local.legacygamefps</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Worms3Enabled</string>
+			<key>label</key>
+			<string>Frame limit</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Original</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Exact tested build 6.2. Target 60 FPS; actual FPS depends on game load.</string>
+			<key>label</key>
+			<string>Minigore HD</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>0</integer>
+			<key>defaults</key>
+			<string>com.local.legacygamefps</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>MinigoreEnabled</string>
+			<key>label</key>
+			<string>Frame limit</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Original</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Exact tested build 1.4. Target 60 FPS; actual FPS depends on game load.</string>
+			<key>label</key>
+			<string>Minigore 2</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>0</integer>
+			<key>defaults</key>
+			<string>com.local.legacygamefps</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Minigore2Enabled</string>
+			<key>label</key>
+			<string>Frame limit</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Original</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Requires Blastron Revival0.1.10+. Target FPS does not guarantee sustained FPS.</string>
+			<key>label</key>
+			<string>Blastron</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>60</integer>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>BlastronFPS</string>
+			<key>label</key>
+			<string>Frame limit</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Original</string>
+				<string>30 FPS</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>-1</integer>
+				<integer>30</integer>
+				<integer>60</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Only tested games/builds are supported. Reopen a supported game once after installation. Higher FPS can increase power use. No respring required.</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Legacy Game FPS</string>
+</dict>
+</plist>

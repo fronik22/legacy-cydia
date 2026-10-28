@@ -1,0 +1,122 @@
+[
+  {
+    "enabled": false,
+    "pid": 4987,
+    "samples": [
+      {
+        "pid": 4987,
+        "drawMs": 11.15406291366213,
+        "enabled": false,
+        "ts": 1792679988.096903,
+        "seconds": 5.033370333338098,
+        "logicCalls": 151,
+        "drawFPS": 29.99977947179138,
+        "presentMs": 0.9335609824999562,
+        "event": "sample",
+        "presentFPS": 29.99977947179138
+      },
+      {
+        "pid": 4987,
+        "drawMs": 11.13080739520493,
+        "enabled": false,
+        "ts": 1792679993.161681,
+        "seconds": 5.031412666663527,
+        "logicCalls": 151,
+        "drawFPS": 30.01145205211967,
+        "presentMs": 0.9320604303926507,
+        "event": "sample",
+        "presentFPS": 30.01145205211967
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "pid": 4987,
+    "samples": [
+      {
+        "pid": 4987,
+        "drawMs": 10.93035119057666,
+        "enabled": true,
+        "ts": 1792680000.963348,
+        "seconds": 5.014210291665222,
+        "logicCalls": 301,
+        "drawFPS": 60.02939296350048,
+        "presentMs": 0.9232944349814021,
+        "event": "sample",
+        "presentFPS": 60.02939296350048
+      },
+      {
+        "pid": 4987,
+        "drawMs": 10.93336849413372,
+        "enabled": true,
+        "ts": 1792680005.996634,
+        "seconds": 5.013585666667495,
+        "logicCalls": 301,
+        "drawFPS": 60.03687181435421,
+        "presentMs": 0.9272810077459854,
+        "event": "sample",
+        "presentFPS": 60.03687181435421
+      }
+    ]
+  },
+  {
+    "enabled": false,
+    "pid": 4987,
+    "samples": [
+      {
+        "pid": 4987,
+        "drawMs": 11.14679527793972,
+        "enabled": false,
+        "ts": 1792680013.930115,
+        "seconds": 5.000382499994885,
+        "logicCalls": 150,
+        "drawFPS": 29.99770517558476,
+        "presentMs": 0.9334474999438195,
+        "event": "sample",
+        "presentFPS": 29.99770517558476
+      },
+      {
+        "pid": 4987,
+        "drawMs": 11.50898070431286,
+        "enabled": false,
+        "ts": 1792680018.964356,
+        "seconds": 5.000640833335638,
+        "logicCalls": 149,
+        "drawFPS": 29.79618112277237,
+        "presentMs": 0.9350908838424226,
+        "event": "sample",
+        "presentFPS": 29.79618112277237
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "pid": 4987,
+    "samples": [
+      {
+        "pid": 4987,
+        "drawMs": 16.41736986108299,
+        "enabled": true,
+        "ts": 1792680026.820547,
+        "seconds": 5.002111458336003,
+        "logicCalls": 300,
+        "drawFPS": 59.97467319526656,
+        "presentMs": 5.893759583098775,
+        "event": "sample",
+        "presentFPS": 59.97467319526656
+      },
+      {
+        "pid": 4987,
+        "drawMs": 16.45526494991353,
+        "enabled": true,
+        "ts": 1792680031.854213,
+        "seconds": 5.013521458327887,
+        "logicCalls": 301,
+        "drawFPS": 60.03764070861078,
+        "presentMs": 6.89522798961737,
+        "event": "sample",
+        "presentFPS": 60.03764070861078
+      }
+    ]
+  }
+]

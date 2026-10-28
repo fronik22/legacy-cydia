@@ -1,0 +1,5 @@
+#import <UIKit/UIKit.h>
+@interface NSObject(TestPrefs)
+-(NSArray*)specifiers;-(id)propertyForKey:(NSString*)k;-(id)readPreferenceValue:(id)s;-(void)setPreferenceValue:(id)v specifier:(id)s;-(NSInteger)numberOfGroups;-(NSInteger)rowsForGroup:(NSInteger)g;
+@end
+int main(void){NSAutoreleasePool*p=[NSAutoreleasePool new];NSBundle*b=[NSBundle bundleWithPath:@"/Library/PreferenceBundles/LegacyGameFPSPrefs.bundle"];if(![b load])return 1;id c=[[NSClassFromString(@"LegacyGameFPSPrefs")alloc]init];NSArray*specs=[c specifiers];unsigned values=0,rows=0;for(NSInteger g=0;g<[c numberOfGroups];g++)rows+=[c rowsForGroup:g];for(id s in specs){if(![s propertyForKey:@"key"])continue;id old=[c readPreferenceValue:s];if(!old)return 2;NSArray*valid=[s propertyForKey:@"validValues"];for(id v in valid){[c setPreferenceValue:v specifier:s];if(![[c readPreferenceValue:s]isEqual:v])return 3;}[c setPreferenceValue:old specifier:s];values++;}printf("values=%u groups=%ld rows=%u roundTrip=pass\n",values,(long)[c numberOfGroups],rows);[c release];[p drain];return values==5&&rows==5?0:4;}

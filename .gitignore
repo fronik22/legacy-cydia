@@ -1,0 +1,25 @@
+.DS_Store
+private/
+notes/screens/
+
+# Build products and local toolchains
+**/build/
+**/dist/
+**/*.o
+**/*.d
+**/*.log
+**/*.deb.tmp
+projects/amnezia6/toolchain/oldlibs/
+
+# Vendored source snapshots too large for the published tree
+projects/localsend/vendor/
+projects/localsend/packages/
+projects/troubadour/ThirdParty/
+
+# Screenshots that contain original game imagery
+projects/game-fps/observations/*.png
+
+# macOS / editors
+*.xcuserstate
+.vscode/
+.idea/

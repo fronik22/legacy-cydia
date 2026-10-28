@@ -1,0 +1,1 @@
+{"containers": [{"container": "amnezia-awg", "awg": {"last_config": "{\"config\": \"[Interface]\\nPrivateKey=AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=\\nAddress=10.0.0.2/32\\nContentPaddingAddition=10-20\\n[Peer]\\nPublicKey=AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI=\\nEndpoint=192.0.2.1:443\\nAllowedIPs=0.0.0.0/0\\n\"}"}}]}

@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>footerText</key>
+			<string>Records locally every15/30/60s. OFF stops sampling. No wake lock or network tests. Retains at most8×4MiB of JSONL logs.</string>
+			<key>label</key>
+			<string>Battery &amp; load recorder</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>default</key>
+			<false/>
+			<key>defaults</key>
+			<string>com.local.legacypower</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Enabled</string>
+			<key>label</key>
+			<string>Recording</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<integer>15</integer>
+			<key>defaults</key>
+			<string>com.local.legacypower</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Interval</string>
+			<key>label</key>
+			<string>Sample interval</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>15 seconds</string>
+				<string>30 seconds</string>
+				<string>60 seconds</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>15</integer>
+				<integer>30</integer>
+				<integer>60</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>default</key>
+			<string>unlabelled</string>
+			<key>defaults</key>
+			<string>com.local.legacypower</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>key</key>
+			<string>Segment</string>
+			<key>label</key>
+			<string>Experiment</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>validTitles</key>
+			<array>
+				<string>Unlabelled</string>
+				<string>Video + VPN</string>
+				<string>Video without VPN</string>
+				<string>Idle + VPN</string>
+				<string>Idle without VPN</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<string>unlabelled</string>
+				<string>video-vpn-on</string>
+				<string>video-vpn-off</string>
+				<string>idle-vpn-on</string>
+				<string>idle-vpn-off</string>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>id</key>
+			<string>Status</string>
+			<key>label</key>
+			<string>Recorder status</string>
+		</dict>
+		<dict>
+			<key>action</key>
+			<string>refreshStatus</string>
+			<key>cell</key>
+			<string>PSButtonCell</string>
+			<key>label</key>
+			<string>Refresh status</string>
+		</dict>
+	</array>
+	<key>title</key>
+	<string>Power Logger</string>
+</dict>
+</plist>

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Check the installed firmware package before stopping mapped processes.
+OS=$(dpkg-query -W -f='${Version}' firmware 2>/dev/null) || exit 1
+if ! dpkg --compare-versions "$OS" ge 4.3 || ! dpkg --compare-versions "$OS" lt 8.0; then
+    echo "Amnezia6 requires iOS4.3–7.x." >&2
+    exit 1
+fi
+# Stop mapped executables before dpkg replaces them.
+PLIST=/Library/LaunchDaemons/com.mak.amnezia6d.plist
+if [ -f "$PLIST" ]; then
+    launchctl unload "$PLIST" >/dev/null 2>&1 || true
+fi
+killall -TERM Amnezia6 >/dev/null 2>&1 || true
+killall -TERM amnezia6d >/dev/null 2>&1 || true
+sleep 1
+exit 0

@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>title</key>
+	<string>Performance HUD</string>
+	<key>items</key>
+	<array>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>HUD</string>
+			<key>footerText</key>
+			<string>Изменения применяются сразу, без респринга.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Показывать HUD</string>
+			<key>key</key>
+			<string>Enabled</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Показатели</string>
+			<key>footerText</key>
+			<string>CPU и GPU — системная загрузка. CPU1, CPU2… показывают отдельные ядра.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>FPS</string>
+			<key>key</key>
+			<string>ShowFPS</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Средняя загрузка CPU</string>
+			<key>key</key>
+			<string>ShowCPU</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>CPU по ядрам</string>
+			<key>key</key>
+			<string>ShowCores</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>Оперативная память</string>
+			<key>key</key>
+			<string>ShowRAM</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSSwitchCell</string>
+			<key>label</key>
+			<string>GPU 3D</string>
+			<key>key</key>
+			<string>ShowGPU</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<true/>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Оформление</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>Угол экрана</string>
+			<key>key</key>
+			<string>Corner</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<integer>0</integer>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>validTitles</key>
+			<array>
+				<string>Верхний левый</string>
+				<string>Верхний правый</string>
+				<string>Нижний левый</string>
+				<string>Нижний правый</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>0</integer>
+				<integer>1</integer>
+				<integer>2</integer>
+				<integer>3</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>Размер шрифта</string>
+			<key>key</key>
+			<string>FontSize</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<integer>12</integer>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>validTitles</key>
+			<array>
+				<string>10</string>
+				<string>12</string>
+				<string>14</string>
+				<string>16</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>10</integer>
+				<integer>12</integer>
+				<integer>14</integer>
+				<integer>16</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>Непрозрачность фона</string>
+			<key>key</key>
+			<string>Opacity</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<real>0.55</real>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>validTitles</key>
+			<array>
+				<string>25%</string>
+				<string>55%</string>
+				<string>80%</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<real>0.25</real>
+				<real>0.55</real>
+				<real>0.8</real>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>Обновление</string>
+			<key>key</key>
+			<string>Interval</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<integer>1</integer>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>validTitles</key>
+			<array>
+				<string>0,5 секунды</string>
+				<string>1 секунда</string>
+				<string>2 секунды</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<real>0.5</real>
+				<integer>1</integer>
+				<integer>2</integer>
+			</array>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSGroupCell</string>
+			<key>label</key>
+			<string>Blastron</string>
+			<key>footerText</key>
+			<string>Требуется Blastron Revival 0.1.10+. Это целевой предел FPS, а не гарантия стабильных60. Скорость игры и шаг физики не меняются.</string>
+		</dict>
+		<dict>
+			<key>cell</key>
+			<string>PSLinkListCell</string>
+			<key>label</key>
+			<string>Целевой FPS</string>
+			<key>key</key>
+			<string>BlastronFPS</string>
+			<key>defaults</key>
+			<string>com.local.perfoverlay</string>
+			<key>default</key>
+			<integer>60</integer>
+			<key>get</key>
+			<string>readPreferenceValue:</string>
+			<key>set</key>
+			<string>setPreferenceValue:specifier:</string>
+			<key>detail</key>
+			<string>PSListItemsController</string>
+			<key>validTitles</key>
+			<array>
+				<string>Исходный режим</string>
+				<string>30 FPS</string>
+				<string>60 FPS</string>
+			</array>
+			<key>validValues</key>
+			<array>
+				<integer>-1</integer>
+				<integer>30</integer>
+				<integer>60</integer>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

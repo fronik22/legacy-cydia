@@ -1,0 +1,34 @@
+[
+  {
+    "enabled": false,
+    "windows": 4,
+    "presentFPSMean": 31.39838875146798,
+    "presentFPSMin": 31.24641942197249,
+    "simulationMillisecondsPerWallSecond": 1007.7834881953222,
+    "logicCallbacksPerSecond": 31.39838875146798
+  },
+  {
+    "enabled": true,
+    "windows": 4,
+    "presentFPSMean": 60.198187842760895,
+    "presentFPSMin": 60.19454286304938,
+    "simulationMillisecondsPerWallSecond": 1004.1364403571022,
+    "logicCallbacksPerSecond": 60.198187842760895
+  },
+  {
+    "enabled": false,
+    "windows": 4,
+    "presentFPSMean": 31.398350448182423,
+    "presentFPSMin": 31.24394897246469,
+    "simulationMillisecondsPerWallSecond": 1007.0857504145279,
+    "logicCallbacksPerSecond": 31.398350448182423
+  },
+  {
+    "enabled": true,
+    "windows": 4,
+    "presentFPSMean": 59.50709292730176,
+    "presentFPSMin": 57.65381730487893,
+    "simulationMillisecondsPerWallSecond": 1005.6069445268247,
+    "logicCallbacksPerSecond": 59.50709292730176
+  }
+]

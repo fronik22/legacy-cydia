@@ -1,0 +1,4 @@
+build-ios4/
+*.ipa
+*.log
+.DS_Store

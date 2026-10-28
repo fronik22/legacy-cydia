@@ -1,0 +1,38 @@
+[
+  {
+    "enabled": false,
+    "samples": [
+      {
+        "event": "sample",
+        "drawMs": 0.965951944332725,
+        "pid": 6397,
+        "enabled": false,
+        "ts": 1792682081.032652,
+        "seconds": 5.000721291668015,
+        "logicCalls": 150,
+        "drawFPS": 29.99567287421587,
+        "presentMs": 0.9480680558772292,
+        "logicMilliseconds": 4999.95,
+        "presentFPS": 29.99567287421587
+      }
+    ]
+  },
+  {
+    "enabled": true,
+    "samples": [
+      {
+        "event": "sample",
+        "drawMs": 0.9845729511284557,
+        "pid": 6397,
+        "enabled": true,
+        "ts": 1792682092.232483,
+        "seconds": 5.002819166664267,
+        "logicCalls": 301,
+        "drawFPS": 60.16607636064087,
+        "presentMs": 0.9675107973100203,
+        "logicMilliseconds": 5016.767,
+        "presentFPS": 60.16607636064087
+      }
+    ]
+  }
+]

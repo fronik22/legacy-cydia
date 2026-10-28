@@ -1,0 +1,33 @@
+Origin: Mak Legacy
+Label: Mak Legacy
+Suite: stable
+Version: 1.0
+Codename: ios-legacy
+Architectures: iphoneos-arm
+Components: main
+Description: Legacy iOS apps and tweaks by mak
+Date: Wed, 28 Oct 2026 11:22:04 UTC
+MD5Sum:
+ d035a6259321fc24b419b745b0f7ebd5 6726 Packages
+ 573a88798f1ef9e41f53ea4fcf42da89 2551 Packages.gz
+ 27971a3fde2b6fc8146cca257b9020b4 785548 ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
+ 5529c83902c935e80064da54d22f636e 52844 ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
+ caddcb80922517ff5c0b999301902e21 45644 ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
+ 3751093eddd9a4919b2ff5c67c630588 18194 ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
+ 7d4bb58387c2c2f1aa862c7d930e975b 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
+ d3aa801a808b317aa76f18d72a591960 848274 ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
+ 08d908cd88be424325509803834e9b23 55538 ./debs/blastron-revival_0.1.15_iphoneos-arm.deb
+ e665a505e8974c76d12ded96cbc2d583 359420 ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
+ 99bea9b6780300293eece4626b9c8470 25938 ./debs/device-access_1.0.1_iphoneos-arm.deb
+SHA256:
+ 0454bc11195cc93659961a854999d1608c1d5259bddc8d3902ff55058af9e14b 6726 Packages
+ da50171b1faec9c42b9f18a5f9ea635a575e0b01a1d18abedb58c03315e5cd73 2551 Packages.gz
+ 35840338a3bfb163ee8e6dd404b123000c3922eba97df7f30e0e3b5e55ca9734 785548 ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
+ 33d9bf1c35cc567021b52fc560fd252655d90b5095c702139d238055fb23761e 52844 ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
+ 4aaff413669915b58b5f6322e27cfbc69a00062119911ca36140c8067e45f383 45644 ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
+ 38a10672dee107c2dc7fdc6da66df26e56fee400d12d392b7ade53ff01132a5e 18194 ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
+ c2d0835167701bbf5e348dd91e7b4e124dfe6ec0bdee06458aa9ad66a931982f 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
+ b022bf6e05aa46bca1a490c7fa459fd68cc0158a73ae3512e8fe7dcd007c3c24 848274 ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
+ a1ebcff5c515435672ec819bf510d97a6aa1f0098f9cc39b5ad27eef6d99b23a 55538 ./debs/blastron-revival_0.1.15_iphoneos-arm.deb
+ 5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405 359420 ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
+ 9f6387b4cc8f845fb53c581dc47330e4f9c3686a96fec9b1189a836921f61b20 25938 ./debs/device-access_1.0.1_iphoneos-arm.deb

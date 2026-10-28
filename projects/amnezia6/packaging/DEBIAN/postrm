@@ -1,0 +1,8 @@
+#!/bin/sh
+# Remove runtime state left behind by the daemon.
+rm -f /var/run/amnezia6d.lock
+rm -f /var/tmp/amnezia6d.sock
+if command -v uicache >/dev/null 2>&1; then
+    uicache >/dev/null 2>&1 || true
+fi
+exit 0

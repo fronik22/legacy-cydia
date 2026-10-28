@@ -1,0 +1,17 @@
+{
+  "temporaryHelpersRemoved": true,
+  "preservedProcessChecks": {
+    "com.senko.senkod": true,
+    "UIKitApplication:com.senko.app[": true,
+    "com.apple.SpringBoard": true,
+    "UIKitApplication:com.team17.worms2[": true
+  },
+  "installedEqualsBuild": true,
+  "installedSHA256": "f307de88ae6d32eb89eadc34d668ccbb8b1121825b8f2892de016220b6723aff",
+  "Worms2Enabled": true,
+  "noRespring": true,
+  "noVPNServiceRestart": true,
+  "noMacMonitorOrDaemonCreated": true,
+  "boundedGameLocalLogRetained": true,
+  "permanentDeviceAccessPreserved": true
+}

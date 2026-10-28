@@ -1,0 +1,21 @@
+{
+  "version": "0.2.0",
+  "dylibSHA256": "70f8d8485f0af2f7df31c1e2a352e022bc73e6f762489f9962ed9b145d2e6be2",
+  "debSHA256": "0ab3cab5c1a04dd210951188392b1bc81fa5ad4925f68cf76452110093afbbb5",
+  "normalBuild": true,
+  "installedEqualsBuild": true,
+  "newProfilesEnabled": true,
+  "settingsRoundTrip": "5 values / 6 groups / 5 rows",
+  "currentProcesses": {
+    "UIKitApplication:com.mak.amnezia6[0xa36d]": "3939",
+    "0x1d633420.anonymous.amnezia6d": "3806",
+    "com.apple.SpringBoard": "146",
+    "com.senko.senkod": "5209"
+  },
+  "changedProcesses": {
+    "com.senko.senkod": {
+      "before": "4859",
+      "after": "5209"
+    }
+  }
+}

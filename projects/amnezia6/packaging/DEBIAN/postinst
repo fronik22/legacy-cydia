@@ -1,0 +1,60 @@
+#!/bin/sh
+# Amnezia6 post-install script.
+
+PREF_DIR=/var/mobile/Library/Preferences/Amnezia6
+CONF=$PREF_DIR/amnezia6.conf
+PLIST=/Library/LaunchDaemons/com.mak.amnezia6d.plist
+
+chmod 755 /usr/libexec/amnezia6/amnezia6d 2>/dev/null || true
+chmod 755 /usr/bin/amnezia6ctl 2>/dev/null || true
+chmod 755 /Applications/Amnezia6.app/Amnezia6 2>/dev/null || true
+chmod 644 /Applications/Amnezia6.app/Info.plist 2>/dev/null || true
+
+mkdir -p "$PREF_DIR"
+chown mobile:mobile "$PREF_DIR" 2>/dev/null || true
+chmod 700 "$PREF_DIR"
+
+if [ ! -f "$CONF" ]; then
+    cat > "$CONF" <<'EOF'
+# Amnezia6 configuration
+#
+# Paste the AmneziaWG [Interface] and [Peer] sections here, then use
+# "Конфигурация" in the app (or amnezia6ctl start) to bring the tunnel up.
+#
+# [Interface]
+# PrivateKey = ...
+# Address = 10.0.0.2/32
+# DNS = 10.0.0.1
+# MTU = 1280
+# ...
+# [Peer]
+# PublicKey = ...
+# PresharedKey = ...
+# Endpoint = 203.0.113.10:443
+# AllowedIPs = 0.0.0.0/0
+EOF
+fi
+chown mobile:mobile "$CONF" 2>/dev/null || true
+chmod 600 "$CONF"
+
+if [ -f "$PLIST" ]; then
+    launchctl unload "$PLIST" >/dev/null 2>&1 || true
+    launchctl load "$PLIST" >/dev/null 2>&1 || true
+fi
+
+# Some old jailbreaks cannot submit launchd jobs from an SSH bootstrap.
+if ! /usr/bin/amnezia6ctl ping >/dev/null 2>&1; then
+    /usr/libexec/amnezia6/amnezia6d --daemonize || exit 1
+fi
+tries=0
+until /usr/bin/amnezia6ctl ping >/dev/null 2>&1; do
+    tries=$((tries + 1))
+    [ "$tries" -lt 5 ] || exit 1
+    sleep 1
+done
+
+if command -v uicache >/dev/null 2>&1; then
+    su mobile -c /usr/bin/uicache >/dev/null 2>&1 || uicache >/dev/null 2>&1 || true
+fi
+
+exit 0

@@ -1,0 +1,16 @@
+{
+  "CFBundleIdentifier": "com.team17.worms2",
+  "CFBundleExecutable": "Worms2iPhone",
+  "CFBundleVersion": "1.25",
+  "CFBundleShortVersionString": "1.25",
+  "MinimumOSVersion": "6.0",
+  "UIDeviceFamily": [
+    1,
+    2
+  ],
+  "UIRequiredDeviceCapabilities": null,
+  "appPath": "/var/mobile/Applications/44B992CE-DA24-414E-A921-976F99C32F35/Worms2iPhone.app/",
+  "device": "iPad2,2 iOS6.1.3",
+  "SHA256": "bc4e0d74eb67fa2aaa100f36dd5f8368b8c0a198e85257db2935857f95dec940",
+  "size": 13704160
+}

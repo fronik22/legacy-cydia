@@ -1,0 +1,107 @@
+{
+  "packages": [
+    {
+      "id": "com.mak.amnezia6",
+      "deb": "repo/incoming/com.mak.amnezia6_1.2.0_iphoneos-arm.deb",
+      "title": "Amnezia6",
+      "tagline": "Lightweight AmneziaWG client for iOS 4.3\u20137",
+      "status_label": "iOS 7: install + daemon",
+      "status_text": "iOS 7 verified: package install, root daemon, UTUN/route setup and the arm64 SpringBoard badge hook. Tunnel handshake was not retested because the VPS is unreachable from the test LAN.",
+      "source": "projects/amnezia6",
+      "license": "GPL-2.0",
+      "order": 1,
+      "homepage": "https://github.com/fronik22/legacy-cydia",
+      "icon": "assets/amnezia6.png"
+    },
+    {
+      "id": "local.perfoverlay",
+      "deb": "repo/incoming/local.perfoverlay_0.1.9_iphoneos-arm.deb",
+      "title": "Performance Overlay",
+      "tagline": "FPS / CPU / RAM / GPU HUD for iOS 4.3\u20139",
+      "status_label": "iOS 7: hook loaded",
+      "status_text": "iOS 7: universal armv7 + arm64 dylib installed; SpringBoard respawned and stayed up with the hook loaded. Visual HUD output on iOS 7 was not captured.",
+      "source": "projects/perfoverlay",
+      "license": "see project",
+      "order": 2,
+      "homepage": "https://github.com/fronik22/legacy-cydia"
+    },
+    {
+      "id": "local.legacypower",
+      "deb": "repo/incoming/local.legacypower_1.1.0_iphoneos-arm.deb",
+      "title": "Power Logger",
+      "tagline": "Battery and per-process CPU logger for iOS 6\u20137",
+      "status_label": "iOS 7: daemon running",
+      "status_text": "iOS 7.1.2 arm64: installed, launchd started the universal daemon, status.json written. Recording stays off until enabled.",
+      "source": "projects/power-logger",
+      "license": "see project",
+      "order": 3,
+      "homepage": "https://github.com/fronik22/legacy-cydia"
+    },
+    {
+      "id": "local.legacy-game-fps",
+      "deb": "repo/incoming/legacy-game-fps_0.2.1_iphoneos-arm.deb",
+      "title": "Legacy Game FPS",
+      "tagline": "Per-game frame pacing for exact legacy builds",
+      "status_label": "iOS 6 evidence only",
+      "status_text": "Verified on iOS 6.1.3 against the exact game builds listed in the project. The armv7 package allows iOS 7, but no iOS 7 game session has been measured yet.",
+      "source": "projects/game-fps",
+      "license": "see project",
+      "order": 4
+    },
+    {
+      "id": "local.codex.veteris-ipad",
+      "deb": "repo/incoming/veteris-ipad_1.2.0_iphoneos-arm.deb",
+      "title": "Veteris Native iPad",
+      "tagline": "Native iPad layout and suspension fix for Veteris 4",
+      "status_label": "iOS 6 evidence only",
+      "status_text": "iOS 6 verified. 1.2.0 adds an iOS 7 shader-cache guard and allows iOS 7, but the app has not been run on iOS 7 yet.",
+      "source": "projects/veteris-ipad",
+      "license": "GPL-2.0",
+      "order": 5
+    },
+    {
+      "id": "com.unlocalsend.ios6",
+      "deb": "repo/incoming/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb",
+      "title": "LocalSend 6",
+      "tagline": "LocalSend client for old iOS devices",
+      "status_label": "iOS 6 evidence only",
+      "status_text": "Verified on iOS 6.1.3. The package has no upper firmware cap, so it is visible on iOS 7, but iOS 7 launch and transfer tests are still pending.",
+      "source": "projects/localsend",
+      "license": "see project",
+      "order": 6
+    },
+    {
+      "id": "local.codex.blastron-revival",
+      "deb": "repo/incoming/blastron-revival_0.1.15_iphoneos-arm.deb",
+      "title": "Blastron Revival",
+      "tagline": "Compatibility and engine fixes for Blastron",
+      "status_label": "legacy only",
+      "status_text": "Built and tested against Blastron on iOS 6 only; the package keeps firmware < 7.0. It contains no original game assets.",
+      "source": "binary-only; build inputs contain game-derived addresses",
+      "license": "GPL-2.0",
+      "order": 7
+    },
+    {
+      "id": "local.codex.legacy-timezone",
+      "deb": "repo/incoming/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb",
+      "title": "Legacy Timezone Update",
+      "tagline": "IANA 2026e timezone data for iOS 4\u20136",
+      "status_label": "legacy only",
+      "status_text": "The installer validates the iOS ICU layout and intentionally refuses iOS 7; a separate iOS 7 ICU adapter is still required.",
+      "source": "binary-only; build inputs contain Apple ICU data",
+      "license": "GPL-2.0",
+      "order": 8
+    },
+    {
+      "id": "local.codex.device-access",
+      "deb": "projects/device-access/dist/device-access_1.0.1_iphoneos-arm.deb",
+      "title": "Legacy Device Access",
+      "tagline": "One-shot SpringBoard lock/unlock helper",
+      "status_label": "legacy only",
+      "status_text": "The helper refuses any OS other than 4.3.3 and 6.1.3 on purpose. It is a diagnostic tool, not an iOS 7 package.",
+      "source": "projects/device-access",
+      "license": "GPL-2.0",
+      "order": 9
+    }
+  ]
+}
