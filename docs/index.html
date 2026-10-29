@@ -9,19 +9,22 @@
 <p><code>https://fronik22.github.io/legacy-cydia/</code></p>
 <p>Every package states its tested range. iOS 7 support is only claimed after an
 install and runtime check on a real device. Packages that are not ready are
-marked <strong>untested</strong>; legacy-only packages stay hidden from iOS 7
-by their <code>firmware</code> dependency.</p>
+marked <strong>untested</strong>; incompatible <code>firmware</code> dependencies prevent installation rather than guaranteeing that Cydia hides an entry.</p>
 <table><thead><tr><th>Package</th><th>Version</th><th>iOS 7</th><th>Summary</th></tr></thead>
 <tbody>
-<tr><td><a href="depictions/com.mak.amnezia6.html">Amnezia6</a></td><td>1.2.0</td><td>iOS 7: install + daemon</td><td>Lightweight AmneziaWG client for iOS 4.3–7</td></tr>
-<tr><td><a href="depictions/local.perfoverlay.html">Performance Overlay</a></td><td>0.1.9</td><td>iOS 7: hook loaded</td><td>FPS / CPU / RAM / GPU HUD for iOS 4.3–9</td></tr>
-<tr><td><a href="depictions/local.legacypower.html">Power Logger</a></td><td>1.1.0</td><td>iOS 7: daemon running</td><td>Battery and per-process CPU logger for iOS 6–7</td></tr>
-<tr><td><a href="depictions/local.legacy-game-fps.html">Legacy Game FPS</a></td><td>0.2.1</td><td>iOS 6 evidence only</td><td>Per-game frame pacing for exact legacy builds</td></tr>
-<tr><td><a href="depictions/local.codex.veteris-ipad.html">Veteris Native iPad</a></td><td>1.2.0</td><td>iOS 6 evidence only</td><td>Native iPad layout and suspension fix for Veteris 4</td></tr>
-<tr><td><a href="depictions/com.unlocalsend.ios6.html">LocalSend 6</a></td><td>0.5.7</td><td>iOS 6 evidence only</td><td>LocalSend client for old iOS devices</td></tr>
+<tr><td><a href="depictions/com.mak.amnezia6.html">Amnezia6</a></td><td>1.2.1</td><td>iOS 7: install + engine</td><td>Lightweight AmneziaWG client for iOS 4.3–7</td></tr>
+<tr><td><a href="depictions/local.perfoverlay.html">Performance Overlay</a></td><td>0.1.10</td><td>iOS 7: installed, hook loaded</td><td>FPS / CPU / RAM / GPU HUD for iOS 4.3–9</td></tr>
+<tr><td><a href="depictions/local.legacypower.html">Power Logger</a></td><td>1.1.1</td><td>iOS 7: daemon + native sampling</td><td>Battery and per-process CPU logger for iOS 6–7</td></tr>
+<tr><td><a href="depictions/local.legacy-game-fps.html">Legacy Game FPS</a></td><td>0.2.2</td><td>iOS 7: install only</td><td>Per-game frame pacing for exact legacy builds</td></tr>
+<tr><td><a href="depictions/local.codex.veteris-ipad.html">Veteris Native iPad</a></td><td>1.2.0</td><td>iOS 7: untested</td><td>Native iPad layout and suspension fix for Veteris 4</td></tr>
+<tr><td><a href="depictions/local.codex.localsend-installer.html">LocalSend (IPA Installer)</a></td><td>5.7.4340</td><td>iOS 7: install not run</td><td>Install the adapted LocalSend 5.7.4340 app</td></tr>
+<tr><td><a href="depictions/local.codex.troubadour-installer.html">Troubadour (IPA Installer)</a></td><td>1.6.447</td><td>iOS 7: install not run</td><td>Install the adapted Troubadour 1.6.447 app</td></tr>
 <tr><td><a href="depictions/local.codex.blastron-revival.html">Blastron Revival</a></td><td>0.1.15</td><td>legacy only</td><td>Compatibility and engine fixes for Blastron</td></tr>
-<tr><td><a href="depictions/local.codex.legacy-timezone.html">Legacy Timezone Update</a></td><td>2026e-1</td><td>legacy only</td><td>IANA 2026e timezone data for iOS 4–6</td></tr>
-<tr><td><a href="depictions/local.codex.device-access.html">Legacy Device Access</a></td><td>1.0.1</td><td>legacy only</td><td>One-shot SpringBoard lock/unlock helper</td></tr>
+<tr><td><a href="depictions/local.codex.legacy-timezone.html">Legacy Timezone Update</a></td><td>2026e-1</td><td>legacy only</td><td>IANA 2026e timezone data for iOS 4.3–6</td></tr>
+<tr><td><a href="depictions/local.codex.device-access.html">Legacy Device Access</a></td><td>1.1.0</td><td>iOS 7: verified</td><td>One-shot SpringBoard lock/unlock helper</td></tr>
+<tr><td><a href="depictions/local.codex.libcxx-ios4.html">Legacy C++ Runtime (iOS 4)</a></td><td>1.0.0</td><td>iOS 4 only; native on 7</td><td>Shared libc++/libc++abi for armv7 iOS 4.3</td></tr>
+<tr><td><a href="depictions/local.codex.legacy60.html">Legacy 1080p60 Timing Fix</a></td><td>1.0.0</td><td>iOS 4.3.3 only</td><td>Guarded H.264 decode-hint fix for iPad 2 / iOS 4.3.3</td></tr>
+<tr><td><a href="depictions/local.codex.localsend-photos.html">LocalSend Photos Without Location</a></td><td>1.0.0</td><td>iOS 4.3.3 only</td><td>LocalSend-specific old Photos permission gate adapter</td></tr>
 </tbody></table>
 <p>No account credentials, private dumps, original game assets or SDKs are
 published here. Senko and the Wi-Fi monitor are not part of this repository.</p>

@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from package_deb import build_deb
 
-VERSION = '0.1.9'
+VERSION = '0.1.10'
 B = ROOT / 'build'
 STAGE = B / 'stage'
 CONTROL = B / 'control'
@@ -75,6 +75,8 @@ exit 0
 
 doc = STAGE / 'usr/share/doc/local.perfoverlay'
 doc.mkdir(parents=True)
+shutil.copy2(ROOT/'COPYING',doc/'COPYING')
+(doc/'copyright').write_text('Own code: Copyright 2026 project contributors. GNU GPLv3; see COPYING. Corresponding source/build scripts accompany the repository. No Apple SDK or original game assets included.\n')
 (doc / 'README').write_text('''Performance Overlay (PerfOverlay)
 ----------------------------------
 A small HUD for jailbroken iOS 4-9 devices.

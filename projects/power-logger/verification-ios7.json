@@ -1,0 +1,105 @@
+{
+  "version": "1.1.1",
+  "date": "2026-10-28",
+  "package_sha256": "0e7e5f0ab0d8a0c29d145b90937f3892835ff4836c18cc81a969db90c8d65c80",
+  "package_bytes": 58850,
+  "GPLv3_copying_included": true,
+  "own_code_only": true,
+  "ios7": {
+    "model": "iPad4,5",
+    "os": "7.1.2",
+    "Settings_bundle_loader": {
+      "bits": 64,
+      "base_abi_available": true,
+      "bundles": [
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "PerfOverlayPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "PerfOverlayPrefsController"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyPowerPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyPowerPrefs"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyGameFPSPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyGameFPSPrefs"
+        }
+      ]
+    },
+    "HUD_enabled_during_probe": false,
+    "Power_recording_enabled_during_probe": false,
+    "native64_metrics": {
+      "self_cpu": "self_busy_one_core_percent=99.95",
+      "processes": 85,
+      "taskinfo_errors": 0,
+      "valid_process_cpu_deltas": 84,
+      "cpu_cores": [
+        3.846153846153846,
+        3.571428571428572
+      ],
+      "timebase_numer": 125,
+      "timebase_denom": 3,
+      "collector_bits": 64,
+      "battery": {
+        "Amperage": 2100,
+        "CurrentCapacity": 5776,
+        "discharge_w": null,
+        "net_battery_w_signed": 0,
+        "DesignCapacity": 6274,
+        "MaxCapacity": 5808,
+        "power_interpretation": "charging_or_externally_powered_not_device_watts",
+        "capacity_units": "raw_unverified",
+        "temperature_c": 27.5,
+        "net_current_ma": 0,
+        "IsCharging": false,
+        "InstantAmperage": 0,
+        "charge_percent": 99.44903581267218,
+        "Voltage": 4273,
+        "CycleCount": 17,
+        "AppleRawMaxCapacity": 5808,
+        "AppleRawCurrentCapacity": 5776,
+        "FullyCharged": true,
+        "Temperature": 2750,
+        "ExternalConnected": true
+      }
+    }
+  },
+  "limits": [
+    "No enabled-HUD pixels/rotation/toggle UI on7",
+    "No four-game iOS7 gameplay timing",
+    "No unplugged iOS7 battery calibration"
+  ],
+  "ios6_regression": {
+    "self_cpu": "self_busy_one_core_percent=100.08",
+    "collector_bits": 32,
+    "processes": 60,
+    "taskinfo_errors": 0
+  },
+  "strict_link": "explicit standard C reexports, no dynamic_lookup",
+  "source_sha256": {
+    "package.py": "e8417ffab2f37e6b2616a6526213a1b10e9eb95ce5066518044af51e79191d46",
+    "build.py": "1f88505ed51b95a8ff576c43cddef27a11c8a37d6b1755e274146460e4189176",
+    "Prefs.m": "265670ab25ff17a1512eaf6383495d2a1f3f4cc944321452ed1741169c0414d9",
+    "test_package.py": "80b32edc2007c162d5f0f65aed629059a5f93a6c92543a41194b56587f904a70",
+    "TelemetryMath.h": "e9d69c8cf1621e1ca1272823d1533ea4d1e701a6babce87f90d4dc1f786f2e7b",
+    "test_math_store.c": "767d3c71b9ef4bf9b580bf95a4830313a13e880971906be8f33a461907e0fdd8",
+    "package_deb.py": "b5ce08b93c93e3a4044dae6ccfc245dd40ee842e1d8d5658ec1e2a24e3c8d5b4",
+    "test_platform.c": "5ec0a32611304f9c3d39bb2b9b24927f0b6d25352090302a342db17ca73cf7e7",
+    "Metrics.m": "5b5c7a5251ca4edd5971997849887c230ce1f5d38f5bf164fdac013fc500c840",
+    "Powerd.m": "86dcd50b57efd05cb697522236615876db93dd208010d9c557a4bae4e83d2f8f",
+    "test_analyze.py": "60d662282e0af8fbb500cfbe4c715d1c34f5e37959a546abcae465e160f71baa",
+    "SettingsLoadProbe.m": "58bd2044c25bdc5290a4274a8251f37fd4c8a2538a6c56ae85b62d782748a052",
+    "PlatformPolicy.h": "330ae32b79c7b7198d1443fdb5a87817fcf9c971929e7f36504cc716f1d825ed",
+    "analyze.py": "a98df3e0f9946d7c69020570a78c7617b2b4c69d2d6b4ee3041e673b753bea4e",
+    "LogStore.h": "8b4db79e17a0a6b2464cc4c6c2bf651309c1a6bdcd7e7cdccc5b5fa5b82c58f1"
+  }
+}

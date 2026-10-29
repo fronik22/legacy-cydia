@@ -13,7 +13,7 @@ launch={'Label':'com.local.legacypowerd','ProgramArguments':['/usr/libexec/legac
 p=S/'Library/LaunchDaemons/com.local.legacypowerd.plist';p.parent.mkdir(parents=True,exist_ok=True);p.write_bytes(plistlib.dumps(launch))
 (C/'control').write_text('''Package: local.legacypower
 Name: Power Logger
-Version: 1.1.0
+Version: 1.1.1
 Architecture: iphoneos-arm
 Section: Utilities
 Maintainer: Local
@@ -47,4 +47,6 @@ fi
 }.items():
  p=C/name;p.write_text('#!/bin/sh\nset -e\n'+body+'exit 0\n');p.chmod(0o755)
 if(R/'README.md').exists():copy(R/'README.md','usr/share/doc/local.legacypower/README.md')
-build_deb(S,C,R/'dist/local.legacypower_1.1.0_iphoneos-arm.deb')
+copy(R/'COPYING','usr/share/doc/local.legacypower/COPYING')
+(S/'usr/share/doc/local.legacypower/copyright').write_text('Own code: Copyright 2026 project contributors. GNU GPLv3; see COPYING. Corresponding source/build scripts accompany the repository. No Apple SDK included.\n')
+build_deb(S,C,R/'dist/local.legacypower_1.1.1_iphoneos-arm.deb')

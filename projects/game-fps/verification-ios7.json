@@ -1,0 +1,63 @@
+{
+  "version": "0.2.2",
+  "date": "2026-10-28",
+  "package_sha256": "c353dc8613a66f8edac75edaea88ae96c048e43ae0763f934cd26171c8d5ecc6",
+  "package_bytes": 30982,
+  "GPLv3_copying_included": true,
+  "own_code_only": true,
+  "ios7": {
+    "model": "iPad4,5",
+    "os": "7.1.2",
+    "Settings_bundle_loader": {
+      "bits": 64,
+      "base_abi_available": true,
+      "bundles": [
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "PerfOverlayPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "PerfOverlayPrefsController"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyPowerPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyPowerPrefs"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyGameFPSPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyGameFPSPrefs"
+        }
+      ]
+    },
+    "HUD_enabled_during_probe": false,
+    "Power_recording_enabled_during_probe": false,
+    "gameplay": "UNVERIFIED"
+  },
+  "limits": [
+    "No enabled-HUD pixels/rotation/toggle UI on7",
+    "No four-game iOS7 gameplay timing",
+    "No unplugged iOS7 battery calibration"
+  ],
+  "native_game_hook": "armv7 only, compiler guard rejects arm64; exact executable hashes/instructions/method encodings",
+  "source_sha256": {
+    "package.py": "2ef6d4652a2a68efd8b4ac5341f94a4fc840b9affef4b5fd2041f3fb5037fdae",
+    "build.py": "8c1cff5231e821de3f5611432b51c0a6401274ec2b36cd877e8067efb1923302",
+    "test_package.py": "b02f9c98725ddde0b4636e7ce02fa6f9151c3d6a351d4730fd32bb88b5ac6fe8",
+    "test_policy.c": "31cfbe8d46f7bb115c919cf9e572bb8cf25f56ad1778b11ff3f5264aba51e244",
+    "package_deb.py": "90e1ef3424ddc8ab2af29efe0635454b292acd296d29b73888919abc95d83478",
+    "settings/Prefs.m": "e9e7c923e2cb995aa59964b28679237da295fc19a55188de59695f2e218e1379",
+    "tools/FPSControl.m": "dfb6a5f210f05f122fa4e2d2b6d7d2ec27307a226f9dd01cd668e47adaed9774",
+    "tools/SettingsOpen.m": "0fbfec7011fc925a978a780b41d0c5bc21eeffa1cc65520be04180e3e127e600",
+    "tools/SettingsCheck.m": "7ec665844b4bb662ce18b27d53b164b3de82d71e60490a57c82be788fa54d778",
+    "tools/Launch.m": "e5c3aa4f6b426b7af0b35e55acdfd295064771fb4fffb4e5860e5c01c8ffb90d",
+    "tools/SmoothTouch.m": "5ee0fbbd5c5dfa73d4717a4f03e17bc181519cda9ab14251c5c12396f92d00af",
+    "src/GameFPS.m": "435c7c4d8a856843196c7f5bfe47ec10858948fcd27cb664851d96bc5e8e45eb",
+    "src/RuntimePolicy.h": "f59615381c33645937a27a4ac96a7c35f0e1e516526e8d5cd6dd1b97ae07727d"
+  }
+}

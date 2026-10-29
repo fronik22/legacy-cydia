@@ -1,7 +1,12 @@
 # Amnezia6
 
-Minimal native UIKit AmneziaWG client for jailbroken armv7 iOS devices.
-Device validation: iPad2,2, iOS 6.1.3 (10B329). iOS 4.3/5 remain untested.
+Minimal native UIKit AmneziaWG client for jailbroken iOS4.3–7.x devices.
+Current release1.2.1. App/daemon/CLI use armv7 (including the iOS7 32-bit
+compatibility runtime); the SpringBoard badge includes armv7+arm64 slices.
+Device validation: iPad2,2/iOS6.1.3 and iPad4,5/iOS7.1.2. The latter's shared
+engine completed a real handshake, HTTP response and configured-DNS query through
+a bounded opaque UDP relay. Direct endpoint access on that LAN remains unproven;
+see ../../notes/AMNEZIA-IOS7.md. iOS4.3/5 and final1.2.1 UIKit controls remain untested.
 
 ## Use
 
@@ -100,3 +105,28 @@ File import uses iOS4-compatible **Open In Amnezia6** integration and a native b
 ContentPaddingAddition accepts a single value or a range0–65535. Selection follows Senko/upstream bounded random padding behavior and observed UDP window, capped by configured MTU, wire overhead and output capacity. Authenticated inbound cookie challenges produce a short-lived MAC2 cookie for subsequent handshake retries, including rekey; malformed/stale/duplicate challenges cannot trigger immediate resend loops. DisableCookies does not disable processing incoming challenges (this client does not act as a handshake responder). Cookie crypto was checked against an independent libsodium vector.
 
 Current limits: IPv4 full tunnel; one peer per profile; bounded2048-byte datagrams/Jmax and Jc<=128; profile text<=128KiB, imported input<=768KiB and supported decoded bundles<=512KiB. This is not a claim of complete upstream conformance or arbitrary server availability. See PROFILES-RESULTS-20261026.md for actual hardware tests and remaining verification limits.
+
+## 1.2.1 audit corrections
+
+The control socket now binds privately before root:mobile0660 ownership/mode is
+established. Missing mobile group or failed ownership/mode/listen setup aborts
+and removes the socket; there is no world-writable fallback. A requested tunnel
+DNS setup failure tears down the attempted tunnel and enters bounded retry
+before any handshake is sent; it no longer continues using a physical resolver.
+This is setup failure handling, not a kill switch or DNS-server health monitor.
+
+The parser rejects IPv6 tunnel Address/DNS/Endpoint and unsupported split-route
+requests instead of silently ignoring them. A common dual default AllowedIPs
+list (`0.0.0.0/0, ::/0`) remains accepted without rewriting the saved profile,
+but **only IPv4 is tunneled**. Physical IPv6 remains unprotected, even with an
+IPv4-only profile. The app always states this and the absence of a kill switch.
+For multiple IPv4 DNS entries, the current engine selects the first; it does
+not provide resolver failover. One IPv4 tunnel address is supported.
+
+Offline checks: `make test`; native diagnostic targets
+`build/test_protocol-device`, `build/test_profiles-device`,
+`build/device_control_probe`, and `build/device_tunnel_probe`. The last target
+is root-only and changes routes/DNS temporarily: coordinate idle VPN state,
+use a private configuration and bounded duration, and verify cleanup. These
+probes are not installed by the Debian package. Public source contains no live
+VPN profile, endpoint, credential, SDK or original device dump.

@@ -1,0 +1,16 @@
+{
+  "version": "2026e",
+  "retrieved": "2026-10-20",
+  "IANA": "https://data.iana.org/time-zones/releases/tzdata2026e.tar.gz",
+  "tzcode": "https://data.iana.org/time-zones/releases/tzcode2026e.tar.gz",
+  "ICUResources": "https://github.com/unicode-org/icu-data/tree/main/tzdata/icunew/2026e/44/le",
+  "compatibilityDocumentation": "https://unicode-org.github.io/icu/userguide/datetime/timezone/",
+  "sha256": {
+    "tzdata2026e.tar.gz": "b26882805f26aac59d5b222978e6580484b834ccdc98be89df2f05a6dc53a652",
+    "tzcode2026e.tar.gz": "cc3d27ca2a0d8399504551b920970d80af83bfb9c216e8082a15491921935d54",
+    "resources/metaZones.res": "5b484c7f02c99d5164208ce84e18fba67c6314d77cf60503e2b19f708b66c6da",
+    "resources/timezoneTypes.res": "5e77ce5afb7374a36cbe3be197d0a6deaa919e6f672c2a372f7a9d91b7f8534f",
+    "resources/windowsZones.res": "b8c3a7adb94fd659f8203ee4af4dc72a4e6b14566baac1855c493096f337184b",
+    "resources/zoneinfo64.res": "5a168fb78cccfc872f9a50e91facf0bf8b7204a6c4f92fe5c64a8165e9e62448"
+  }
+}

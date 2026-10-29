@@ -1,28 +1,29 @@
-# Legacy Device Access
+# Legacy Device Access 1.1.0
 
-One-shot, root-operated screen access helper for two exact legacy systems:
-iOS 4.3.3 and iOS 6.1.3. It is a diagnostic tool, not a general unlock service.
+Explicit root-operated screen status/lock/unlock for iOS 4.3.3, 6.1.3 and capability-checked iOS 7. No daemon, network listener, SUID executable, startup auto-unlock or passcode bypass. Configured passcodes and unknown runtime signatures are refused.
 
-The CLI (`/usr/bin/codex-device-access`) accepts `status`, `unlock` and `lock`.
-It refuses configured passcodes, installs no daemon or listener, has no SUID
-mode and adds no boot hook. The payload (`AccessOnce.dylib`) is loaded only for
-the explicit one-shot operation.
+```
+codex-device-access status
+codex-device-access unlock
+codex-device-access lock
+codex-device-access unlock --simulate-passcode
+```
 
-The package intentionally caps firmware below 7.0 and the source refuses any
-other OS version. There is no iOS 7 support claim.
+The root CLI is armv7; the one-shot SpringBoard payload has armv7 and arm64 slices for A7 devices. iOS 7 uses SBLockScreenManager, MCProfileConnection.isPasscodeSet and SBUserAgent's native lock path. The old SBAwayController adapters remain separate. A matching method name alone is insufficient: signatures are checked before invocation. Current-state passcode lock is not used as a substitute for whether a passcode is configured.
 
-## Build
+Native iOS 7.1.2 tests: status, unlock, lock, status roundtrip and simulated-passcode refusal. Earlier iOS 4.3.3/6.1.3 adapters were tested in the original release; those physical devices were not changed during the iOS 7 port. The first iOS 7 lockUIFromSource attempt returned without locking; it was replaced with the verified SBUserAgent.lockAndDimDevice path. No passcode was set/removed by testing.
 
-```sh
+Build with external SDK/stubs and ldid:
+
+```
 export IOS4_SDK=/path/to/iPhoneOS.sdk
-export IOS4_STUB=/path/to/compatible/import-sysroot
+export IOS4_STUB=/path/to/legacy/link/sysroot
+export IOS7_STUB=/path/to/arm64/link/sysroot
 export IOS4_LDID=/path/to/ldid
 python3 build.py
 python3 package.py
 ```
 
-Apple SDKs, signing identities and device data are not included.
+The arm64 System supplemental TBD declares only standard exports missing from the external stub set; SDKs are not distributed. Remove using `dpkg -r local.codex.device-access`. Logs remain at `/var/log/codex-device-access.log`; temporary request/result bundles are removed after each operation. The one-shot image stays mapped until SpringBoard exits so queued code remains valid; it has no later timer or command reader.
 
-## License
-
-GPL-2.0; see `COPYING`.
+License: GNU GPLv3; see COPYING.

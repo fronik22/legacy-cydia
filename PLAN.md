@@ -9,7 +9,9 @@
 
 No publication of keys/configs/accounts/private assets. No blanket OS7 claim from compilation. Deployment must preserve current app data, settings and disabled HUD/logger state.
 
-Status 2026-10-28: repo generator, manifest and validator are in place; nine
-packages are staged under `repo/incoming/` and rendered into `docs/`. Remaining:
-publish GitHub Pages, verify the source from the iPads, and finish iOS 7 runtime
-audits for Game FPS, Veteris and LocalSend.
+Status 2026-10-28: the manifest now has 11 packages; the iOS 7 builds 1.2.1,
+0.1.10, 1.1.1, 0.2.2 and 1.1.0 were installed and checked on iPad4,5/7.1.2.
+The local index validates. Remaining: publish the updated index after review;
+install/reboot the iOS 7 timezone adapter; and finish app workflow tests for
+LocalSend/Troubadour (blocked by missing AppSync/appinst), Veteris (host app),
+Game FPS gameplay, and visual HUD/Settings UI.

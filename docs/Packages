@@ -1,6 +1,6 @@
 Package: com.mak.amnezia6
 Name: Amnezia6
-Version: 1.2.0
+Version: 1.2.1
 Architecture: iphoneos-arm
 Description: Lightweight AmneziaWG client for iOS 4-7
  A small native AmneziaWG client: a root daemon owns the UTUN device,
@@ -14,18 +14,18 @@ Section: Networking
 Priority: optional
 Maintainer: mak
 Author: mak
-Installed-Size: 1113
+Installed-Size: 1130
 Homepage: https://github.com/fronik22/legacy-cydia
 Icon: https://fronik22.github.io/legacy-cydia/assets/amnezia6.png
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.mak.amnezia6.html
-Filename: ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
-Size: 785548
-MD5sum: 27971a3fde2b6fc8146cca257b9020b4
-SHA256: 35840338a3bfb163ee8e6dd404b123000c3922eba97df7f30e0e3b5e55ca9734
+Filename: ./debs/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
+Size: 786844
+MD5sum: 5f073132658516c45215c9ea8d6f082a
+SHA256: e38a40ff7436c3a7171662a2549cf9a29aa0ce94b683e9ea97da5e57f0975512
 
 Package: local.perfoverlay
 Name: Performance Overlay
-Version: 0.1.9
+Version: 0.1.10
 Architecture: iphoneos-arm
 Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
  Shows live system counters in a small non-interactive overlay.
@@ -33,17 +33,17 @@ Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
 Depends: mobilesubstrate, preferenceloader, firmware (>= 4.3), firmware (<< 10.0)
 Section: Tweaks
 Maintainer: Local
-Installed-Size: 334
+Installed-Size: 369
 Homepage: https://github.com/fronik22/legacy-cydia
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.perfoverlay.html
-Filename: ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
-Size: 52844
-MD5sum: 5529c83902c935e80064da54d22f636e
-SHA256: 33d9bf1c35cc567021b52fc560fd252655d90b5095c702139d238055fb23761e
+Filename: ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
+Size: 66182
+MD5sum: 92d54b738afab1f2257648f841ed1d53
+SHA256: 24a2b7ee86bcad6da0962711c685a9bc25ec6c73463f140e4147540ad82103d5
 
 Package: local.legacypower
 Name: Power Logger
-Version: 1.1.0
+Version: 1.1.1
 Architecture: iphoneos-arm
 Description: Switchable local battery and per-process CPU logger for iOS6-7 (armv7/arm64).
  Records signed battery current, charging, process CPU, GPU and traffic.
@@ -51,29 +51,29 @@ Description: Switchable local battery and per-process CPU logger for iOS6-7 (arm
 Depends: preferenceloader, firmware (>= 6.0), firmware (<< 8.0)
 Section: Utilities
 Maintainer: Local
-Installed-Size: 295
+Installed-Size: 331
 Homepage: https://github.com/fronik22/legacy-cydia
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.legacypower.html
-Filename: ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
-Size: 45644
-MD5sum: caddcb80922517ff5c0b999301902e21
-SHA256: 4aaff413669915b58b5f6322e27cfbc69a00062119911ca36140c8067e45f383
+Filename: ./debs/local.legacypower_1.1.1_iphoneos-arm.deb
+Size: 58850
+MD5sum: e1ce003c2b5ad5be880366ef96570ba4
+SHA256: 0e7e5f0ab0d8a0c29d145b90937f3892835ff4836c18cc81a969db90c8d65c80
 
 Package: local.legacy-game-fps
 Name: Legacy Game FPS
-Version: 0.2.1
+Version: 0.2.2
 Architecture: iphoneos-arm
 Description: Per-game frame pacing for explicitly verified legacy game builds.
  Reopen supported games after installation; reopen Settings if already running. No respring.
 Depends: mobilesubstrate, preferenceloader, firmware (>= 6.0), firmware (<< 8.0)
 Section: Tweaks
 Maintainer: Local
-Installed-Size: 159
+Installed-Size: 194
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.legacy-game-fps.html
-Filename: ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
-Size: 18194
-MD5sum: 3751093eddd9a4919b2ff5c67c630588
-SHA256: 38a10672dee107c2dc7fdc6da66df26e56fee400d12d392b7ade53ff01132a5e
+Filename: ./debs/legacy-game-fps_0.2.2_iphoneos-arm.deb
+Size: 30982
+MD5sum: 99830b7767732a8d4ed1f8371a53ed27
+SHA256: c353dc8613a66f8edac75edaea88ae96c048e43ae0763f934cd26171c8d5ecc6
 
 Package: local.codex.veteris-ipad
 Name: Veteris Native iPad
@@ -94,21 +94,43 @@ Size: 26468
 MD5sum: 7d4bb58387c2c2f1aa862c7d930e975b
 SHA256: c2d0835167701bbf5e348dd91e7b4e124dfe6ec0bdee06458aa9ad66a931982f
 
-Package: com.unlocalsend.ios6
-Name: LocalSend 6
-Version: 0.5.7
+Package: local.codex.localsend-installer
+Name: LocalSend (IPA Installer)
+Version: 5.7.4340
 Architecture: iphoneos-arm
-Description: Minimal LocalSend v2 client for iOS 6
-Depends: firmware (>= 6.0)
-Section: Networking
-Maintainer: LocalSend6
-Author: LocalSend6
-Installed-Size: 1920
-Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.unlocalsend.ios6.html
-Filename: ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
-Size: 848274
-MD5sum: d3aa801a808b317aa76f18d72a591960
-SHA256: b022bf6e05aa46bca1a490c7fa459fd68cc0158a73ae3512e8fe7dcd007c3c24
+Description: Install the adapted LocalSend application using appinst.
+ Preserves existing IPA containers and user data on upgrade.
+ Cydia removal leaves the installed app and its data intact.
+ Requires Karen's official repository: https://cydia.akemi.ai/.
+Depends: firmware (>= 5.0), firmware (<< 8.0), ai.akemi.appinst (>= 2.0), ai.akemi.appsyncunified
+Section: Applications
+Maintainer: Legacy iPad Tools
+Installed-Size: 1793
+Homepage: https://github.com/fronik22/legacy-cydia
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.localsend-installer.html
+Filename: ./debs/local.codex.localsend-installer_5.7.4340_iphoneos-arm.deb
+Size: 1803988
+MD5sum: 7d7acfb3816ac35d46af05253125b0ee
+SHA256: ed8e7650975d98b14cf28f3daf889d52c7d71f5f57d82937b587cc6472371f02
+
+Package: local.codex.troubadour-installer
+Name: Troubadour (IPA Installer)
+Version: 1.6.447
+Architecture: iphoneos-arm
+Description: Install the adapted Troubadour application using appinst.
+ Preserves existing IPA containers and user data on upgrade.
+ Cydia removal leaves the installed app and its data intact.
+ Requires Karen's official repository: https://cydia.akemi.ai/.
+Depends: firmware (>= 5.0), firmware (<< 8.0), ai.akemi.appinst (>= 2.0), ai.akemi.appsyncunified
+Section: Applications
+Maintainer: Legacy iPad Tools
+Installed-Size: 5585
+Homepage: https://github.com/fronik22/legacy-cydia
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.troubadour-installer.html
+Filename: ./debs/local.codex.troubadour-installer_1.6.447_iphoneos-arm.deb
+Size: 5360430
+MD5sum: e751b35d09bb196a1ab33e0578e5f706
+SHA256: 42796551790f7063c55576cc2efb7563c72e248513593720923706ec51e6c5c7
 
 Package: local.codex.blastron-revival
 Name: Blastron Revival
@@ -148,16 +170,64 @@ SHA256: 5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405
 
 Package: local.codex.device-access
 Name: Legacy Device Access
-Version: 1.0.1
+Version: 1.1.0
 Architecture: iphoneos-arm
 Description: Explicit root-operated no-passcode screen access for device tests.
- Tested on iOS 4.3.3 and 6.1.3. No daemon or boot auto-unlock.
-Depends: mobilesubstrate, firmware (>= 4.3), firmware (<< 7.0)
+ Version-specific adapters for iOS 4.3.3, 6.1.3 and 7.x. No daemon or boot auto-unlock.
+Depends: mobilesubstrate, firmware (>= 4.3), firmware (<< 8.0)
 Section: Development
 Maintainer: Legacy iPad Tools
-Installed-Size: 121
+Installed-Size: 203
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.device-access.html
-Filename: ./debs/device-access_1.0.1_iphoneos-arm.deb
-Size: 25938
-MD5sum: 99bea9b6780300293eece4626b9c8470
-SHA256: 9f6387b4cc8f845fb53c581dc47330e4f9c3686a96fec9b1189a836921f61b20
+Filename: ./debs/device-access_1.1.0_iphoneos-arm.deb
+Size: 33404
+MD5sum: b4d12c61a3dac431f10bc63e506060ce
+SHA256: 4387d8cd67342f6a7cc4dac07fa2aa6c0daace1e844cf1c0b9f2d970603a43c3
+
+Package: local.codex.libcxx-ios4
+Name: Legacy C++ Runtime (iOS 4)
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Shared LLVM libc++ and libc++abi for armv7 iOS 4.3.x.
+ Maintains legacy libstdc++ and installs no injection tweak.
+Depends: firmware (>= 4.3), firmware (<< 5.0)
+Section: Development
+Maintainer: Legacy iPad Tools
+Installed-Size: 798
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.libcxx-ios4.html
+Filename: ./debs/libcxx-ios4_1.0.0_iphoneos-arm.deb
+Size: 270470
+MD5sum: 78fbe7243e5d592bafd31fa9f689a90c
+SHA256: 3245b384ae75e8cfa5df6ed0f7fb695c42426293514be3184925c5afcdf901c8
+
+Package: local.codex.legacy60
+Name: Legacy 1080p60 Timing Fix
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Corrects the iOS 4.3.3 real-time decode hint for iPad 2 1080p60 H.264.
+ Preserves video frames, timestamps, audio, asynchronous and temporal decoding.
+Depends: mobilesubstrate, firmware (= 4.3.3)
+Section: Tweaks
+Maintainer: Legacy iPad Tools
+Installed-Size: 68
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.legacy60.html
+Filename: ./debs/legacy60_1.0.0_iphoneos-arm.deb
+Size: 17042
+MD5sum: 494f85aa968a7d15f0b7d6d33cc0cff8
+SHA256: f87fbb25625e21a2557002665d40ddb15a8d2787db08dedb125858a9efbd5a7a
+
+Package: local.codex.localsend-photos
+Name: LocalSend Photos Without Location
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Allows native AssetsLibrary access in LocalSend on iOS 4.3.3 without enabling Location Services.
+ Scoped to com.unlocalsend.ios6 on build 8J2. Grants the app read access to Photos, including location metadata.
+Depends: mobilesubstrate, firmware (= 4.3.3)
+Section: Tweaks
+Maintainer: Legacy iPad Tools
+Installed-Size: 69
+Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.localsend-photos.html
+Filename: ./debs/localsend-photos_1.0.0_iphoneos-arm.deb
+Size: 17198
+MD5sum: ee7cabba3600705bfcc9f8f342b8c2c5
+SHA256: 8602a90b812ecc8361072f0f8bf37c6aef8f84c2d7cc4395411d88cbe71ce11b

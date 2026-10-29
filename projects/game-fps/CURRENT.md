@@ -1,3 +1,7 @@
+# Current audit —0.2.2
+
+Hook remains exact-build armv7, Settings is universal and loads natively on iOS7.1.2. Four-game iOS7 timing is unverified; earlier iOS6 gameplay results below remain separate. New package includes GPLv3COPYING and no preferences reset. See README.md final audit and package tests.
+
 # Current state — 2026-10-22
 
 Legacy Game FPS **0.2.0** is installed on iPad2,2 / iOS6.1.3. WORMS3, Minigore HD and Minigore2 profiles are explicitly enabled at60FPS. Existing WORMS2/Blastron preferences are retained. Package defaults preserve Original for new installations. Firmware support remains armv7/iOS6.

@@ -1,0 +1,106 @@
+{
+  "amnezia6": {
+    "archive": "amnezia6-1.2.1-source.zip",
+    "bytes": 868648,
+    "files": 119,
+    "license": "GPL-2.0",
+    "origin": "projects/amnezia6",
+    "sha256": "39aceabb7ffbf9d77f5cba84cda90c2a6c528c5a7fe1b329032ac28757808c50"
+  },
+  "blastron": {
+    "archive": "blastron-0.1.15-source.zip",
+    "bytes": 78637,
+    "files": 35,
+    "license": "GPL-3.0",
+    "origin": "released 0.1.15 source ZIP; example endpoint replaced with localhost",
+    "sha256": "56b996999c402e7166c3afc65cdd2009545b2acd132ec8be26e29263ac644f20"
+  },
+  "device-access": {
+    "archive": "device-access-1.1.0-source.zip",
+    "bytes": 22436,
+    "files": 9,
+    "license": "GPL-3.0",
+    "origin": "projects/device-access",
+    "sha256": "5d6cce2e066c773aa4d79e7c8a9091d422a7e0ae9fe38a0a019782e97eb1144d"
+  },
+  "game-fps": {
+    "archive": "game-fps-0.2.2-source.zip",
+    "bytes": 34058,
+    "files": 22,
+    "license": "GPL-3.0",
+    "origin": "projects/game-fps",
+    "sha256": "154b62255014aca1b2e7e9e7aaff86ef3efafae1d6721cafae56d8757433c34f"
+  },
+  "legacy-ipad-tools": {
+    "archive": "legacy-ipad-tools-1.0.0-source.zip",
+    "bytes": 6059571,
+    "files": 5198,
+    "license": "GPL-3.0; LLVM UIUC/MIT notices",
+    "origin": "released legacy-ipad-tools-1.0.0.zip, source-only subset",
+    "sha256": "1ad187d09cf408b450f1d3652b539bb1aee0b4aceb98721b276ef6698cd391f2"
+  },
+  "localsend": {
+    "archive": "localsend-5.7.4340-source.zip",
+    "bytes": 10036879,
+    "files": 6227,
+    "license": "GPL-3.0",
+    "origin": "projects/localsend",
+    "sha256": "2b4e75c31f768f03a253f8b279f570f03c5306a485c29592a8205a899d5a87b9"
+  },
+  "localsend-photos": {
+    "archive": "localsend-photos-1.0.0-source.zip",
+    "bytes": 19295,
+    "files": 10,
+    "license": "GPL-3.0",
+    "origin": "released LocalSend Photos 1.0.0 source ZIP",
+    "sha256": "866c0d70c7884caf46b8e4803c09346ac49eb06652ea2c79ee6e3f09a20b075a"
+  },
+  "perfoverlay": {
+    "archive": "perfoverlay-0.1.10-source.zip",
+    "bytes": 76196,
+    "files": 47,
+    "license": "GPL-3.0",
+    "origin": "projects/perfoverlay",
+    "sha256": "b13a6bf5b9d52f70bb3774e4d723ce0c71a35112f39909fcb34cb5ab28902ac0"
+  },
+  "power-logger": {
+    "archive": "power-logger-1.1.1-source.zip",
+    "bytes": 39410,
+    "files": 22,
+    "license": "GPL-3.0",
+    "origin": "projects/power-logger",
+    "sha256": "ddb74b86c6a3d10795b404fb1b78ae40ab5d431f8545c34192d9b4215a38fc94"
+  },
+  "timezone": {
+    "archive": "timezone-2026e-2-source.zip",
+    "bytes": 555074,
+    "files": 618,
+    "license": "0BSD; IANA public domain; Unicode data license",
+    "origin": "projects/timezone",
+    "sha256": "3e1c1b6c10adf2d19ed85eae0499b9b7c6c9dc07f3b37e988f255e6804b31774"
+  },
+  "timezone-stable": {
+    "archive": "timezone-stable-2026e-1-source.zip",
+    "bytes": 560202,
+    "files": 616,
+    "license": "0BSD; IANA public domain; Unicode data license",
+    "origin": "released LegacyTimezone-2026e-source.zip, source/data-only subset",
+    "sha256": "855e6a180b6ea334d36499e0e95d3d16479e5dbfb18ad6fb5274f13727a780e8"
+  },
+  "troubadour": {
+    "archive": "troubadour-1.6.447-source.zip",
+    "bytes": 5799056,
+    "files": 989,
+    "license": "GPL-3.0",
+    "origin": "projects/troubadour",
+    "sha256": "9ebfbc61bb7c13c52e41220bbc47947e980e57b807893f29717241bf226dc278"
+  },
+  "veteris-ipad": {
+    "archive": "veteris-ipad-1.2.0-source.zip",
+    "bytes": 29115,
+    "files": 16,
+    "license": "GPL-3.0",
+    "origin": "projects/veteris-ipad",
+    "sha256": "c11e3eb14cf1900521310918bf1345e0c88bdf8c68245da48ce3e7c7c0c0dcc9"
+  }
+}

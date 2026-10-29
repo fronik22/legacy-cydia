@@ -37,3 +37,17 @@ for name in ("DeviceAccess", "AccessOnce"):
             raise SystemExit(result.stderr[-5000:])
 
 print("Built root CLI and one-shot access payload")
+
+# SpringBoard is arm64 on A7 even when the root CLI runs as armv7.
+sdk7=Path(os.environ.get("IOS7_STUB",str(SDK)))
+obj=BUILD/"AccessOnce.arm64.o";image=BUILD/"AccessOnce.arm64.dylib"
+commands=[
+ ["xcrun","clang","-target","arm64-apple-ios7.0","-isysroot",str(sdk7),"-fno-objc-arc","-fblocks","-Os","-c",str(ROOT/"src/AccessOnce.m"),"-o",str(obj)],
+ ["xcrun","ld-classic","-bundle","-arch","arm64","-iphoneos_version_min","7.0","-syslibroot",str(sdk7),"-L"+str(sdk7/"usr/lib"),"-o",str(image),str(obj),"-L"+str(ROOT/"build-support"),"-lAccessC","-framework","Foundation","-framework","CoreFoundation","-lobjc","-lSystem"],
+ ["xcrun","lipo","-create",str(BUILD/"AccessOnce.dylib"),str(image),"-output",str(BUILD/"AccessOnce.universal.dylib")],
+ [LDID,"-Cadhoc","-Hsha1","-S",str(BUILD/"AccessOnce.universal.dylib")]]
+for i,command in enumerate(commands):
+ result=subprocess.run(command,capture_output=True,text=True);(BUILD/("arm64-"+str(i)+".log")).write_text(result.stdout+result.stderr)
+ if result.returncode:raise SystemExit(result.stderr[-4000:])
+(BUILD/"AccessOnce.universal.dylib").replace(BUILD/"AccessOnce.dylib")
+print("Universal one-shot payload built; armv7 CLI supports old and 64-bit iOS7 hosts")

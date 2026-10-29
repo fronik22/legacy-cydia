@@ -11,7 +11,7 @@ int main(int argc,char **argv){
     if(getuid()!=0){fputs("Root access is required.\n",stderr);[pool drain];return 2;}
     if(argc<2 || argc>3 || (strcmp(argv[1],"status") && strcmp(argv[1],"unlock") && strcmp(argv[1],"lock")) || (argc==3 && strcmp(argv[2],"--simulate-passcode"))){fputs("Use --help.\n",stderr);[pool drain];return 64;}
     NSDictionary *system=[NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];NSString *version=[system objectForKey:@"ProductVersion"];
-    if(![version isEqual:@"4.3.3"] && ![version isEqual:@"6.1.3"]){fprintf(stderr,"Unverified OS %s; refusing injection.\n",[version UTF8String]);[pool drain];return 2;}
+    if(![version isEqual:@"4.3.3"] && ![version isEqual:@"6.1.3"] && [version intValue]!=7){fprintf(stderr,"Unverified OS %s; refusing injection.\n",[version UTF8String]);[pool drain];return 2;}
     FILE *list=popen("/bin/launchctl list","r");char line[2048],label[1024];unsigned springboard=0,pid=0;
     if(list){while(fgets(line,sizeof(line),list)){if(sscanf(line,"%u %*s %1023s",&pid,label)==2 && !strcmp(label,"com.apple.SpringBoard")){springboard=pid;break;}}pclose(list);}
     if(!springboard){fputs("SpringBoard PID unavailable.\n",stderr);[pool drain];return 3;}

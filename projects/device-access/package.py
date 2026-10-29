@@ -26,13 +26,13 @@ shutil.copy2(BUILD / "AccessOnce.dylib", lib_dir / "AccessOnce.dylib")
 
 (CONTROL / "control").write_text("""Package: local.codex.device-access
 Name: Legacy Device Access
-Version: 1.0.1
+Version: 1.1.0
 Architecture: iphoneos-arm
 Description: Explicit root-operated no-passcode screen access for device tests.
- Tested on iOS 4.3.3 and 6.1.3. No daemon or boot auto-unlock.
+ Version-specific adapters for iOS 4.3.3, 6.1.3 and 7.x. No daemon or boot auto-unlock.
 Maintainer: Legacy iPad Tools
 Section: Development
-Depends: mobilesubstrate, firmware (>= 4.3), firmware (<< 7.0)
+Depends: mobilesubstrate, firmware (>= 4.3), firmware (<< 8.0)
 """)
 
 doc = STAGE / "usr/share/doc/local.codex.device-access"
@@ -41,10 +41,10 @@ doc.mkdir(parents=True)
     "Run over authenticated root SSH: codex-device-access status; "
     "codex-device-access unlock. Explicit lock test: codex-device-access lock. "
     "Configured passcodes are refused. No SUID mode, daemon, listener or startup hook. "
-    "Supported exact OS versions: 4.3.3, 6.1.3. "
+    "Supported OS versions: 4.3.3, 6.1.3 and signature-checked iOS7. "
     "Uninstall: dpkg -r local.codex.device-access.\n"
 )
 shutil.copy2(ROOT / "COPYING", doc / "COPYING")
 
-build_deb(STAGE, CONTROL, ROOT / "dist/device-access_1.0.1_iphoneos-arm.deb")
-print("wrote dist/device-access_1.0.1_iphoneos-arm.deb")
+build_deb(STAGE, CONTROL, ROOT / "dist/device-access_1.1.0_iphoneos-arm.deb")
+print("wrote dist/device-access_1.1.0_iphoneos-arm.deb")

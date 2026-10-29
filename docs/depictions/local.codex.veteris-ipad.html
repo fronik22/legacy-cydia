@@ -9,7 +9,7 @@
 <p><strong>Native iPad layout and suspension fix for Veteris 4</strong></p>
 <p>Native iPad layout and suspension crash fix for Veteris 4.</p>
 <p>Removes iPhone compatibility sizing, fixes storyboard selection, and adapts home and application-list layouts. Fixes SGX shader-cache suspension kills so Veteris&#x27;s existing background download support can work normally.</p>
-<p><span class="badge">iOS 6 verified. 1.2.0 adds an iOS 7 shader-cache guard and allows iOS 7, but the app has not been run on iOS 7 yet.</span></p>
+<p><span class="badge">iOS 6 layout and suspension behavior verified. iOS 7 layout policy and metadata self-tests pass; full Veteris 4 UI/background behavior is untested. The iOS 6 SGX disk-cache workaround is deliberately skipped on iOS 7.</span></p>
 <h2>Details</h2>
 <ul>
 <li>Package: <code>local.codex.veteris-ipad</code></li>
@@ -18,5 +18,6 @@
 <li>Requires: <code>firmware (&gt;= 5.0), firmware (&lt;&lt; 8.0), mobilesubstrate (&gt;= 0.9.5000), com.victorlobe.veteris (= 4)</code></li>
 </ul>
 <h2>Source</h2>
-<p><code>projects/veteris-ipad</code> — license: GPL-2.0</p>
+<p><code>projects/veteris-ipad</code> — license: GPL-3.0</p>
+<p><a href="https://github.com/fronik22/legacy-cydia/raw/refs/heads/main/source-archives/veteris-ipad-1.2.0-source.zip">Corresponding source ZIP</a></p>
 </body></html>

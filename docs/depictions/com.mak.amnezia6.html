@@ -10,14 +10,15 @@
 <p>Lightweight AmneziaWG client for iOS 4-7</p>
 <p>A small native AmneziaWG client: a root daemon owns the UTUN device, routing, DNS and the WireGuard/AmneziaWG 3.1 protocol, and a UIKit app controls it over a Unix socket. </p>
 <p> Supports header protection, junk packets, I1-I5 signatures, S1-S4 and H1-H4. Requires a jailbroken device with root access.</p>
-<p><span class="badge">iOS 7 verified: package install, root daemon, UTUN/route setup and the arm64 SpringBoard badge hook. Tunnel handshake was not retested because the VPS is unreachable from the test LAN.</span></p>
+<p><span class="badge">iOS 7.1.2 verified: 1.2.1 installs, the root daemon starts with a 0660 root:mobile control socket and stays idle. The same engine completed a handshake and 9/7 IP packets through an isolated UDP relay. A direct handshake from the test LAN still times out; server-side capture is needed to localise that path.</span></p>
 <h2>Details</h2>
 <ul>
 <li>Package: <code>com.mak.amnezia6</code></li>
-<li>Version: <code>1.2.0</code></li>
+<li>Version: <code>1.2.1</code></li>
 <li>Section: Networking</li>
 <li>Requires: <code>firmware (&gt;= 4.3), firmware (&lt;&lt; 8.0), mobilesubstrate</code></li>
 </ul>
 <h2>Source</h2>
 <p><code>projects/amnezia6</code> — license: GPL-2.0</p>
+<p><a href="https://github.com/fronik22/legacy-cydia/raw/refs/heads/main/source-archives/amnezia6-1.2.1-source.zip">Corresponding source ZIP</a></p>
 </body></html>

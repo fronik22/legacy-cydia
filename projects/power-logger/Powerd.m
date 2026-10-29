@@ -12,7 +12,7 @@ static const char*LogPath="/var/mobile/Library/Logs/LegacyPower/samples.jsonl";
 static BOOL enabled;static int interval=15;static NSString*segment;static NSString*session;static NSTimer*timer;static NSDictionary*lastSample;static NSString*lastError;static volatile sig_atomic_t quitting;
 static NSArray*Segments(void){return[NSArray arrayWithObjects:@"unlabelled",@"video-vpn-on",@"video-vpn-off",@"idle-vpn-on",@"idle-vpn-off",nil];}
 static void Status(void){
- NSMutableDictionary*d=[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:enabled],@"enabled",@"1.1.0",@"version",[NSNumber numberWithInt:getpid()],@"pid",[NSNumber numberWithInt:interval],@"interval",[NSNumber numberWithDouble:[[NSDate date]timeIntervalSince1970]],@"updated_epoch",session?:@"",@"session",segment?:@"unlabelled",@"segment",lastError?:@"",@"error",nil];
+ NSMutableDictionary*d=[NSMutableDictionary dictionaryWithObjectsAndKeys:[NSNumber numberWithBool:enabled],@"enabled",@"1.1.1",@"version",[NSNumber numberWithInt:getpid()],@"pid",[NSNumber numberWithInt:interval],@"interval",[NSNumber numberWithDouble:[[NSDate date]timeIntervalSince1970]],@"updated_epoch",session?:@"",@"session",segment?:@"unlabelled",@"segment",lastError?:@"",@"error",nil];
  if(lastSample){for(NSString*k in [NSArray arrayWithObjects:@"epoch",@"battery",@"cpu_cores_percent",@"gpu3d_percent",@"amnezia",@"display",@"collection_cpu_ms",@"collection_wall_ms",nil])if([lastSample objectForKey:k])[d setObject:[lastSample objectForKey:k]forKey:k];}
  NSData*data=[NSJSONSerialization dataWithJSONObject:d options:0 error:NULL];NSString*path=[LP_DIR stringByAppendingPathComponent:@"status.json"];[data writeToFile:path atomically:YES];chmod(path.fileSystemRepresentation,0640);
 }
@@ -38,7 +38,7 @@ static void Event(NSString*kind){
  getrusage(RUSAGE_SELF,&after);mach_timebase_info_data_t tb;mach_timebase_info(&tb);
  double work=((after.ru_utime.tv_sec-before.ru_utime.tv_sec)+(after.ru_stime.tv_sec-before.ru_stime.tv_sec))*1000.0+((after.ru_utime.tv_usec-before.ru_utime.tv_usec)+(after.ru_stime.tv_usec-before.ru_stime.tv_usec))/1000.0;
  [r setObject:Num(work)forKey:@"collection_cpu_ms"];[r setObject:Num((mach_absolute_time()-start)*(double)tb.numer/tb.denom/1e6)forKey:@"collection_wall_ms"];
- [r setObject:[NSNumber numberWithInt:interval]forKey:@"interval_seconds"];[r setObject:session forKey:@"session"];[r setObject:segment forKey:@"segment"];[r setObject:@"1.1.0"forKey:@"logger_version"];
+ [r setObject:[NSNumber numberWithInt:interval]forKey:@"interval_seconds"];[r setObject:session forKey:@"session"];[r setObject:segment forKey:@"segment"];[r setObject:@"1.1.1"forKey:@"logger_version"];
  if(Write(r)){[lastError release];lastError=nil;}
  [lastSample release];lastSample=[r copy];Status();[pool drain];
 }
@@ -62,13 +62,16 @@ int main(int argc,char**argv){
  NSAutoreleasePool*p=[NSAutoreleasePool new];NSDictionary*os=[NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];NSString*v=[os objectForKey:@"ProductVersion"];
  if(!LPOSAllowed(v.intValue)){fprintf(stderr,"Only iOS6-7 armv7/arm64 is supported\n");return 2;}
  if(argc==2&&!strcmp(argv[1],"--once")){NSData*d=[NSJSONSerialization dataWithJSONObject:Sample()options:0 error:NULL];fwrite(d.bytes,1,d.length,stdout);puts("");return d?0:1;}
+ if(argc==2&&!strcmp(argv[1],"--sample-pair")){
+  NSDictionary*a=Sample();usleep(250000);NSDictionary*b=Sample();NSData*d=[NSJSONSerialization dataWithJSONObject:[NSArray arrayWithObjects:a,b,nil]options:0 error:NULL];fwrite(d.bytes,1,d.length,stdout);puts("");return d?0:1;
+ }
  if(argc==2&&!strcmp(argv[1],"--self-cpu-test")){
   int(*info)(int,int,uint64_t,void*,int)=dlsym(RTLD_DEFAULT,"proc_pidinfo");struct LPTask a={0},b={0};if(!info||info(getpid(),4,0,&a,sizeof a)!=sizeof a)return 3;
   uint64_t t=mach_absolute_time();mach_timebase_info_data_t tb;mach_timebase_info(&tb);volatile uint64_t x=1;while((mach_absolute_time()-t)*(double)tb.numer/tb.denom/1e9<.5)x=x*1664525+1013904223;
   if(info(getpid(),4,0,&b,sizeof b)!=sizeof b)return 5;double cpu=LPCPU(a.user_ticks+a.system_ticks,b.user_ticks+b.system_ticks,mach_absolute_time()-t,1);printf("self_busy_one_core_percent=%.2f\n",cpu);return cpu>=60&&cpu<=110?0:4;
  }
  if(argc==2&&!strcmp(argv[1],"--running")){int fd=open("/var/run/legacypowerd.lock",O_RDONLY|O_NOFOLLOW);if(fd<0)return 1;int active=flock(fd,LOCK_EX|LOCK_NB)<0&&(errno==EWOULDBLOCK||errno==EAGAIN);close(fd);return active?0:1;}
- if(argc>2||(argc==2&&strcmp(argv[1],"--daemonize"))){fprintf(stderr,"usage: legacypowerd [--daemonize|--once|--self-cpu-test]\n");return 64;}
+ if(argc>2||(argc==2&&strcmp(argv[1],"--daemonize"))){fprintf(stderr,"usage: legacypowerd [--daemonize|--once|--sample-pair|--self-cpu-test]\n");return 64;}
  if(geteuid()!=0)return 77;
  if(argc==2){pid_t child=fork();if(child<0)return 1;if(child>0)return 0;if(setsid()<0)return 1;int fd=open("/dev/null",O_RDWR);if(fd<0)return 1;for(int i=0;i<3;i++)dup2(fd,i);if(fd>2)close(fd);}
  struct group*mobile=getgrnam("mobile");if(!mobile||setgid(mobile->gr_gid))return 1;

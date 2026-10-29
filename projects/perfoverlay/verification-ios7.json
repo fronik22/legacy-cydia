@@ -1,0 +1,117 @@
+{
+  "version": "0.1.10",
+  "date": "2026-10-28",
+  "package_sha256": "24a2b7ee86bcad6da0962711c685a9bc25ec6c73463f140e4147540ad82103d5",
+  "package_bytes": 66182,
+  "GPLv3_copying_included": true,
+  "own_code_only": true,
+  "ios7": {
+    "model": "iPad4,5",
+    "os": "7.1.2",
+    "Settings_bundle_loader": {
+      "bits": 64,
+      "base_abi_available": true,
+      "bundles": [
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "PerfOverlayPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "PerfOverlayPrefsController"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyPowerPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyPowerPrefs"
+        },
+        {
+          "subclass_and_specifiers": true,
+          "bundle": "LegacyGameFPSPrefs.bundle",
+          "error": "",
+          "loaded": true,
+          "principal": "LegacyGameFPSPrefs"
+        }
+      ]
+    },
+    "HUD_enabled_during_probe": false,
+    "Power_recording_enabled_during_probe": false,
+    "same_source_metric_probe": {
+      "frame_counter_delta": 0,
+      "first_frame_counter": 93107,
+      "collector_bits": 64,
+      "last_frame_counter": 93107,
+      "memory_available": true,
+      "kernel_page_size": 4096,
+      "total_mb": 975.96484375,
+      "ncsettings_allowed": 0,
+      "global_frames_available": true,
+      "active_pages": 91912,
+      "gpu_percent": 0,
+      "wire_pages": 29689,
+      "used_mb": 576.64453125,
+      "inactive_pages": 26021,
+      "free_pages": 102094,
+      "gpu_service": "AGXAccelerator",
+      "host_page_size": 16384,
+      "cpu_percent": 0,
+      "cpu_cores": 2,
+      "sys_page_size": 16384
+    }
+  },
+  "limits": [
+    "No enabled-HUD pixels/rotation/toggle UI on7",
+    "No four-game iOS7 gameplay timing",
+    "No unplugged iOS7 battery calibration"
+  ],
+  "ios6_same_source_metric_probe": {
+    "free_pages": 51038,
+    "global_frames_available": true,
+    "cpu_cores": 2,
+    "inactive_pages": 6669,
+    "sys_page_size": 4096,
+    "host_page_size": 4096,
+    "ncsettings_allowed": 1,
+    "active_pages": 19344,
+    "kernel_page_size": 0,
+    "memory_available": true,
+    "last_frame_counter": 179228,
+    "collector_bits": 32,
+    "first_frame_counter": 179228,
+    "wire_pages": 18459,
+    "used_mb": 173.70703125,
+    "cpu_percent": 2,
+    "gpu_percent": 0,
+    "frame_counter_delta": 0,
+    "total_mb": 502.984375,
+    "gpu_service": "SGXDriver543"
+  },
+  "regression": "HOST_VM_INFO kernel4096 versus task16384 pages; invalid totals/overflow, percentage bounds, legacyNC scope, CPU weighted deltas and216geometry cases",
+  "source_sha256": {
+    "package.py": "e3a200aaa013f92314bca6a6c4cb8c441a3fff8c07e755529b2948e6dfa49283",
+    "build.py": "c67915e7d9a1a257c1ac61906d498c9cd376e458e83c826b7231b01e125d278a",
+    "package_deb.py": "b5ce08b93c93e3a4044dae6ccfc245dd40ee842e1d8d5658ec1e2a24e3c8d5b4",
+    "settings/PerfOverlayPrefs.m": "4b444c16144c991d1fdaf9036b0373ef9d8dea1c602a40137cc65a80d0010e1c",
+    "ncsettings/Toggle.m": "8a8bdf242379a5f07b106dc3805779ffe1f468e73ed58ace691a6b233ab4b6e2",
+    "ncsettings/make_icons.py": "fed5e4f71f88106b8cf22cdb48dd1866fc92321b88dd4f40a1fe181bf033fb6c",
+    "probe/togglecli.m": "4da92c6b8514186c27e0fa0a0c3c0c1959e47cfd93182c3738373c09a564e545",
+    "probe/test_package.py": "378c6b1858afd474285cec6f0b8f6cfed310a08ade15e92489f3ebec611d8876",
+    "probe/ncopen.m": "d3ddf3a970ac8da2850ca5fa56a6e3091e3b60ab1ff78e054f8bb5ea01551482",
+    "probe/build-metrics.py": "0784a0a500eb7594ce5cfc1d7a4f498b051a3f78628782915f6652e5aa1c4700",
+    "probe/gpuwatch.m": "89d834ea456c4eec4bbe8ff0bf6b002f0c8b4bcccce42d35c179dc3db8715ae5",
+    "probe/native-metrics.m": "d26939ff16ea5ab507bd6dcc4d6be98e8e79eb6076c0d9dac6c80c0039321cdb",
+    "probe/settings-check.m": "1bf157411a1466effdd9ac64bf06b9a59340cc002b2706d94fa2958a464742d9",
+    "probe/cpu-test.c": "3aec240c89b4a3b63c1e7839e23caf49ce261073b3888c14a7f27fd9436836a4",
+    "probe/metric-policy-test.c": "ccb6ac70731ef37d7432b073c7730dad61d013f7d1149f2759029fbe8549ebc9",
+    "probe/nctap.m": "1c88a4f9507a2f4425c06dad5f6b6016ff26bcf4ad51435dc77d1569b9c30f85",
+    "probe/screenshot.m": "b66f26f95bd9e247cb4879be6888ba6d17547ee7866e3c07836bbf31a6a3c65e",
+    "probe/framecounter.m": "36f250e9950c68886d5efad36a898ae7c374f270915af4c468d1327ebb39bee0",
+    "probe/rotation-test.c": "ba2b9199e89678e6b12ee312abcbcabe76275ee5aa6d7727702326c2a7e9b6bc",
+    "probe/probe.m": "346169ffaa0156ec566b195f80ab90dbf17420afc2d0cad3d5b16a34399d1469",
+    "tweak/HUDLayout.h": "693625ebcad7b2cc41f4f5b0bcbd739a7004bb83e6d4d2bdc9b4d4cd1232dc39",
+    "tweak/MetricPolicy.h": "dc3d70abbd0e07ae08a701a8f62bc0227eb1f949c055a18351e468fa6ab0fd9d",
+    "tweak/CPUCounters.h": "718c5980438a5321ef0bb026ddc05b1a6dca8ed2188d936cf42285d837eacbec",
+    "tweak/PerfOverlay.m": "7239d5ccee5771a921e56d5d9f2e6e071fa4a0e7ad99dc2e65c0cb2e66e7d3d1"
+  }
+}

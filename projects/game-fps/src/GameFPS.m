@@ -163,5 +163,5 @@ __attribute__((constructor))static void Initialize(void){
  [center addObserverForName:UIApplicationDidBecomeActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note){ReadPreference();Log(@"active",nil);}];
  [center addObserverForName:UIApplicationWillResignActiveNotification object:nil queue:nil usingBlock:^(NSNotification *note){ResetSample();Log(@"inactive",nil);}];
  [center addObserverForName:UIApplicationDidReceiveMemoryWarningNotification object:nil queue:nil usingBlock:^(NSNotification *note){Log(@"memory_warning",nil);}];
- Log(@"started",@{@"version":@"0.2.1",@"bundle":@(Profile->bundle),@"drawSelector":NSStringFromSelector(DrawSelector),@"idleTimerDisabled":@([UIApplication sharedApplication].idleTimerDisabled),@"linkOffset":@(ivar_getOffset(LinkIvar)),@"timerOffset":@(ivar_getOffset(TimerIvar))});[pool drain];
+ Log(@"started",@{@"version":@"0.2.2",@"bundle":@(Profile->bundle),@"drawSelector":NSStringFromSelector(DrawSelector),@"idleTimerDisabled":@([UIApplication sharedApplication].idleTimerDisabled),@"linkOffset":@(ivar_getOffset(LinkIvar)),@"timerOffset":@(ivar_getOffset(TimerIvar))});[pool drain];
 }

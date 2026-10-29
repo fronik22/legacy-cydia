@@ -98,7 +98,8 @@ $(BUILD)/test_command_reply: tests/test_command_reply.m app/A6Daemon.m app/A6Dae
 $(BUILD)/test_tunnel_retry: tests/test_tunnel_retry.c src/tunnel.c $(HOST_COMMON_OBJ) | $(BUILD)
 	$(HOSTCC) $(HOST_CFLAGS) tests/test_tunnel_retry.c $(HOST_COMMON_OBJ) -o $@ $(HOST_LIBS)
 
-test: $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+test: $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+	$(BUILD)/test_control_permissions
 	$(BUILD)/test_profiles tests/fixtures
 	$(BUILD)/test_protocol
 	$(BUILD)/test_qr tests/fixtures/profile-qr.pgm
@@ -254,7 +255,7 @@ $(BUILD)/ToggleRegression.bundle: tests/ToggleRegression.m app/A6Daemon.h | $(BU
 
 deb: device app
 	python3 tools/build_deb.py
-	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
+	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
 
 -include $(wildcard build/host/*.d build/dev/*.d build/app/app/*.d build/app/src/*.d build/test_*.d)
 
@@ -280,4 +281,15 @@ $(BUILD)/test_handshake-device: tests/test_handshake.c $(DEV_COMMON_OBJ)
 	$(LDID) -S $@
 $(BUILD)/test_profiles-device: tests/test_profiles.m app/A6Profiles.m app/A6Daemon.m app/A6Import.m $(IMPORT_C) $(DEV_COMMON_OBJ) src/client.c
 	$(DEVCLANG) $(APP_CFLAGS) tests/test_profiles.m app/A6Profiles.m app/A6Daemon.m app/A6Import.m $(IMPORT_C) $(DEV_COMMON_OBJ) src/client.c -L"$(CURDIR)/toolchain/oldlibs" -framework Foundation -framework CoreFoundation -lz -lm -o $@
+	$(LDID) -S $@
+
+$(BUILD)/test_control_permissions: tests/test_control_permissions.c src/control.c src/control.h | $(BUILD)
+	$(HOSTCC) $(HOST_CFLAGS) tests/test_control_permissions.c -o $@
+
+$(BUILD)/device_tunnel_probe: tests/device_tunnel_probe.c $(DEV_COMMON_OBJ) $(DEV_OBJDIR)/utun.o $(DEV_OBJDIR)/dns.o $(DEV_OBJDIR)/tunnel.o
+	$(DEVCLANG) $(DEV_CFLAGS) tests/device_tunnel_probe.c $(DEV_COMMON_OBJ) $(DEV_OBJDIR)/utun.o $(DEV_OBJDIR)/dns.o $(DEV_OBJDIR)/tunnel.o $(DEV_LDFLAGS) -o $@
+	$(LDID) -S $@
+
+$(BUILD)/device_control_probe: tests/device_control_probe.c $(DEV_OBJDIR)/control.o
+	$(DEVCLANG) $(DEV_CFLAGS) tests/device_control_probe.c $(DEV_OBJDIR)/control.o $(DEV_LDFLAGS) -o $@
 	$(LDID) -S $@

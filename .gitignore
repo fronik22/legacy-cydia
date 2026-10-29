@@ -23,3 +23,8 @@ projects/game-fps/observations/*.png
 *.xcuserstate
 .vscode/
 .idea/
+
+# Historical corresponding source ships as its exact versioned archive.
+projects/blastron/
+**/__pycache__/
+**/*.pyc

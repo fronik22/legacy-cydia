@@ -48,7 +48,7 @@ for archive in ("control.tar.gz", "data.tar.gz"):
             assert tar.extractfile("./Library/MobileSubstrate/DynamicLibraries/A6Status.dylib").read() == (path.parent / "A6Status.dylib").read_bytes()
             assert "./Library/MobileSubstrate/DynamicLibraries/A6Status.plist" in names
             info=plistlib.loads(tar.extractfile("./Applications/Amnezia6.app/Info.plist").read())
-            assert info["CFBundleVersion"]=="1.2.0" and info["MinimumOSVersion"]=="4.3"
+            assert info["CFBundleVersion"]=="1.2.1" and info["MinimumOSVersion"]=="4.3"
             assert "vpn" in info["CFBundleURLTypes"][0]["CFBundleURLSchemes"]
             assert info["CFBundleDocumentTypes"] and info["NSCameraUsageDescription"]
             assert not any(n.endswith("profiles.plist") for n in names)

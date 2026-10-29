@@ -16,8 +16,12 @@ int a6_control_open(const char *path) {
     struct sockaddr_un addr;
     int fd;
     struct group *mobile;
+    mode_t mask;
+    int result, saved_errno;
 
     if (!path || strlen(path) >= sizeof addr.sun_path) return -1;
+    mobile = getgrnam("mobile");
+    if (!mobile) { errno = ENOENT; return -1; }
     unlink(path);
     fd = socket(AF_UNIX, SOCK_STREAM, 0);
     if (fd < 0) return -1;
@@ -25,21 +29,16 @@ int a6_control_open(const char *path) {
     memset(&addr, 0, sizeof addr);
     addr.sun_family = AF_UNIX;
     snprintf(addr.sun_path, sizeof addr.sun_path, "%s", path);
-    if (bind(fd, (struct sockaddr *)&addr, sizeof addr) != 0) {
-        close(fd);
-        return -1;
-    }
-    chmod(path, 0660);
-    mobile = getgrnam("mobile");
-    if (mobile) {
-        if (chown(path, 0, mobile->gr_gid) != 0)
-            chmod(path, 0666);
-    } else {
-        chmod(path, 0666);
-    }
-    if (listen(fd, 8) != 0) {
+    mask = umask(0177);
+    result = bind(fd, (struct sockaddr *)&addr, sizeof addr);
+    saved_errno = errno;
+    umask(mask);
+    if (result != 0) { close(fd); errno = saved_errno; return -1; }
+    if (chown(path, 0, mobile->gr_gid) != 0 || chmod(path, 0660) != 0 || listen(fd, 8) != 0) {
+        saved_errno = errno;
         close(fd);
         unlink(path);
+        errno = saved_errno;
         return -1;
     }
     return fd;

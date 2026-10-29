@@ -34,3 +34,11 @@ python3 test_package.py
 ```
 
 Do not set FPS_DIAGNOSTIC for a release build. Developer scripts reuse this workspace's guarded USB/SSH connector and are not portable access installers. Additional games require their own exact-build limiter, simulation-time and lifecycle validation; never apply systemwide timer/sleep hooks.
+
+## iOS7 audit /0.2.2 (2026-10-28)
+
+The hook deliberately remains armv7: its four profiles name exact owned32bit game executable hashes, instruction bytes and method encodings. A compile-time guard forbids using these native offsets in arm64. These32bit games run in the A7 compatibility runtime; the Settings bundle is now universal armv7/iOS6 +arm64/iOS7 so it can load into64bit Settings. Runtime/installer scope is6–7. Existing FPS preferences are preserved; new profiles default Original.
+
+The real mini2/iOS7.1.2 loaded the arm64 preference bundle against PSListController and exposed required methods. Package checks verify thinarmv7 hook, universalSettings, source-profile/settings alignment, exact payload and absent diagnostic hooks/private binaries. iOS7 gameplay/presentation/simulation timing for the four games was not exercised; retain previous iOS6 measurements separately. Do not reuse these hooks for an arm64 game or a different executable hash.
+
+GPLv3COPYING/copyright are now included in the package; version0.2.2 supersedes already-published0.2.1 without silently replacing its bytes. Native-offset code and existing simulation safeguards are otherwise unchanged.

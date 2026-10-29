@@ -12,7 +12,7 @@ class Package(unittest.TestCase):
    self.assertEqual(cells[key]['default'],0)
   self.assertEqual(cells['BlastronFPS']['validValues'],[-1,30,60])
  def test_release_payload_and_scope(self):
-  raw=(R/'dist/legacy-game-fps_0.2.1_iphoneos-arm.deb').read_bytes();self.assertEqual(raw[:8],b'!<arch>\n');pos=8;members={}
+  raw=(R/'dist/legacy-game-fps_0.2.2_iphoneos-arm.deb').read_bytes();self.assertEqual(raw[:8],b'!<arch>\n');pos=8;members={}
   while pos<len(raw):
    h=raw[pos:pos+60];size=int(h[48:58]);members[h[:16].decode().strip().rstrip('/')]=raw[pos+60:pos+60+size];pos+=60+size+(size%2)
   with tarfile.open(fileobj=io.BytesIO(members['data.tar.gz']),mode='r:gz')as t:
@@ -28,4 +28,5 @@ class Package(unittest.TestCase):
    if cmd==0x25:versions.append(struct.unpack_from('<I',binary,pos+8)[0])
    pos+=size
   self.assertEqual(versions,[0x60000]);self.assertEqual(struct.unpack_from('<I',binary,4)[0],12,'Verified native hooks must stay armv7')
+  prefs=files['Library/PreferenceBundles/LegacyGameFPSPrefs.bundle/LegacyGameFPSPrefs'];self.assertEqual(struct.unpack_from('>I',prefs)[0],0xcafebabe);self.assertEqual({struct.unpack_from('>I',prefs,8+i*20)[0]for i in range(struct.unpack_from('>I',prefs,4)[0])},{12,0x100000c})
 if __name__=='__main__':unittest.main()

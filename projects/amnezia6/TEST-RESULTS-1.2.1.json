@@ -1,0 +1,32 @@
+{
+  "version": "1.2.1",
+  "device": "iPad4,5",
+  "os": "7.1.2",
+  "engine": "armv7 in iOS7 compatibility runtime",
+  "badge": "armv7+arm64",
+  "host_tests": "PASS",
+  "asan_ubsan_socket_protocol": "PASS",
+  "native_protocol_profiles_socket": "PASS",
+  "via_temporary_opaque_relay": {
+    "handshake": true,
+    "http_status": 301,
+    "dns_response": true,
+    "tx_ip_packets": 9,
+    "rx_ip_packets": 7,
+    "tx_ip_bytes": 556,
+    "rx_ip_bytes": 1034,
+    "relay_out_datagrams": 10,
+    "relay_in_datagrams": 9
+  },
+  "cleanup": {
+    "idle": true,
+    "interface_gone": true,
+    "gateway_restored": true,
+    "dns_restored": true,
+    "profile_unchanged": true
+  },
+  "direct_endpoint": "No handshake within12s; exact transport/path cause unresolved",
+  "final_package_ui_tested": false,
+  "ipv6_protected": false,
+  "kill_switch": false
+}

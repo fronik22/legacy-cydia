@@ -19,7 +19,9 @@
 #include <unistd.h>
 #include <math.h>
 
+#ifndef PERF_LOG
 #define PERF_LOG "/tmp/perfoverlay.log"
+#endif
 #define PERF_PREF_DOMAIN CFSTR("com.local.perfoverlay")
 #define PERF_PREF_ENABLED CFSTR("Enabled")
 #define PERF_TOGGLE_ON "com.local.perfoverlay.toggle.on"
@@ -181,12 +183,13 @@ static int PercentFromStats(CFDictionaryRef stats) {
         CFStringRef key = CFStringCreateWithCString(kCFAllocatorDefault, keys[i], kCFStringEncodingUTF8);
         if (!key) continue;
         CFTypeRef value = CFDictionaryGetValue(stats, key);
-        int percent = -1;
+        double raw = -1;
         if (value && CFGetTypeID(value) == CFNumberGetTypeID()) {
-            if (!CFNumberGetValue((CFNumberRef)value, kCFNumberIntType, &percent)) percent = -1;
+            if (!CFNumberGetValue((CFNumberRef)value, kCFNumberDoubleType, &raw)) raw = -1;
         }
         CFRelease(key);
-        if (PerfMetricPercent(percent) >= 0) return percent;
+        int percent=PerfMetricPercent(raw);
+        if (percent >= 0) return percent;
     }
     return -1;
 }
@@ -334,13 +337,13 @@ static BOOL MemoryUsage(double *usedMB, double *totalMB) {
     vm_statistics_data_t vm;
     mach_msg_type_number_t count = HOST_VM_INFO_COUNT;
     if (host_statistics(mach_host_self(), HOST_VM_INFO, (host_info_t)&vm, &count) != KERN_SUCCESS) return NO;
-    vm_size_t page = 0;
-    host_page_size(mach_host_self(), &page);
-    uint64_t used = ((uint64_t)vm.active_count + (uint64_t)vm.inactive_count +
-                     (uint64_t)vm.wire_count) * (uint64_t)page;
-    uint64_t total = 0;
-    size_t len = sizeof(total);
-    if (sysctlbyname("hw.memsize", &total, &len, NULL, 0) != 0 || total == 0 || !page) return NO;
+    vm_size_t taskPage = 0;
+    if(host_page_size(mach_host_self(), &taskPage)!=KERN_SUCCESS)return NO;
+    // iOS7 A7 tasks use16KiB pages while HOST_VM_INFO counts4KiB kernel pages.
+    vm_size_t *kernelPage=dlsym(RTLD_DEFAULT,"vm_kernel_page_size");
+    uint64_t page=PerfMetricPageSize(kernelPage?*kernelPage:0,taskPage),used=0,total=0;
+    size_t len=sizeof(total);
+    if(sysctlbyname("hw.memsize",&total,&len,NULL,0)||!PerfMetricMemory(vm.active_count,vm.inactive_count,vm.wire_count,page,total,&used))return NO;
     if (usedMB) *usedMB = (double)used / 1048576.0;
     if (totalMB) *totalMB = (double)total / 1048576.0;
     return YES;

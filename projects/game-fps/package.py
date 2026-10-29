@@ -10,7 +10,7 @@ if(B/'Prefs').exists():
  dest=stage/'Library/PreferenceLoader/Preferences';dest.mkdir(parents=True);shutil.copy2(R/'settings/LegacyGameFPS.plist',dest/'LegacyGameFPS.plist')
 (control/'control').write_text('''Package: local.legacy-game-fps
 Name: Legacy Game FPS
-Version: 0.2.1
+Version: 0.2.2
 Architecture: iphoneos-arm
 Maintainer: Local
 Section: Tweaks
@@ -18,4 +18,5 @@ Depends: mobilesubstrate, preferenceloader, firmware (>= 6.0), firmware (<< 8.0)
 Description: Per-game frame pacing for explicitly verified legacy game builds.
  Reopen supported games after installation; reopen Settings if already running. No respring.
 ''')
-build_deb(stage,control,R/'dist/legacy-game-fps_0.2.1_iphoneos-arm.deb')
+doc=stage/'usr/share/doc/local.legacy-game-fps';doc.mkdir(parents=True);shutil.copy2(R/'COPYING',doc/'COPYING');(doc/'copyright').write_text('Own code: Copyright 2026 project contributors. GNU GPLv3; see COPYING. Corresponding source/build scripts accompany the repository. No original game code/assets/SDK included.\n')
+build_deb(stage,control,R/'dist/legacy-game-fps_0.2.2_iphoneos-arm.deb')

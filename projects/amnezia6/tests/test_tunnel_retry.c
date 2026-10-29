@@ -21,7 +21,7 @@
 #include "../src/tunnel.c"
 #include <assert.h>
 static uint64_t clock_ms=100000;
-static int sent,opened,route_ready,fail_send,fail_route,source_present=1,packet_kind=2,cookies;
+static int sent,opened,route_ready,fail_send,fail_route,source_present=1,packet_kind=2,cookies,fail_dns;
 uint64_t mock_now(void){return clock_ms;}
 int mock_socket(int domain,int type,int protocol){opened++;return 100;}
 int mock_connect(int fd,const struct sockaddr*a,socklen_t n){assert(route_ready);return 0;}
@@ -35,7 +35,7 @@ int mock_gateway(const char*endpoint,char*gw,size_t cap){snprintf(gw,cap,"172.21
 int mock_route_up(const char*i,const char*e,const char*g,const char*a,uint32_t mtu,int*owned){route_ready=!fail_route;*owned=route_ready;return fail_route?-1:0;}
 void mock_route_down(const char*i,const char*e,const char*g,int owned){route_ready=0;}
 int mock_source_available(const char*address){return source_present;}
-int mock_dns_up(a6_dns_t*d,const char*i,const char*a,const char*s){return 0;}
+int mock_dns_up(a6_dns_t*d,const char*i,const char*a,const char*s){return fail_dns?-1:0;}
 void mock_dns_down(a6_dns_t*d){}
 int mock_initiation(a6_session_t*s,uint8_t*out,size_t cap,size_t*n){s->pending.active=1;memset(out,0,8);*n=8;return 0;}
 int mock_packet_type(const a6_config_t*c,const uint8_t*p,size_t n){return packet_kind;}
@@ -76,5 +76,12 @@ int main(void){
  /* OFF is final: no future timer may recreate the tunnel. */
  before=opened;a6_tunnel_stop(&t);clock_ms+=1000000;a6_tunnel_timers(&t);assert(t.state==A6_STATE_IDLE&&!t.retry_pending&&opened==before);
  fail_route=0;start(&t);t.handshake_attempts=t.cfg.max_handshake_attempts.max;clock_ms=t.next_handshake_ms;a6_tunnel_timers(&t);assert(t.retry_pending&&strstr(t.error,"handshake"));a6_tunnel_stop(&t);
+ /* Requested DNS failure must never send a handshake or claim connected. */
+ fail_dns=1;start(&t);a6_config_t cfg=t.cfg;a6_tunnel_stop(&t);strcpy(cfg.dns,"192.0.2.53");
+ before=sent;char error[192];
+ assert(!a6_tunnel_start(&t,&cfg,error,sizeof error));
+ assert(t.retry_pending&&t.state==A6_STATE_CONNECTING&&strstr(t.error,"DNS"));
+ assert(sent==before&&!t.routes_up&&t.utun_fd==-1&&t.udp_fd==-1);
+ fail_dns=0;clock_ms=t.retry_at_ms;a6_tunnel_timers(&t);online(&t);assert(t.dns_up);a6_tunnel_stop(&t);
  puts("Connection timer survives rekey, resets on reconnect; retry, key expiry, source rebinding, backoff and OFF cancellation passed");
 }

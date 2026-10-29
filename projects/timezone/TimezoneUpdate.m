@@ -1,0 +1,69 @@
+#import "ICUPack.h"
+#include <dlfcn.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <errno.h>
+#include <limits.h>
+#include <notify.h>
+#include <mach/mach.h>
+static NSString *const Payload=@"/usr/share/legacy-timezone";
+static NSString *const Backup=@"/var/lib/legacy-timezone/backup";
+static NSString *const Owner=@"local.codex.legacy-timezone";
+static NSString *Hash(NSData *data){unsigned char digest[32];void *(*sha)(const void*,unsigned,void*)=dlsym(RTLD_DEFAULT,"CC_SHA256");Require(sha!=NULL,@"SHA256 unavailable");Require(data!=nil&&data.length<UINT32_MAX,@"Invalid hash input");sha(data.bytes,(unsigned)data.length,digest);NSMutableString *s=[NSMutableString string];for(unsigned i=0;i<32;i++)[s appendFormat:@"%02x",digest[i]];return s;}
+static NSString *FileHash(NSString *path){NSAutoreleasePool *p=[NSAutoreleasePool new];NSString *hash=[Hash([NSData dataWithContentsOfMappedFile:path])copy];[p drain];return [hash autorelease];}
+static void Directory(NSString *path,unsigned mode){NSError *e=nil;Require([[NSFileManager defaultManager]createDirectoryAtPath:path withIntermediateDirectories:YES attributes:[NSDictionary dictionaryWithObject:[NSNumber numberWithUnsignedInt:mode] forKey:NSFilePosixPermissions] error:&e],[NSString stringWithFormat:@"Directory %@: %@",path,e]);}
+static void Atomic(NSString *path,NSData *data,unsigned mode,unsigned uid,unsigned gid){
+ Require(data!=nil,@"Missing file data");Directory([path stringByDeletingLastPathComponent],0755);NSString *tmp=[path stringByAppendingFormat:@".legacytz-%d",getpid()];int fd=open(tmp.fileSystemRepresentation,O_WRONLY|O_CREAT|O_EXCL|O_NOFOLLOW,0600);Require(fd>=0,[NSString stringWithFormat:@"Create %@ errno%d",tmp,errno]);BOOL ok=YES;NSUInteger at=0;while(at<data.length){ssize_t n=write(fd,(const char*)data.bytes+at,data.length-at);if(n<0&&errno==EINTR)continue;if(n<=0){ok=NO;break;}at+=n;}if(fchmod(fd,mode)||fchown(fd,uid,gid)||fsync(fd))ok=NO;if(close(fd))ok=NO;if(ok&&rename(tmp.fileSystemRepresentation,path.fileSystemRepresentation))ok=NO;if(!ok)unlink(tmp.fileSystemRepresentation);Require(ok,[NSString stringWithFormat:@"Atomic write %@ failed",path]);
+}
+static void Relative(NSString *rel){Require([rel isKindOfClass:[NSString class]]&&![rel hasPrefix:@"/"]&&rel.length>0,@"Invalid relative path");for(NSString *c in [rel pathComponents])Require(c.length&&![c isEqual:@".."]&&![c isEqual:@"."],@"Unsafe relative path");}
+static NSString *Target(NSString *rel){
+ Relative(rel);Require([rel hasPrefix:@"zoneinfo/"]||[rel hasPrefix:@"icu/"],@"Unknown target");
+ if([rel hasPrefix:@"icu/"])Require([[rel lastPathComponent]hasPrefix:@"icudt"]&&[rel hasSuffix:@"l.dat"]&&[rel pathComponents].count==2,@"Invalid ICU target");
+ NSString *root=[rel hasPrefix:@"icu/"]?@"/usr/share/icu":@"/usr/share/zoneinfo";
+ NSString *path=[@"/usr/share" stringByAppendingPathComponent:rel],*parent=[path stringByDeletingLastPathComponent];char resolved[PATH_MAX];
+ // Jailbreak stashing can make /usr/share a symlink; compare canonical paths.
+ Require(realpath(root.fileSystemRepresentation,resolved)!=NULL,@"Timezone root unavailable");NSString *canonical=[NSString stringWithUTF8String:resolved];
+ while(!realpath(parent.fileSystemRepresentation,resolved)){Require(errno==ENOENT&&![parent isEqual:root],@"Cannot resolve target parent");parent=[parent stringByDeletingLastPathComponent];}
+ NSString *r=[NSString stringWithUTF8String:resolved];Require([r isEqual:canonical]||[r hasPrefix:[canonical stringByAppendingString:@"/"]],@"Target parent escapes timezone directory");return path;
+}
+static void Receipt(NSDictionary *m){NSString *p=[Backup stringByAppendingPathComponent:@"receipt.plist"];NSData *d=[NSPropertyListSerialization dataWithPropertyList:m format:NSPropertyListXMLFormat_v1_0 options:0 error:NULL];Atomic(p,d,0600,0,0);}
+static NSDictionary *ReadReceipt(void){NSString *p=[Backup stringByAppendingPathComponent:@"receipt.plist"];NSDictionary *m=[NSDictionary dictionaryWithContentsOfFile:p];Require([[m objectForKey:@"owner"]isEqual:Owner]&&[[m objectForKey:@"files"]isKindOfClass:[NSArray class]],@"Invalid/missing rollback receipt");return m;}
+static BOOL ExistingMatches(NSString *path,NSDictionary *row,BOOL updated){
+ struct stat st;if(lstat(path.fileSystemRepresentation,&st))return !updated&&![[row objectForKey:@"present"]boolValue]&&errno==ENOENT;
+ if(updated)return S_ISREG(st.st_mode)&&[FileHash(path)isEqual:[row objectForKey:@"installedHash"]];
+ if([[row objectForKey:@"kind"]isEqual:@"link"]){char value[PATH_MAX];ssize_t n=readlink(path.fileSystemRepresentation,value,sizeof value-1);if(n<0)return NO;value[n]=0;return S_ISLNK(st.st_mode)&&[[NSString stringWithUTF8String:value]isEqual:[row objectForKey:@"link"]];}
+ return S_ISREG(st.st_mode)&&[FileHash(path)isEqual:[row objectForKey:@"originalHash"]];
+}
+static void Stage(const char *name){struct task_basic_info info;mach_msg_type_number_t count=TASK_BASIC_INFO_COUNT;if(task_info(mach_task_self(),TASK_BASIC_INFO,(task_info_t)&info,&count)==KERN_SUCCESS)printf("STAGE %s resident=%uKB\n",name,(unsigned)(info.resident_size/1024));}
+static void Changed(void){CFTimeZoneResetSystem();notify_post("com.apple.system.timezone");}
+static void Restore(void){
+ Stage("restore-start");NSDictionary *m=ReadReceipt();NSArray *rows=[m objectForKey:@"files"];Stage("receipt-loaded");unsigned checked=0;
+ for(NSDictionary *row in rows){if(!(checked++%100))Stage("restore-preflight");NSString *path=Target([row objectForKey:@"relative"]);Require(ExistingMatches(path,row,YES)||ExistingMatches(path,row,NO),[NSString stringWithFormat:@"File changed outside this package: %@",path]);if([[row objectForKey:@"kind"]isEqual:@"file"]&&!ExistingMatches(path,row,NO)){NSString *b=[Backup stringByAppendingPathComponent:[@"files" stringByAppendingPathComponent:[row objectForKey:@"relative"]]];Require([FileHash(b)isEqual:[row objectForKey:@"originalHash"]],@"Backup hash mismatch");}}
+ Stage("restore-preflight-done");for(NSDictionary *row in rows){NSAutoreleasePool *iteration=[NSAutoreleasePool new];NSString *rel=[row objectForKey:@"relative"],*path=Target(rel);if(![[row objectForKey:@"present"]boolValue]){Require(!unlink(path.fileSystemRepresentation)||errno==ENOENT,@"Remove newly added timezone failed");}
+  else if([[row objectForKey:@"kind"]isEqual:@"link"]){NSString *tmp=[path stringByAppendingFormat:@".legacytz-%d",getpid()];Require(!symlink([[row objectForKey:@"link"]fileSystemRepresentation],tmp.fileSystemRepresentation),@"Restore symlink failed");Require(!lchown(tmp.fileSystemRepresentation,[[row objectForKey:@"uid"]unsignedIntValue],[[row objectForKey:@"gid"]unsignedIntValue])&&!rename(tmp.fileSystemRepresentation,path.fileSystemRepresentation),@"Restore symlink rename failed");}
+  else{NSString *source=ExistingMatches(path,row,NO)?path:[Backup stringByAppendingPathComponent:[@"files" stringByAppendingPathComponent:rel]];NSData *data=[NSData dataWithContentsOfMappedFile:source];Atomic(path,data,[[row objectForKey:@"mode"]unsignedIntValue],[[row objectForKey:@"uid"]unsignedIntValue],[[row objectForKey:@"gid"]unsignedIntValue]);}[iteration drain];
+ }
+ for(NSDictionary *row in rows)Require(ExistingMatches(Target([row objectForKey:@"relative"]),row,NO),@"Rollback verification failed");sync();Require([[NSFileManager defaultManager]removeItemAtPath:Backup error:NULL],@"Remove restored backups failed");Require(![[NSFileManager defaultManager]fileExistsAtPath:Backup],@"Rollback directory still exists");sync();Changed();puts("RESTORED original timezone files and ICU resources; reboot once to reload caches in all processes");
+}
+static unsigned ICUMajor(void){void *lib=dlopen("/usr/lib/libicucore.A.dylib",RTLD_LAZY);void(*get)(unsigned char*)=dlsym(lib,"u_getVersion");Require(get!=NULL,@"Cannot identify system ICU");unsigned char v[4]={0};get(v);return v[0]<10?v[0]*10+v[1]:v[0];}
+static void Apply(BOOL validate,NSString *payload){
+ NSDictionary *os=[NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];int major=[[os objectForKey:@"ProductVersion"]intValue];Require(major>=4&&major<=7,@"Requires iOS4–7");unsigned icu=ICUMajor();Require((icu>=44&&icu<=49)||(major==7&&icu==51),@"Unsupported ICU layout; requires44–49 or iOS7 ICU51");
+ NSString *receipt=[Backup stringByAppendingPathComponent:@"receipt.plist"];
+ if(!validate&&[[NSFileManager defaultManager]fileExistsAtPath:receipt]){NSDictionary *m=ReadReceipt();if([[m objectForKey:@"state"]isEqual:@"installed"]){Require([[m objectForKey:@"release"]isEqual:@"2026e"],@"Remove previous timezone release first");for(NSDictionary *row in [m objectForKey:@"files"])Require(ExistingMatches(Target([row objectForKey:@"relative"]),row,YES),@"Installed data changed outside package");puts("ALREADY INSTALLED 2026e; files verified");return;}Restore();}
+ Stage("payload-start");NSDictionary *manifest=[NSDictionary dictionaryWithContentsOfFile:[payload stringByAppendingPathComponent:@"files.plist"]];Require(manifest.count>500,@"Missing payload manifest");NSMutableDictionary *plans=[NSMutableDictionary dictionary],*resources=[NSMutableDictionary dictionary];
+ for(NSString *rel in manifest){Relative(rel);Require([rel hasPrefix:@"zoneinfo/"]||[rel hasPrefix:@"resources/"],@"Invalid payload path");NSData *data=[NSData dataWithContentsOfFile:[payload stringByAppendingPathComponent:rel]];Require([Hash(data)isEqual:[manifest objectForKey:rel]],@"Payload hash mismatch");if([rel hasPrefix:@"resources/"])[resources setObject:data forKey:[rel lastPathComponent]];else [plans setObject:data forKey:rel];}
+ Require(resources.count==4,@"Expected four ICU timezone resources");NSString *icuRel=[NSString stringWithFormat:@"icu/icudt%ul.dat",icu];NSString *icuPath=Target(icuRel);NSAutoreleasePool *packing=[NSAutoreleasePool new];NSData *old=[NSData dataWithContentsOfMappedFile:icuPath];Require(old!=nil,@"System ICU data file missing");[plans setObject:RepackICU(old,resources) forKey:icuRel];[packing drain];
+ Stage("ICU-repacked");if(validate){printf("VALIDATED tzdata2026e: %lu files; ICU%u; no system files changed\n",(unsigned long)plans.count,icu);return;}Directory(Backup,0700);struct stat dir;Require(!lstat(Backup.fileSystemRepresentation,&dir)&&S_ISDIR(dir.st_mode)&&dir.st_uid==0,@"Unsafe backup directory");Require(!chmod(Backup.fileSystemRepresentation,0700),@"Backup permissions failed");NSMutableArray *rows=[NSMutableArray array];
+ for(NSString *rel in [[plans allKeys]sortedArrayUsingSelector:@selector(compare:)]){NSAutoreleasePool *iteration=[NSAutoreleasePool new];NSString *path=Target(rel);struct stat st;int exists=lstat(path.fileSystemRepresentation,&st);Require(!exists||errno==ENOENT,@"Cannot inspect target");NSMutableDictionary *row=[NSMutableDictionary dictionaryWithObjectsAndKeys:rel,@"relative",[NSNumber numberWithBool:!exists],@"present",Hash([plans objectForKey:rel]),@"installedHash",nil];
+  if(!exists){Require(S_ISREG(st.st_mode)||S_ISLNK(st.st_mode),@"Timezone target is not a file");[row setObject:[NSNumber numberWithUnsignedInt:st.st_mode&07777]forKey:@"mode"];[row setObject:[NSNumber numberWithUnsignedInt:st.st_uid]forKey:@"uid"];[row setObject:[NSNumber numberWithUnsignedInt:st.st_gid]forKey:@"gid"];
+   if(S_ISLNK(st.st_mode)){char link[PATH_MAX];ssize_t n=readlink(path.fileSystemRepresentation,link,sizeof link-1);Require(n>=0,@"Cannot save symlink");link[n]=0;[row setObject:@"link" forKey:@"kind"];[row setObject:[NSString stringWithUTF8String:link]forKey:@"link"];}
+   else{NSData *data=[NSData dataWithContentsOfMappedFile:path];[row setObject:@"file" forKey:@"kind"];[row setObject:Hash(data)forKey:@"originalHash"];Atomic([Backup stringByAppendingPathComponent:[@"files" stringByAppendingPathComponent:rel]],data,0600,0,0);}
+  }[rows addObject:row];[iteration drain];
+ }
+ NSMutableDictionary *m=[NSMutableDictionary dictionaryWithObjectsAndKeys:Owner,@"owner",@"2026e",@"release",@"prepared",@"state",rows,@"files",nil];Receipt(m);sync();Stage("originals-backed-up");
+ @try{for(NSDictionary *row in rows){NSString *rel=[row objectForKey:@"relative"];Atomic(Target(rel),[plans objectForKey:rel],0644,0,0);}Stage("files-written");for(NSDictionary *row in rows)Require(ExistingMatches(Target([row objectForKey:@"relative"]),row,YES),@"Installed hash verification failed");Stage("files-verified");[m setObject:@"installed" forKey:@"state"];Receipt(m);sync();Stage("receipt-saved");}
+ @catch(NSException *exception){fprintf(stderr,"Apply failed; restoring originals: %s\n",exception.reason.UTF8String);Restore();@throw;}
+ Changed();printf("INSTALLED tzdata2026e: %lu files; ICU%u; selected zone and UTC clock unchanged\n",(unsigned long)rows.count,icu);puts("Reboot once to reload cached timezone data in all processes");
+}
+int main(int argc,char **argv){NSAutoreleasePool *pool=[NSAutoreleasePool new];umask(077);setbuf(stdout,NULL);int result=0;@try{Require(argc==2||argc==3,@"Usage: legacy-timezone apply|restore|status|validate [payload]");NSString *command=[NSString stringWithUTF8String:argv[1]];Require(argc==2||[command isEqual:@"validate"],@"Alternate payload allowed only for read-only validation");if([command isEqual:@"status"]){NSString *p=[Backup stringByAppendingPathComponent:@"receipt.plist"];NSDictionary *m=[NSDictionary dictionaryWithContentsOfFile:p];printf("release=%s state=%s ICU=%u zone=%s\n",[[m objectForKey:@"release"]UTF8String]?:"stock",[[m objectForKey:@"state"]UTF8String]?:"not-installed",ICUMajor(),[[[NSTimeZone systemTimeZone]name]UTF8String]);}else{Require(geteuid()==0,@"Root required");if([command isEqual:@"apply"]||[command isEqual:@"validate"])Apply([command isEqual:@"validate"],argc==3?[NSString stringWithUTF8String:argv[2]]:Payload);else if([command isEqual:@"restore"])Restore();else Require(NO,@"Unknown command");}}@catch(NSException *e){fprintf(stderr,"ERROR: %s\n",e.reason.UTF8String);result=1;}[pool drain];return result;}

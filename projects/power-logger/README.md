@@ -1,6 +1,6 @@
-# Power Logger1.0.0
+# Power Logger1.1.1
 
-Installable native recorder + PreferenceLoader pane for jailbroken armv7 iOS6. No Substrate injection is needed for the recorder. Default OFF; Settings > Power Logger > Recording enables it. OFF leaves the one small daemon dormant with no sample timer; it does not unload the process. It works without a cable. No wake lock, Wi-Fi reset, VPN toggle, Internet probes or background app hook.
+Installable native recorder + PreferenceLoader pane for jailbroken iOS6–7 (armv7 plus arm64 on7). No Substrate injection is needed for the recorder. Default OFF; Settings > Power Logger > Recording enables it. OFF leaves the one small daemon dormant with no sample timer; it does not unload the process. It works without a cable. No wake lock, Wi-Fi reset, VPN toggle, Internet probes or background app hook.
 
 Records every15/30/60seconds while awake: battery charge/capacity, signed InstantAmperage, voltage, net battery watts, temperature, charger flag, cycle count; all visible processes' CPU delta/RSS/thread/context-switch counters; per-core total CPU; PowerVR3D load; physical/tunnel byte counters/rates; available brightness setting/raw display power state; Amnezia state/counters/retry/error. Unsupported values are null/read_error, not zero. No URLs, VPN profile, packet contents or command-line arguments are collected.
 
@@ -19,3 +19,13 @@ Build: python3 build.py; python3 package.py. Uses the existing external iOS9.3 S
 Reuse/provenance: older own VPNBench experiment in /Users/mak/Documents/Codex/2026-07-01/new-chat/work/vpnbench supplied the battery/network experiment concept; this version replaces ps/shell polling and adds signed-current handling, real process deltas, Settings, bounds and tests. Own PerfOverlay preference-pane/build/package patterns reused. XNU2050 public proc_taskinfo ABI and time units consulted at https://github.com/apple-oss-distributions/xnu/blob/xnu-2050.18.24/bsd/sys/proc_info.h and osfmk/kern/bsd_kern.c. Native OS framework headers remain external inputs. New implementation is original local project code.
 
 Existing alternatives considered: CocoaTop's 32bit branch supports iOS6 process viewing; DetailedBatteryUsage explicitly requires iOS8/9. They do not replace this requested switchable contextual trace. No third-party monitoring app installed.
+
+## iOS7 audit /1.1.1 (2026-10-28)
+
+Daemon and Settings bundle now contain armv7/iOS6 and arm64/iOS7 slices; installer/runtime reject outside6–7. PROC_PIDTASKINFO is verified as a96byte architecture-neutral contract with checked offsets and exact return-size validation. Sysctl process table alignment is validated. Native iOS7A7 task counters use Mach ticks (125/3 timebase), not guessed nanoseconds: own busy-loop CPU measured99.95%. All85 sampled processes returned valid taskinfo, with84nonnull process deltas on the second sample (kernel_task CPU remains intentionally excluded). iOS6 regression measured100.08%,60processes with0readerrors and59valid deltas.
+
+IOKit adds A7 AGXAccelerator and records missing process readings explicitly. Unknown-model capacity units stay raw_unverified rather than claiming iPad2 calibration. On mini2 the sensor exposed4273mV,27.5C,current0 while fully charged/externalpower; discharge_w correctly stayed null. This is not unplugged battery-drain calibration. Native64 Settings bundle loads and required PSListController API exists; no interactive pane/toggle test was performed. Recording remained OFF and the existing dormant daemon PID7862 was unchanged by probes.
+
+The incomplete legacy SDK omitted memcpy/strcmp reexport declarations. A narrowly scoped standard-libSystem ABI link stub replaces unrestricted dynamic_lookup; final native64 binaries executed. It contains no Apple implementation/SDK content. --sample-pair returns two nonpersistent samples250ms apart to verify deltas without enabling recording or writing logger output/preferences. --once and --self-cpu-test are also nonpersistent.
+
+Host tests cover signed current, charging exclusion, Mach-counter math, PID baselines, counter wraps, bounded log rotation/symlink refusal, analyzer timeweighting/gaps, platform guards/ABI layout and exact final universal DEB payload/defaultOFF preservation. GNU GPLv3COPYING and copyright notice are installed with the package.

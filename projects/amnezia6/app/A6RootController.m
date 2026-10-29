@@ -329,8 +329,8 @@ static UIImage *A6DotImage(UIColor *color) {
         return state;
     }
     if (section == A6SectionService) {
-        return @"Ключи хранятся в /var/mobile/Library/Preferences/Amnezia6/amnezia6.conf "
-               @"с правами 0600.";
+        return @"Туннель защищает только IPv4. IPv6 не защищён. Kill switch отсутствует. "
+               @"Ключи хранятся в /var/mobile/Library/Preferences/Amnezia6/amnezia6.conf с правами 0600.";
     }
     return nil;
 }

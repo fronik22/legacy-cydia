@@ -1,0 +1,13 @@
+{
+  "normalDpkgRemovalPassed": true,
+  "allOriginalFilesVerifiedByNativeInstaller": true,
+  "originalICUByteForByteAfterRemoval": true,
+  "backupDirectoryRemovedOnRemoval": true,
+  "checkerRemovedWithPackage": true,
+  "sameArtifactReinstallPassed": true,
+  "MoscowCurrentAndHistoricalOffsetsVerified": true,
+  "finalOriginalBackupIntact": true,
+  "installedICUEqualsTestedHostRepack": true,
+  "installedICUSHA256": "abfb13539e94761b7a52a9722ab178f7d46b72eb73cddfcd49deb7b59566fbb5",
+  "artifactSHA256": "5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405"
+}

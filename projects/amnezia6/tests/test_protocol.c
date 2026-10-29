@@ -10,6 +10,17 @@ static const char conf[]="[Interface]\nPrivateKey=AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQ
 static void config_test(void){a6_config_t c;char error[256],text[4096];assert(!a6_config_parse(conf,strlen(conf),&c,error,sizeof error));assert(c.content_padding_addition.min==10&&c.content_padding_addition.max==20);
  const char*bad[]={"ContentPaddingAddition=20-10","ContentPaddingAddition=-1","ContentPaddingAddition=65536","S1=4294967295","Jmax=9000","H1=2"};
  for(unsigned i=0;i<sizeof bad/sizeof bad[0];i++){snprintf(text,sizeof text,"[Interface]\n%s\n%s",bad[i],conf+12);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));}
+ const char *unsupported_interface[]={"Address=10.0.0.2/32, fd00::2/128","Address=fd00::2/128","DNS=192.0.2.53,2001:db8::53"};
+ for(unsigned i=0;i<sizeof unsupported_interface/sizeof *unsupported_interface;i++){
+  snprintf(text,sizeof text,"[Interface]\n%s\n%s",unsupported_interface[i],conf+12);
+  assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));assert(strstr(error,"IPv6"));
+ }
+ const char *unsupported_peer[]={"AllowedIPs=10.0.0.0/8","AllowedIPs=::/0","AllowedIPs=0.0.0.0/0,2001:db8::/32","Endpoint=[2001:db8::1]:443"};
+ for(unsigned i=0;i<sizeof unsupported_peer/sizeof *unsupported_peer;i++){
+  snprintf(text,sizeof text,"%s%s\n",conf,unsupported_peer[i]);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));
+ }
+ snprintf(text,sizeof text,"%sAllowedIPs=0.0.0.0/0, ::/0\n",conf);assert(!a6_config_parse(text,strlen(text),&c,error,sizeof error));
+ snprintf(text,sizeof text,"%sAllowedIPs=0.0.0.0/0\n",conf);assert(!a6_config_parse(text,strlen(text),&c,error,sizeof error));
  snprintf(text,sizeof text,"%s\n[Peer]\nEndpoint=192.0.2.2:443\n",conf);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));
  char longline[8192];size_t size=strlen(conf);memcpy(longline,conf,size);longline[size++]='#';memset(longline+size,'A',5000);size+=5000;longline[size++]='\n';assert(a6_config_parse(longline,size,&c,error,sizeof error));
  memcpy(text,conf,strlen(conf));text[strlen(conf)]=0;text[strlen(conf)+1]='x';assert(a6_config_parse(text,strlen(conf)+2,&c,error,sizeof error));

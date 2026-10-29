@@ -191,3 +191,13 @@ FPS unlock for other apps. A60 target does not guarantee sustained60.
 Self-checks: probe/cpu-test.c (wrap/deltas/aggregate), probe/rotation-test.c
 (24 original +192 corner/size cases). Both architecture slices and the
 preference bundle build; native verification is recorded in WORKLOG.md.
+
+## iOS7 audit /0.1.10 (2026-10-28)
+
+The shared hook and Settings bundle contain armv7/iOS4.3 and arm64/iOS7 slices. NCSettings integration is explicitly limited to iOS5/6; iOS7 uses Settings > Performance HUD. New A7 GPU class AGXAccelerator is supported; absent or invalid counters report unavailable.
+
+A real iPad mini2/iOS7.1.2 test exposed a fourfold RAM overstatement: a64bit task advertises16KiB task pages but HOST_VM_INFO counts4KiB kernel pages. The adapter resolves vm_kernel_page_size dynamically on7+, falling back to host_page_size on old systems. It rejects impossible totals instead of displaying invented512MiB or clamping. Native same-source test changed2293MiB/975.96MiB to576.64MiB/975.96MiB. Pure regression includes both page sizes, impossible totals and overflow. iOS6 armv7 regression still reports173.71MiB/502.98MiB with4KiB fallback and SGXDriver543.
+
+Read-only native64 tests also verified2CPUcores, AGX GPU counter availability and the global render-server counter; the idle screen produced no counter delta, so this is no active-game FPS measurement. The actual universal preference bundle loads against iOS7 PSListController and required methods exist. HUD stayed OFF throughout. Pixel layout/rotation and live toggles on7 still require a coordinated enabled-UI test. No supported-game performance claim from these probes.
+
+Tests: probe/test_package.py, probe/metric-policy-test.c, probe/cpu-test.c, probe/rotation-test.c. Optional nonpersistent native metrics probe: python3 probe/build-metrics.py arm64 (armv7 for legacy), then run the resulting own CLI over authenticated SSH. It does not create/show the HUD or write preferences; diagnostics use only an own temporary log.

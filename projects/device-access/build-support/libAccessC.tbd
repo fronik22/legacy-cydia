@@ -1,0 +1,10 @@
+--- !tapi-tbd-v2
+archs: [ arm64 ]
+platform: ios
+install-name: '/usr/lib/libSystem.B.dylib'
+current-version: 1
+compatibility-version: 1
+exports:
+  - archs: [ arm64 ]
+    symbols: [ _strcmp, __Unwind_Resume ]
+...

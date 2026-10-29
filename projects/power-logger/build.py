@@ -7,7 +7,7 @@ def build(name,kind='exe',frameworks=(),entitlements=None):
  for arch in ('armv7','arm64'):
   sdk=SDK64 if arch=='arm64'else SDK;stub=SDK64 if arch=='arm64'else STUB;version='7.0'if arch=='arm64'else'6.0';obj=out/(name+'.'+arch+'.o');target=out/(name+'.'+arch)
   entry=['-bundle']if kind=='bundle'else ['-e','_main']if arch=='arm64'else ['-no_pie',SDK/'usr/lib/crt1.3.1.o']
-  commands=[['xcrun','clang','-target',arch+'-apple-ios'+version,'-isysroot',sdk,'-fno-objc-arc','-fblocks','-Os','-Wall','-Wextra','-Wno-unused-parameter','-Wno-deprecated-declarations','-c',R/(name+'.m'),'-o',obj],['xcrun','ld-classic','-arch',arch,'-iphoneos_version_min',version,'-syslibroot',stub,'-L'+str(stub/'usr/lib'),'-F'+str(stub/'System/Library/PrivateFrameworks'),*entry,'-o',target,obj,'-framework','Foundation','-framework','CoreFoundation',*[a for f in frameworks for a in ['-framework',f]],'-lobjc','-lSystem',*(['-lgcc_s.1']if arch=='armv7'else[]),*(['-undefined','dynamic_lookup']if arch=='arm64'else[])]]
+  commands=[['xcrun','clang','-target',arch+'-apple-ios'+version,'-isysroot',sdk,'-fno-objc-arc','-fblocks','-Os','-Wall','-Wextra','-Wno-unused-parameter','-Wno-deprecated-declarations','-c',R/(name+'.m'),'-o',obj],['xcrun','ld-classic','-arch',arch,'-iphoneos_version_min',version,'-syslibroot',stub,'-L'+str(stub/'usr/lib'),'-F'+str(stub/'System/Library/PrivateFrameworks'),*entry,'-o',target,obj,'-framework','Foundation','-framework','CoreFoundation',*[a for f in frameworks for a in ['-framework',f]],'-lobjc','-lSystem',*(['-lgcc_s.1']if arch=='armv7'else[]),*([R/'build-support/ios7-system-symbols.tbd']if arch=='arm64'else[])]]
   for i,c in enumerate(commands):
    p=subprocess.run(list(map(str,c)),capture_output=True);(out/(name+'-'+arch+'-'+str(i)+'.log')).write_bytes(p.stdout+p.stderr)
    if p.returncode:raise RuntimeError(p.stderr.decode())
@@ -17,5 +17,5 @@ def build(name,kind='exe',frameworks=(),entitlements=None):
  return binary
 if __name__=='__main__':
  for name in sys.argv[1:]or['Powerd','Prefs']:
-  if name not in('Powerd','Prefs','Probe','SettingsProbe'):raise SystemExit('Unknown build target')
+  if name not in('Powerd','Prefs','Probe','SettingsProbe','SettingsLoadProbe'):raise SystemExit('Unknown build target')
   print(build(name,'bundle'if name in('Prefs','SettingsProbe')else'exe',['Preferences','UIKit']if name=='Prefs'else['UIKit','CoreGraphics']if name=='SettingsProbe'else[]))

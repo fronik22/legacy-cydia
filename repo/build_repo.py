@@ -102,6 +102,8 @@ def write_depiction(entry, fields):
             paragraphs.append(html.escape(line.strip()))
     description = "<p>" + " ".join(paragraphs).replace("</p><p>", "</p>\n<p>") + "</p>" if paragraphs else ""
     src = html.escape(entry.get("source", ""))
+    archive = entry.get("source_archive")
+    archive_link = ("<p><a href=\"https://github.com/fronik22/legacy-cydia/raw/refs/heads/main/source-archives/" + html.escape(archive, quote=True) + "\">Corresponding source ZIP</a></p>") if archive else ""
     page = f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
@@ -123,6 +125,7 @@ def write_depiction(entry, fields):
 </ul>
 <h2>Source</h2>
 <p><code>{src}</code> — license: {html.escape(entry.get("license", "see project"))}</p>
+{archive_link}
 </body></html>
 """
     (DEPICTIONS / (entry["id"] + ".html")).write_text(page)
@@ -212,8 +215,7 @@ def main():
 <p><code>{BASE_URL}/</code></p>
 <p>Every package states its tested range. iOS 7 support is only claimed after an
 install and runtime check on a real device. Packages that are not ready are
-marked <strong>untested</strong>; legacy-only packages stay hidden from iOS 7
-by their <code>firmware</code> dependency.</p>
+marked <strong>untested</strong>; incompatible <code>firmware</code> dependencies prevent installation rather than guaranteeing that Cydia hides an entry.</p>
 <table><thead><tr><th>Package</th><th>Version</th><th>iOS 7</th><th>Summary</th></tr></thead>
 <tbody>
 {rows}

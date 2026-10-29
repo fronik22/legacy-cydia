@@ -15,6 +15,46 @@ static BOOL BoolGetter(id object,SEL selector,BOOL *value){
     if(!signature || signature.numberOfArguments!=2 || signature.methodReturnLength!=sizeof(BOOL))return NO;
     *value=((BOOL (*)(id,SEL))objc_msgSend)(object,selector);return YES;
 }
+static id Singleton(NSString *name,NSString *method){
+    Class type=NSClassFromString(name);SEL selector=NSSelectorFromString(method);
+    NSMethodSignature *signature=[type methodSignatureForSelector:selector];
+    if(!signature||signature.numberOfArguments!=2||strcmp(signature.methodReturnType,@encode(id)))return nil;
+    return ((id (*)(id,SEL))objc_msgSend)(type,selector);
+}
+static void ModernAccess(NSDictionary *request){
+    dlopen("/System/Library/PrivateFrameworks/ManagedConfiguration.framework/ManagedConfiguration",RTLD_LAZY|RTLD_LOCAL);
+    id controller=Singleton(@"SBLockScreenManager",@"sharedInstance");
+    id policy=Singleton(@"MCProfileConnection",@"sharedConnection");
+    BOOL protected=YES,locked=YES;
+    NSMutableDictionary *result=[NSMutableDictionary dictionary];
+    if(!BoolGetter(policy,NSSelectorFromString(@"isPasscodeSet"),&protected)||!BoolGetter(controller,NSSelectorFromString(@"isUILocked"),&locked)){
+        [result setObject:@"refused-unknown-runtime" forKey:@"result"];Reply(request,result);return;
+    }
+    [result setObject:@(protected) forKey:@"passcodeProtected"];[result setObject:@(locked) forKey:@"locked"];
+    NSString *action=[request objectForKey:@"action"];
+    if([action isEqual:@"status"]){[result setObject:@"status" forKey:@"result"];Reply(request,result);return;}
+    if(protected||[[request objectForKey:@"simulatePasscode"]boolValue]){[result setObject:@"refused-passcode" forKey:@"result"];Reply(request,result);return;}
+    BOOL unlocking=[action isEqual:@"unlock"];
+    id target=unlocking?controller:Singleton(@"SBUserAgent",@"sharedUserAgent");
+    SEL selector=NSSelectorFromString(unlocking?@"unlockUIFromSource:withOptions:":@"lockAndDimDevice");
+    NSMethodSignature *signature=[target methodSignatureForSelector:selector];
+    if(!signature||signature.numberOfArguments!=(unlocking?4:2)||strcmp(signature.methodReturnType,@encode(void))||(unlocking&&(strcmp([signature getArgumentTypeAtIndex:2],@encode(int))||strcmp([signature getArgumentTypeAtIndex:3],@encode(id))))){
+        [result setObject:@"refused-unknown-method" forKey:@"result"];Reply(request,result);return;
+    }
+    if(unlocking&&locked){
+        id app=Singleton(@"UIApplication",@"sharedApplication");SEL wake=NSSelectorFromString(@"resetIdleTimerAndUndim");NSMethodSignature *w=[app methodSignatureForSelector:wake];
+        if(!w||w.numberOfArguments!=2||strcmp(w.methodReturnType,@encode(void))){[result setObject:@"refused-unknown-wake-method" forKey:@"result"];Reply(request,result);return;}
+        ((void (*)(id,SEL))objc_msgSend)(app,wake);
+    }
+    if(unlocking&&locked)((void (*)(id,SEL,int,id))objc_msgSend)(target,selector,0,nil);
+    else if(!unlocking&&!locked)((void (*)(id,SEL))objc_msgSend)(target,selector);
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,NSEC_PER_SEC/2),dispatch_get_main_queue(),^{
+        NSAutoreleasePool *pool=[NSAutoreleasePool new];BOOL now=YES;
+        if(!BoolGetter(controller,NSSelectorFromString(@"isUILocked"),&now))[result setObject:@"refused-unknown-runtime" forKey:@"result"];
+        else{[result setObject:@(now)forKey:@"locked"];[result setObject:(unlocking?!now:now)?(unlocking?@"unlocked":@"locked"):@"state-change-failed" forKey:@"result"];}
+        Reply(request,result);[pool drain];
+    });
+}
 __attribute__((constructor)) static void Access(void){
     Dl_info image;if(!dladdr((void *)&Access,&image))return;
     // Keep queued main-thread code mapped after the injector closes its handle.
@@ -25,6 +65,8 @@ __attribute__((constructor)) static void Access(void){
     dispatch_async(dispatch_get_main_queue(),^{
         NSAutoreleasePool *pool=[NSAutoreleasePool new];
         @try{
+            NSDictionary *system=[NSDictionary dictionaryWithContentsOfFile:@"/System/Library/CoreServices/SystemVersion.plist"];
+            if([[system objectForKey:@"ProductVersion"]intValue]==7){ModernAccess(request);[pool drain];return;}
             Class type=NSClassFromString(@"SBAwayController");SEL shared=NSSelectorFromString(@"sharedAwayController");id controller=[type respondsToSelector:shared]?[type performSelector:shared]:nil;
             BOOL protected=YES,locked=YES;
             id passcodeController=controller;

@@ -1,3 +1,9 @@
+# iOS7 audit update —1.2.0
+
+Layout supports Veteris4 on iOS5–7. The SGX shader-cache workaround runs ONLY on iOS6; it is not applied to iOS7's different drivers. Own armv7 hook targets the32bit Veteris process and does not need a64bit SpringBoard slice. Metadata self-test passed on actual7.1.2, but Veteris7UI/download/background behavior remains untested. Source/COPYING is GPLv3. Read ../../notes/APPS-IOS7.md.
+
+Historical1.1notes follow.
+
 # Veteris Native iPad 1.1.0
 
 Separate, removable jailbreak package for **Veteris version 4**. Enables a native iPad window and fixes the home screen, application lists, search/favorites rows, and download-row geometry. The existing detail screen and Settings then use their native UIKit sizing. Portrait orientation follows Veteris's original policy. Version1.1 also fixes the immediate suspension crash and restores the app's existing background-download behavior.

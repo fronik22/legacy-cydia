@@ -269,8 +269,8 @@ int a6_tunnel_start(a6_tunnel_t *t, const a6_config_t *cfg,
         if (a6_dns_up(&t->dns, t->ifname, t->cfg.address, t->cfg.dns) == 0) {
             t->dns_up = 1;
         } else {
-            a6_log("could not set DNS to %s; continuing with the physical resolver",
-                   t->cfg.dns);
+            set_error(t, "requested tunnel DNS could not be installed");
+            goto fail;
         }
     }
 

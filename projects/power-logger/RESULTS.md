@@ -1,3 +1,7 @@
+# Current audit —1.1.1
+
+See README.md iOS7 audit for native32/64 sampler and Settings-loader checks. New package is built; live service upgrade is coordinated by the parent task. Historical1.0.0 device results below are retained, not relabeled as new-version installation.
+
 # Power Logger — installed result
 
 Installed1.0.0 on iPad2,2 / iOS6.1.3. Settings > Power Logger > Recording. ON,15seconds. It runs without USB; OFF halts sampling. Default OFF in the distributable package.

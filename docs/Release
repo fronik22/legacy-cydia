@@ -6,28 +6,36 @@ Codename: ios-legacy
 Architectures: iphoneos-arm
 Components: main
 Description: Legacy iOS apps and tweaks by mak
-Date: Wed, 28 Oct 2026 11:22:04 UTC
+Date: Thu, 29 Oct 2026 04:16:37 UTC
 MD5Sum:
- d035a6259321fc24b419b745b0f7ebd5 6726 Packages
- 573a88798f1ef9e41f53ea4fcf42da89 2551 Packages.gz
- 27971a3fde2b6fc8146cca257b9020b4 785548 ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
- 5529c83902c935e80064da54d22f636e 52844 ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
- caddcb80922517ff5c0b999301902e21 45644 ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
- 3751093eddd9a4919b2ff5c67c630588 18194 ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
+ 3d2ca373361d275c17fc38b2669abda9 10025 Packages
+ 8e84472d7e4810976a62721a33ab9b27 3404 Packages.gz
+ 5f073132658516c45215c9ea8d6f082a 786844 ./debs/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
+ 92d54b738afab1f2257648f841ed1d53 66182 ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
+ e1ce003c2b5ad5be880366ef96570ba4 58850 ./debs/local.legacypower_1.1.1_iphoneos-arm.deb
+ 99830b7767732a8d4ed1f8371a53ed27 30982 ./debs/legacy-game-fps_0.2.2_iphoneos-arm.deb
  7d4bb58387c2c2f1aa862c7d930e975b 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
- d3aa801a808b317aa76f18d72a591960 848274 ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
+ 7d7acfb3816ac35d46af05253125b0ee 1803988 ./debs/local.codex.localsend-installer_5.7.4340_iphoneos-arm.deb
+ e751b35d09bb196a1ab33e0578e5f706 5360430 ./debs/local.codex.troubadour-installer_1.6.447_iphoneos-arm.deb
  08d908cd88be424325509803834e9b23 55538 ./debs/blastron-revival_0.1.15_iphoneos-arm.deb
  e665a505e8974c76d12ded96cbc2d583 359420 ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
- 99bea9b6780300293eece4626b9c8470 25938 ./debs/device-access_1.0.1_iphoneos-arm.deb
+ b4d12c61a3dac431f10bc63e506060ce 33404 ./debs/device-access_1.1.0_iphoneos-arm.deb
+ 78fbe7243e5d592bafd31fa9f689a90c 270470 ./debs/libcxx-ios4_1.0.0_iphoneos-arm.deb
+ 494f85aa968a7d15f0b7d6d33cc0cff8 17042 ./debs/legacy60_1.0.0_iphoneos-arm.deb
+ ee7cabba3600705bfcc9f8f342b8c2c5 17198 ./debs/localsend-photos_1.0.0_iphoneos-arm.deb
 SHA256:
- 0454bc11195cc93659961a854999d1608c1d5259bddc8d3902ff55058af9e14b 6726 Packages
- da50171b1faec9c42b9f18a5f9ea635a575e0b01a1d18abedb58c03315e5cd73 2551 Packages.gz
- 35840338a3bfb163ee8e6dd404b123000c3922eba97df7f30e0e3b5e55ca9734 785548 ./debs/com.mak.amnezia6_1.2.0_iphoneos-arm.deb
- 33d9bf1c35cc567021b52fc560fd252655d90b5095c702139d238055fb23761e 52844 ./debs/local.perfoverlay_0.1.9_iphoneos-arm.deb
- 4aaff413669915b58b5f6322e27cfbc69a00062119911ca36140c8067e45f383 45644 ./debs/local.legacypower_1.1.0_iphoneos-arm.deb
- 38a10672dee107c2dc7fdc6da66df26e56fee400d12d392b7ade53ff01132a5e 18194 ./debs/legacy-game-fps_0.2.1_iphoneos-arm.deb
+ d9f2a3a2f46d9b8368b80dc5db48753c7936ae3086382534860c68d3c14e7f4f 10025 Packages
+ faac8b0a59ea087568ac35d8b98828e5d12d7427f77ba5245fcd4ab0bc880f3f 3404 Packages.gz
+ e38a40ff7436c3a7171662a2549cf9a29aa0ce94b683e9ea97da5e57f0975512 786844 ./debs/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
+ 24a2b7ee86bcad6da0962711c685a9bc25ec6c73463f140e4147540ad82103d5 66182 ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
+ 0e7e5f0ab0d8a0c29d145b90937f3892835ff4836c18cc81a969db90c8d65c80 58850 ./debs/local.legacypower_1.1.1_iphoneos-arm.deb
+ c353dc8613a66f8edac75edaea88ae96c048e43ae0763f934cd26171c8d5ecc6 30982 ./debs/legacy-game-fps_0.2.2_iphoneos-arm.deb
  c2d0835167701bbf5e348dd91e7b4e124dfe6ec0bdee06458aa9ad66a931982f 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
- b022bf6e05aa46bca1a490c7fa459fd68cc0158a73ae3512e8fe7dcd007c3c24 848274 ./debs/com.unlocalsend.ios6_0.5.7_iphoneos-arm.deb
+ ed8e7650975d98b14cf28f3daf889d52c7d71f5f57d82937b587cc6472371f02 1803988 ./debs/local.codex.localsend-installer_5.7.4340_iphoneos-arm.deb
+ 42796551790f7063c55576cc2efb7563c72e248513593720923706ec51e6c5c7 5360430 ./debs/local.codex.troubadour-installer_1.6.447_iphoneos-arm.deb
  a1ebcff5c515435672ec819bf510d97a6aa1f0098f9cc39b5ad27eef6d99b23a 55538 ./debs/blastron-revival_0.1.15_iphoneos-arm.deb
  5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405 359420 ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
- 9f6387b4cc8f845fb53c581dc47330e4f9c3686a96fec9b1189a836921f61b20 25938 ./debs/device-access_1.0.1_iphoneos-arm.deb
+ 4387d8cd67342f6a7cc4dac07fa2aa6c0daace1e844cf1c0b9f2d970603a43c3 33404 ./debs/device-access_1.1.0_iphoneos-arm.deb
+ 3245b384ae75e8cfa5df6ed0f7fb695c42426293514be3184925c5afcdf901c8 270470 ./debs/libcxx-ios4_1.0.0_iphoneos-arm.deb
+ f87fbb25625e21a2557002665d40ddb15a8d2787db08dedb125858a9efbd5a7a 17042 ./debs/legacy60_1.0.0_iphoneos-arm.deb
+ 8602a90b812ecc8361072f0f8bf37c6aef8f84c2d7cc4395411d88cbe71ce11b 17198 ./debs/localsend-photos_1.0.0_iphoneos-arm.deb

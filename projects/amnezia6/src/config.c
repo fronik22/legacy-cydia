@@ -136,11 +136,19 @@ static int apply_interface(a6_config_t *cfg, const char *key, const char *val,
             return -1;
         }
     } else if (!strcasecmp(key, "Address")) {
+        if (strchr(val, ':') || strchr(val, ',')) {
+            set_error(err, err_cap, "only one IPv4 tunnel Address is supported; IPv6 is not protected");
+            return -1;
+        }
         if (parse_ipv4(val, cfg->address, sizeof cfg->address) != 0) {
             set_error(err, err_cap, "Address is not an IPv4 address");
             return -1;
         }
     } else if (!strcasecmp(key, "DNS")) {
+        if (strchr(val, ':')) {
+            set_error(err, err_cap, "IPv6 DNS is unsupported; use an IPv4 DNS address");
+            return -1;
+        }
         if (parse_ipv4(val, cfg->dns, sizeof cfg->dns) != 0) {
             set_error(err, err_cap, "DNS is not an IPv4 address");
             return -1;
@@ -233,11 +241,29 @@ static int apply_peer(a6_config_t *cfg, const char *key, const char *val,
         }
         cfg->has_preshared_key = 1;
     } else if (!strcasecmp(key, "Endpoint")) {
+        if (strchr(val, ':') != strrchr(val, ':')) {
+            set_error(err, err_cap, "IPv6 Endpoint is unsupported; use an IPv4 host or hostname");
+            return -1;
+        }
         if (parse_endpoint(val, cfg->endpoint_host, sizeof cfg->endpoint_host,
                            &cfg->endpoint_port) != 0) {
             set_error(err, err_cap, "Endpoint is invalid");
             return -1;
         }
+    } else if (!strcasecmp(key, "AllowedIPs")) {
+        char copy[512], *remaining, *part; int ipv4_default = 0;
+        if (strlen(val) >= sizeof copy) { set_error(err, err_cap, "AllowedIPs is too long"); return -1; }
+        snprintf(copy, sizeof copy, "%s", val); remaining = copy;
+        while ((part = strsep(&remaining, ",")) != NULL) {
+            part = trim(part);
+            if (!strcmp(part, "0.0.0.0/0")) ipv4_default = 1;
+            else if (strcmp(part, "::/0")) {
+                set_error(err, err_cap, "split routes are unsupported; AllowedIPs must include only full defaults");
+                return -1;
+            }
+        }
+        /* Common dual-default exports remain usable; this engine tunnels IPv4 only. */
+        if (!ipv4_default) { set_error(err, err_cap, "AllowedIPs needs 0.0.0.0/0; IPv6 is not protected"); return -1; }
     } else if (!strcasecmp(key, "PersistentKeepalive")) {
         if (parse_u32(val, &cfg->persistent_keepalive) != 0) {
             set_error(err, err_cap, "PersistentKeepalive is invalid");

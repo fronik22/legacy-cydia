@@ -1,0 +1,6 @@
+{
+  "sourceArchiveExtractedCleanly": true,
+  "prebuiltPackagingReproducesExactDeb": true,
+  "parserTestBuildsAndPassesFromSourceKit": true,
+  "AppleICUDataNotDistributed": true
+}

@@ -14,3 +14,13 @@
 Evidence stays in work/legacy-power-monitor: native probes, build/install/remove logs, UI/lifecycle/identity JSON, initial/final JSONL, math/analysis/package tests and source. Shareable export excludes personal process logs, credentials and SDKs. Existing temporary probes/DEBs/input/result files removed; developer helper images remain pinned in process memory until Settings/SpringBoard exits. Existing device-access helper, HUD and unrelated apps/services preserved.
 
 Not validated: reboot/launchd supervision, other iOS versions/devices, sleep-current energy integration, actual brightness nits, individual tweak/decoder watts, long-term recorder energy cost or the cause of the reported battery drain. Current known battery-health figures alone cannot attribute drain.
+
+## iOS7 audit /1.1.1 (2026-10-28)
+
+Daemon and Settings bundle now contain armv7/iOS6 and arm64/iOS7 slices; installer/runtime reject outside6–7. PROC_PIDTASKINFO is verified as a96byte architecture-neutral contract with checked offsets and exact return-size validation. Sysctl process table alignment is validated. Native iOS7A7 task counters use Mach ticks (125/3 timebase), not guessed nanoseconds: own busy-loop CPU measured99.95%. All85 sampled processes returned valid taskinfo, with84nonnull process deltas on the second sample (kernel_task CPU remains intentionally excluded). iOS6 regression measured100.08%,60processes with0readerrors and59valid deltas.
+
+IOKit adds A7 AGXAccelerator and records missing process readings explicitly. Unknown-model capacity units stay raw_unverified rather than claiming iPad2 calibration. On mini2 the sensor exposed4273mV,27.5C,current0 while fully charged/externalpower; discharge_w correctly stayed null. This is not unplugged battery-drain calibration. Native64 Settings bundle loads and required PSListController API exists; no interactive pane/toggle test was performed. Recording remained OFF and the existing dormant daemon PID7862 was unchanged by probes.
+
+The incomplete legacy SDK omitted memcpy/strcmp reexport declarations. A narrowly scoped standard-libSystem ABI link stub replaces unrestricted dynamic_lookup; final native64 binaries executed. It contains no Apple implementation/SDK content. --sample-pair returns two nonpersistent samples250ms apart to verify deltas without enabling recording or writing logger output/preferences. --once and --self-cpu-test are also nonpersistent.
+
+Host tests cover signed current, charging exclusion, Mach-counter math, PID baselines, counter wraps, bounded log rotation/symlink refusal, analyzer timeweighting/gaps, platform guards/ABI layout and exact final universal DEB payload/defaultOFF preservation. GNU GPLv3COPYING and copyright notice are installed with the package.

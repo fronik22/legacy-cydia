@@ -12,6 +12,7 @@ Checks:
 """
 import gzip
 import hashlib
+import json
 import re
 import sys
 from pathlib import Path
@@ -140,6 +141,16 @@ def main():
                 fail("Release %s size mismatch for %s" % (algorithm, relative))
             if digest(target, hashlib_name) != checksum:
                 fail("Release %s checksum mismatch for %s" % (algorithm, relative))
+
+    manifest = json.loads((ROOT / "repo/packages.json").read_text())
+    for entry in manifest["packages"]:
+        archive = entry.get("source_archive", "")
+        if not archive or Path(archive).name != archive:
+            fail("%s: invalid/missing corresponding source archive" % entry["id"])
+            continue
+        path = ROOT / "source-archives" / archive
+        if not path.is_file() or digest(path, "sha256") != entry.get("source_sha256"):
+            fail("%s: source archive missing or hash mismatch" % entry["id"])
 
     if errors:
         for error in errors:
