@@ -55,14 +55,14 @@ normal daemon stayed idle and the existing profile was preserved byte-for-byte.
 The existing profile is not shipped in the package. Upgrading preserves
 `/var/mobile/Library/Preferences/Amnezia6/amnezia6.conf`.
 
-### Performance Overlay 0.1.10 — `local.perfoverlay`
+### Performance Overlay 0.1.11 — `local.perfoverlay`
 
 Declared: `firmware (>= 4.3), firmware (<< 10.0), mobilesubstrate,
 preferenceloader`.
 
 | Check | iOS 6.1.3 | iOS 7.1.2 |
 |---|---|---|
-| Install | Verified (0.1.8) | Verified (0.1.10 over 0.1.9) |
+| Install | Verified (0.1.8) | Verified (0.1.11 over 0.1.10) |
 | Universal dylib | armv7 only in 0.1.8 | armv7 + arm64 |
 | Hook loads into SpringBoard | Verified | Verified |
 | SpringBoard stable after respawn | Verified | Verified, no crash report |
@@ -78,6 +78,10 @@ framework. The attempted screenshotr path required a mounted Developer Disk Imag
 confirmed".
 
 Controlled native A/B on7.1.2 (2026-10-29) reproduced Settings28–33% AGX driver snapshot with HUDON/~1 redraw per second, and0% with HUDOFF/no new frames. Home withoutHUD still rendered~10fps/14–17%; exactHome animation was not isolated. RAM531MiB includes79MiB inactive;444MiB free, no pageout growth during the short test. The driver percentage is not calibrated peak GPU power. See notes/HUD-LOAD-DIAGNOSIS.md; no metric formula or package version changed.
+
+0.1.11 fixes the observer loop with changed-text-only assignment and at mostone redraw/5s when global frame activity is no greater than expected HUD-own activity. Sampling continues at the selected interval; active content/fallback keep normal refresh. NativeSettings0.993→0.192frames/s, mean AGX snapshot29.82→6.28%; activeHome10.055frames/s. BriefGPU peaks remain; no battery-watt calibration or realgame benchmark. A tight-window experiment had noGPU improvement and was discarded. Original geometry retained. Installed dylib/Settings metadata match the final package and HUDOFF/Home state was restored. See projects/perfoverlay/verification-idle-ios7.json.
+
+Detailed native VM64 attribution:548.41MiB used =177.56anonymous+256.35occupiedfile-backed+114.50wired, with427.12free. LargestRSS SpringBoard80.13/kernel79.73/Preferences17.57/CommCenter15.41/backboardd15.24MiB; ownVPNdaemon0.31MiB and PowerLogger1.61MiB. RSS includes shared mappings; do not sum it as global ownership. Cached iOS6 same-formula173.71MiB is from a different iPad2/512MiB versus currentmini2/1GiB; no controlledOS-only delta claimed. See notes/RAM-IOS7-ATTRIBUTION.md.
 
 ### Power Logger 1.1.1 — `local.legacypower`
 

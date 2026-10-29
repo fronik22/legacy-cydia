@@ -6,12 +6,12 @@ Codename: ios-legacy
 Architectures: iphoneos-arm
 Components: main
 Description: Legacy iOS apps and tweaks by mak
-Date: Thu, 29 Oct 2026 08:51:16 UTC
+Date: Thu, 29 Oct 2026 09:20:17 UTC
 MD5Sum:
- fad7ad46be442a3dcdf3872286ce5527 10025 Packages
- acbddd787a5c9b3a7a7dc04344f5c4a3 3399 Packages.gz
+ 08e19f22d43a05dc9c7510f7895b5f58 10025 Packages
+ e9bd1e187f08c03fba28e6f3f4b0d4f6 3403 Packages.gz
  9a847882e444b2968f9fd2aac88ea761 795464 ./debs/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
- 92d54b738afab1f2257648f841ed1d53 66182 ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
+ de95217634f791eb3109c0364afc7e83 66584 ./debs/local.perfoverlay_0.1.11_iphoneos-arm.deb
  e1ce003c2b5ad5be880366ef96570ba4 58850 ./debs/local.legacypower_1.1.1_iphoneos-arm.deb
  99830b7767732a8d4ed1f8371a53ed27 30982 ./debs/legacy-game-fps_0.2.2_iphoneos-arm.deb
  7d4bb58387c2c2f1aa862c7d930e975b 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb
@@ -24,10 +24,10 @@ MD5Sum:
  494f85aa968a7d15f0b7d6d33cc0cff8 17042 ./debs/legacy60_1.0.0_iphoneos-arm.deb
  ee7cabba3600705bfcc9f8f342b8c2c5 17198 ./debs/localsend-photos_1.0.0_iphoneos-arm.deb
 SHA256:
- 58badce5c82f25cb615c848cfdf913e8bc05a11ca1b4ab3d933b03611cacc122 10025 Packages
- 7d778b69a55392fe3657898563ff71137340b3b7cae0c9311a24d3fca7b0cbf0 3399 Packages.gz
+ 73b53b98e3ec136cccc06f7aa26c43727a86d480b769032906cd08f85d528d30 10025 Packages
+ 0f9576d6bb20aa29651072421ad6489adc34b81fc0c901803fb647e0b909d891 3403 Packages.gz
  1bca33f1f5946d963f8c25b5699769703a5ff1d683a9d534408db43119d43084 795464 ./debs/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
- 24a2b7ee86bcad6da0962711c685a9bc25ec6c73463f140e4147540ad82103d5 66182 ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
+ c84e3ff793eac0cef8ef2dee4f831671e12ef8cb6338d56f9d512d34885a3ca6 66584 ./debs/local.perfoverlay_0.1.11_iphoneos-arm.deb
  0e7e5f0ab0d8a0c29d145b90937f3892835ff4836c18cc81a969db90c8d65c80 58850 ./debs/local.legacypower_1.1.1_iphoneos-arm.deb
  c353dc8613a66f8edac75edaea88ae96c048e43ae0763f934cd26171c8d5ecc6 30982 ./debs/legacy-game-fps_0.2.2_iphoneos-arm.deb
  c2d0835167701bbf5e348dd91e7b4e124dfe6ec0bdee06458aa9ad66a931982f 26468 ./debs/veteris-ipad_1.2.0_iphoneos-arm.deb

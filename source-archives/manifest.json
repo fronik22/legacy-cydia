@@ -56,12 +56,12 @@
     "sha256": "866c0d70c7884caf46b8e4803c09346ac49eb06652ea2c79ee6e3f09a20b075a"
   },
   "perfoverlay": {
-    "archive": "perfoverlay-0.1.10-source.zip",
-    "bytes": 76825,
-    "files": 47,
+    "archive": "perfoverlay-0.1.11-source.zip",
+    "bytes": 78543,
+    "files": 49,
     "license": "GPL-3.0",
     "origin": "projects/perfoverlay",
-    "sha256": "85ea9b12d47c71ff189fd2901ca69baa5487cd5ad569102936c698093a5cb8f0"
+    "sha256": "27a54e30708756780a8af6b1c171406e11230c65ae271afc8c77296b3effbea7"
   },
   "power-logger": {
     "archive": "power-logger-1.1.1-source.zip",

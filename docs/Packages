@@ -25,7 +25,7 @@ SHA256: 1bca33f1f5946d963f8c25b5699769703a5ff1d683a9d534408db43119d43084
 
 Package: local.perfoverlay
 Name: Performance Overlay
-Version: 0.1.10
+Version: 0.1.11
 Architecture: iphoneos-arm
 Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
  Shows live system counters in a small non-interactive overlay.
@@ -36,10 +36,10 @@ Maintainer: Local
 Installed-Size: 369
 Homepage: https://github.com/fronik22/legacy-cydia
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.perfoverlay.html
-Filename: ./debs/local.perfoverlay_0.1.10_iphoneos-arm.deb
-Size: 66182
-MD5sum: 92d54b738afab1f2257648f841ed1d53
-SHA256: 24a2b7ee86bcad6da0962711c685a9bc25ec6c73463f140e4147540ad82103d5
+Filename: ./debs/local.perfoverlay_0.1.11_iphoneos-arm.deb
+Size: 66584
+MD5sum: de95217634f791eb3109c0364afc7e83
+SHA256: c84e3ff793eac0cef8ef2dee4f831671e12ef8cb6338d56f9d512d34885a3ca6
 
 Package: local.legacypower
 Name: Power Logger

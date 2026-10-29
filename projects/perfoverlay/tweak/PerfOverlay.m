@@ -4,6 +4,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "HUDLayout.h"
+#import "HUDRenderPolicy.h"
 #import "CPUCounters.h"
 #import "MetricPolicy.h"
 #include <CoreFoundation/CoreFoundation.h>
@@ -390,6 +391,7 @@ static BOOL MemoryUsage(double *usedMB, double *totalMB) {
     int _corner;
     CGFloat _fontSize,_opacity;
     NSTimeInterval _sampleInterval;
+    CFTimeInterval _lastTextRender;
 }
 + (PerfOverlay *)shared;
 - (void)start;
@@ -636,6 +638,7 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
 }
 
 - (void)stopSampling {
+    _lastTextRender=0;
     if (_link) _link.paused = YES;
     if (_timer) {
         [_timer invalidate];
@@ -666,12 +669,12 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
     if (!_window) return;
     [self updateOrientation]; // Existing one-second sampler covers missed/older OS notifications.
 
-    if (_showFPS && !_globalFPSTried) {
+    if (!_globalFPSTried) {
         _globalFPSTried = YES;
         _useGlobalFPS = LoadGlobalFrameCounter();
     }
     if (_link) _link.paused = !_showFPS || _useGlobalFPS;
-    if (_showFPS && _useGlobalFPS) {
+    if (_useGlobalFPS) {
         uint32_t counter = 0;
         if (!ReadGlobalFrameCounter(&counter)) {
             // Only a real API/port failure may switch to the display link.
@@ -749,8 +752,13 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
     if(_showRAM)[rows addObject:_ramValid?[NSString stringWithFormat:@"RAM  %3.0f/%3.0fM",_usedMB,_totalMB]:@"RAM  --"];
     if(_showGPU)[rows addObject:_gpu>=0?[NSString stringWithFormat:@"GPU3D %2d%%",_gpu]:@"GPU3D n/a"];
     _panel.hidden=rows.count==0;
-    _label.text=[rows componentsJoinedByString:@"\n"];
-    [self layoutPanel];
+    NSString *text=[rows componentsJoinedByString:@"\n"];
+    CFTimeInterval now=CACurrentMediaTime();
+    if(PerfHUDRenderDue(now,_lastTextRender,_sampleInterval,_useGlobalFPS,_fpsValid,_fps,![_label.text isEqualToString:text])){
+        _label.text=text;
+        [self layoutPanel];
+        _lastTextRender=now;
+    }
 
     NSMutableArray *cores=[NSMutableArray array];
     if(_showCores)for(unsigned int i=0;i<gCoreCount;i++)[cores addObject:gCoreUsage[i]>=0?[NSString stringWithFormat:@"%.1f",gCoreUsage[i]]:@"--"];

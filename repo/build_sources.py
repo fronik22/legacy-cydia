@@ -11,7 +11,7 @@ OUT = ROOT / 'source-archives'
 RELEASES = ROOT.parent / 'outputs'
 PROJECTS = {
     'amnezia6': ('1.3.0', 'GPL-2.0', 'src app status tools tests third_party packaging'),
-    'perfoverlay': ('0.1.10', 'GPL-3.0', 'tweak settings ncsettings probe'),
+    'perfoverlay': ('0.1.11', 'GPL-3.0', 'tweak settings ncsettings probe'),
     'power-logger': ('1.1.1', 'GPL-3.0', 'settings build-support'),
     'game-fps': ('0.2.2', 'GPL-3.0', 'src settings tools'),
     'veteris-ipad': ('1.2.0', 'GPL-3.0', 'src tools tests'),

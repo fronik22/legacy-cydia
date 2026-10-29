@@ -2,7 +2,7 @@
 from pathlib import Path
 import io,tarfile,struct
 R=Path(__file__).resolve().parents[1]
-raw=(R/'build/local.perfoverlay_0.1.10_iphoneos-arm.deb').read_bytes();assert raw[:8]==b'!<arch>\n';at=8;parts={}
+raw=(R/'build/local.perfoverlay_0.1.11_iphoneos-arm.deb').read_bytes();assert raw[:8]==b'!<arch>\n';at=8;parts={}
 while at<len(raw):
  h=raw[at:at+60];n=int(h[48:58]);name=h[:16].decode().strip().rstrip('/');parts[name]=raw[at+60:at+60+n];at+=60+n+(n%2)
 assert set(parts)=={'debian-binary','data.tar.gz','control.tar.gz'}

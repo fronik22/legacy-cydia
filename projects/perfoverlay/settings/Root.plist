@@ -123,6 +123,8 @@
 			<string>PSGroupCell</string>
 			<key>label</key>
 			<string>Оформление</string>
+			<key>footerText</key>
+			<string>На неподвижном экране HUD перерисовывается не чаще раза в5 секунд. Сбор показателей и обновление при активном содержимом используют выбранный интервал.</string>
 		</dict>
 		<dict>
 			<key>cell</key>

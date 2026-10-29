@@ -1,0 +1,29 @@
+{
+  "version": "0.1.11",
+  "device": "iPad4,5",
+  "os": "7.1.2",
+  "policy_tests": 11,
+  "geometry": "original unchanged; tight-window experiment discarded",
+  "settings_baseline": {
+    "frames_per_second": 0.9934529253172152,
+    "mean_driver_gpu_percent": 29.823529411764707
+  },
+  "settings_adaptive": {
+    "frames_per_second": 0.19228233019643895,
+    "mean_driver_gpu_percent": 6.28125,
+    "peak_driver_gpu_percent": 46
+  },
+  "active_home_frames_per_second": 10.055235415043963,
+  "restored_HUD_enabled": false,
+  "battery_watts_calibrated": false,
+  "game_physical_test": false,
+  "package_sha256": "c84e3ff793eac0cef8ef2dee4f831671e12ef8cb6338d56f9d512d34885a3ca6",
+  "installed_payload_and_settings_metadata_match": true,
+  "temporary_helpers_removed": true,
+  "fps_row_hidden": {
+    "native_global_counter_valid": true,
+    "frames_per_second": 0.16556087751762819,
+    "mean_driver_gpu_percent": 6.076923076923077,
+    "in_memory_setting_restored": true
+  }
+}

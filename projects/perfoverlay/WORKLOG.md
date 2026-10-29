@@ -61,3 +61,13 @@ product/package change or respring. Enabled=true restored, Home left unlocked
 for coordinated QR test; own temporary binaries/log removed. Full sanitized
 evidence/limits: notes/HUD-LOAD-DIAGNOSIS.md. Private raw and probe source kept
 outside public repository at work/cydia-ios7-tweaks-20261028.
+
+## Idle-render overhead follow-up — 2026-10-29
+
+User requested lowering HUD observer cost and attributing RAM. Scoped0.1.11 candidate replaces full-screen transparent UIWindow with the exact rotated panel bounds, retains screen-coordinate placement and rotation, skips equal text/frame assignments. Metric formulas and user preferences unchanged. Pure rotation/corner tests now assert tight window equals prior physical panel rectangle. Native before/after measurement pending. Separate read-only VM64/process probe attributes anonymous/file-backed/wired queues; no memory purge or system-service disabling.
+
+Tight-window candidate: native16geometry/touch cases passed after fixing test-directory write permissions and using actual UIKit orientation constants instead of guessed numeric values. Its SettingsGPUmean30.12% versus29.82% baseline at~1fps showed no reduction; discarded the geometry change. BackboarddCPU changed7.13→5.92% in short windows, insufficient evidence of a GPU fix. Final candidate retains original geometry and caps changed-text redraws toonce/5s only when the global counter indicates at mostHUD-own frame activity; active content/fallback retain configured cadence. Sampling remainsunchanged. Public11-case render policy self-check covers idle/active/first/reset/fallback/interval logic.
+
+Final adaptive redraw native7.1.2 result: Settings globalframecadence0.993→0.192fps; mean driverGPU29.82→6.28%, periodicpeak46%. ActiveHome comparison completed; final HUDOFF/Home restored asfound. CPU/process/memory queues were observed without changing metric formulas or disabling services. Battery watts and realgameperformance not measured. Raw private/hud-render-20261029; public verification-idle-ios7.json and RAM note.
+
+Final caller review found idle detection was tied to ShowFPS. Made global activity sampling independent of row visibility; native hidden-FPS check confirms valid global counter, absentFPSrow and idle cadence0.166fps. Only the in-memory row flag was changed for testing and restored; preferences remainasfound. Rebuilt/reinstalled final artifact, exact installed dylib/footer hashes match; owntemporaryfiles removed. One-shot diagnostic code was pinned for callback safety and becomes quiescent after completion until normal SpringBoardexit; no persistent hook/job/timer.

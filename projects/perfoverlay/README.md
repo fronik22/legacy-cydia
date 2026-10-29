@@ -224,3 +224,11 @@ allocations and reclaimable inactive pages; they do not imply one app owns
 600MiB or that memory pressure is high. Process RSS overlaps shared memory
 and must not be summed as an exact decomposition. Detailed results and limits:
 [HUD load diagnosis](../../notes/HUD-LOAD-DIAGNOSIS.md).
+
+## Idle redraw optimization —0.1.11
+
+A changed-text guard and global-frame-counter idle policy stop the HUD from sustaining a1Hz compositing loop on otherwise static screens. Global activity detection also runs when the FPS row is hidden. Sampling continues at the configured interval; only visible text redraws are capped toonce/5s while global frame activity is no greater than the HUD's own expected cadence. Active content and display-link fallback retain configured refresh. Unchanged text is never reassigned. Settings/toggle restart clears the draw timestamp. Geometry, metrics and preferences are unchanged. A live overlay necessarily causes occasional rendering; this is not a zero-GPU guarantee.
+
+Native7.1.2 Settings comparison: global frames0.993→0.192/s and mean AGX driver snapshot29.82→6.28%, with brief peaks up to46%. ActiveHome remains at the measured normal cadence (see verification-idle-ios7.json). This is a short driver/frame measurement, not calibrated peak GPU capacity, battery watts or a game benchmark. HUD restored toas-foundOFF. A tight-window experiment did not reduceGPU and was discarded.
+
+Self-check: `clang -Wall -Wextra -Werror probe/render-policy-test.c -o /tmp/hud-render-test && /tmp/hud-render-test`. Eleven assertions cover initial/idle/active/fallback/reset/interval behavior. Exact final package is checked with probe/test_package.py. iOS4–6/8–9 hardware execution of this change remains untested.

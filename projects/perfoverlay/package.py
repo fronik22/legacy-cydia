@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from package_deb import build_deb
 
-VERSION = '0.1.10'
+VERSION = '0.1.11'
 B = ROOT / 'build'
 STAGE = B / 'stage'
 CONTROL = B / 'control'

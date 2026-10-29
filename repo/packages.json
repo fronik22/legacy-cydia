@@ -17,17 +17,17 @@
     },
     {
       "id": "local.perfoverlay",
-      "deb": "repo/incoming/local.perfoverlay_0.1.10_iphoneos-arm.deb",
+      "deb": "repo/incoming/local.perfoverlay_0.1.11_iphoneos-arm.deb",
       "title": "Performance Overlay",
       "tagline": "FPS / CPU / RAM / GPU HUD for iOS 4.3\u20139",
-      "status_label": "iOS 7: native metrics + A/B",
-      "status_text": "0.1.10 native A7 page accounting and driver snapshots verified. Controlled Settings A/B: HUD ON28\u201333% AGX snapshot/~1 redraw per second; OFF0% with no redraws. RAM531MiB includes79MiB inactive,444MiB free, no pageout growth. GPU value is not calibrated peak GPU power. Visible rotation remains unverified.",
+      "status_label": "iOS 7: idle redraw fix verified",
+      "status_text": "0.1.11 avoids redundant text assignments and caps redraws on static screens toonce/5s; sampling and active-content refresh keep the chosen interval. Native7.1.2 Settings frames0.993\u21920.192/s; mean AGX driver snapshot29.82\u21926.28% with brief peaks. Original geometry/rotation and metrics retained. RAM548MiB comprises178anonymous+256occupiedfile-backed+114wired; no500MiB process. OtherOS hardware/game/battery savings untested.",
       "source": "projects/perfoverlay",
       "license": "GPL-3.0",
       "order": 2,
       "homepage": "https://github.com/fronik22/legacy-cydia",
-      "source_archive": "perfoverlay-0.1.10-source.zip",
-      "source_sha256": "85ea9b12d47c71ff189fd2901ca69baa5487cd5ad569102936c698093a5cb8f0"
+      "source_archive": "perfoverlay-0.1.11-source.zip",
+      "source_sha256": "27a54e30708756780a8af6b1c171406e11230c65ae271afc8c77296b3effbea7"
     },
     {
       "id": "local.legacypower",
