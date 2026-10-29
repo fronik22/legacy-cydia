@@ -39,3 +39,9 @@ Installed `local.codex.legacy-timezone` **2026e-1** on the attached iPad2,2 / iO
 
 Raw diagnostics and private Apple-data fixtures are retained in `work/legacy-timezone/` in the local workspace, excluded from the shareable archive. The final package SHA256 is recorded in `SHA256SUMS` and all artifact-specific device reports.
 20. Extracted the distributable source kit into a clean temporary directory. Repackaged its included prebuilt native tools/data and reproduced the **exact installed `.deb` bytes**. Built and ran the parser tests from that extracted kit using a private original ICU fixture: all 2,424 unrelated resources remained byte-identical and malformed-input tests passed. Temporary private fixtures were deleted with the temporary directory. No task-owned proxy forwards or background test processes remain on the Mac.
+
+## iOS 7 release — 2026-10-29
+
+2026e-2 adds the validated ICU51 gate for iOS7. The 603 payload entries are identical to2026e-1. On iPad4,5/7.1.2, installation wrote600 managed files; 155 date/region cases across31 zones matched IANA2026e in NSTimeZone, libc and NSDateFormatter. Moscow2026 isUTC+3; 2010UTC+3 and2014summerUTC+4 history remains. Removal verified every original managed target and restored the full ICU SHA256f21d28be20acfdcf1f69d9d4d1661a4865a41b12cb8ff98d73420e6afb86eeaa. Reinstalled the sameDEB and verified idempotency. Europe/Moscow selection stayed unchanged. Private originals/receipts/rawlogs are in private/timezone7-release-20261029; no Appledata is redistributed. Final reboot verification follows in the release evidence.
+
+Final reboot completed. All600 installed files verified by idempotent apply. Fresh native arm64 consumers passed the same155 IANA date/region cases as armv7; both result sets match exactly. No timezone service was added.

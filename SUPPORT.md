@@ -1,6 +1,6 @@
 # Support and verification matrix
 
-Last updated: 2026-10-28.
+Last updated: 2026-10-29.
 
 This page records what was actually exercised on hardware. A package appearing in
 the repository does not imply that every feature works on every declared
@@ -16,17 +16,17 @@ this page is the support statement.
 
 Both devices are armv7-capable; the iPad mini 2 has a 64-bit SpringBoard and a
 32-bit compatibility runtime. No firmware was changed during testing. Existing
-apps, profiles, saves and the disabled HUD/logger states were preserved.
+apps, profiles and saves were preserved. HUD visibility is restored to its as-found state after each coordinated test; logger recording remains off.
 
 ## Package matrix
 
-### Amnezia6 1.2.1 — `com.mak.amnezia6`
+### Amnezia6 1.3.0 — `com.mak.amnezia6`
 
 Declared: `firmware (>= 4.3), firmware (<< 8.0), mobilesubstrate`.
 
 | Check | iOS 6.1.3 | iOS 7.1.2 |
 |---|---|---|
-| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.2.1 over 1.2.0) |
+| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.3.0 over 1.2.1) |
 | App bundle, daemon and CLI present | Verified | Verified |
 | Root daemon starts under launchd | Verified | Verified |
 | Control socket permissions | Not re-run | Verified `0660 root:mobile` |
@@ -48,8 +48,9 @@ crypto, route and DNS paths. A direct handshake to the same endpoint from the
 test LAN still times out, so the direct network path remains unlocalised. The
 normal daemon stayed idle and the existing profile was preserved byte-for-byte.
 
-The 1.2.1 package was installed only on 7.1.2; the iOS 6 device remains on 1.2.0.
-The fixes are shared code, but iOS 6 was not re-run against this exact build.
+1.3.0 was installed only on7.1.2; the iOS6 device was not modified. The fixes are shared code; iOS4–6 camera execution was not re-run against this exact build.
+
+1.3.0 replaces the still-photo camera action with continuous AVCaptureVideoDataOutput scanning and official Amnezia QDataStream/qCompress multipart assembly. Native7 camera callbacks, stop/restart lifecycle, reordered/repeated four-part CMSampleBuffer replay through the real packaged app, review-editor presentation and camera stop on completion passed. Profiles remain unchanged and import requires explicit review/save. Optical scanning of a physically aimed animated display remains untested. Host negative/bounds/checksum/timeout/static tests pass. See notes/ANIMATED-QR.md.
 
 The existing profile is not shipped in the package. Upgrading preserves
 `/var/mobile/Library/Preferences/Amnezia6/amnezia6.conf`.
@@ -65,17 +66,18 @@ preferenceloader`.
 | Universal dylib | armv7 only in 0.1.8 | armv7 + arm64 |
 | Hook loads into SpringBoard | Verified | Verified |
 | SpringBoard stable after respawn | Verified | Verified, no crash report |
-| HUD stays disabled by default | Verified | Verified (`Enabled = false`) |
+| Existing enabled preference preserved | Verified | Verified; as-found state restored after A/B |
 | HUD visually confirmed | Verified on iOS 6 | **Not captured** |
 
 0.1.10 fixes the A7 page-size reading: the arm64 task uses 16 KiB pages while
 the kernel VM counters remain 4 KiB, which previously produced a fake 2293 MiB
 used on a 976 MiB device. Native probes now read about 576 MiB and reject
 impossible totals; the Settings bundle loads under the 64-bit Preferences
-framework. Screenshots on iOS 7 require a mounted Developer Disk Image and the
-`screenshotr` service, which was not available. The iOS 7 evidence is therefore
+framework. The attempted screenshotr path required a mounted Developer Disk Image/service, which was unavailable. The iOS 7 evidence is therefore
 "hook loaded, metrics corrected and SpringBoard stable", not "HUD pixels
 confirmed".
+
+Controlled native A/B on7.1.2 (2026-10-29) reproduced Settings28–33% AGX driver snapshot with HUDON/~1 redraw per second, and0% with HUDOFF/no new frames. Home withoutHUD still rendered~10fps/14–17%; exactHome animation was not isolated. RAM531MiB includes79MiB inactive;444MiB free, no pageout growth during the short test. The driver percentage is not calibrated peak GPU power. See notes/HUD-LOAD-DIAGNOSIS.md; no metric formula or package version changed.
 
 ### Power Logger 1.1.1 — `local.legacypower`
 
@@ -195,19 +197,13 @@ the project. The package is deliberately capped below iOS 7. It contains no
 original game assets or game executables; the dylib applies hooks to an
 already-installed copy of the game.
 
-### Legacy Timezone Update 2026e-1 — `local.codex.legacy-timezone`
+### Legacy Timezone Update 2026e-2 — `local.codex.legacy-timezone`
 
-Declared: `firmware (>= 4.3), firmware (<< 7.0), gsc.armv7`.
+Declared: firmware >=4.3, <8.0, gsc.armv7. Runtime validates ICU44–49 or iOS7 ICU51. Updates timezone data only; no Substrate hook or background service. Selected geographical zone, UTC clock and automatic-time preference are not rewritten.
 
-System installation/removal tested on iPad2,2 / iOS 6.1.3; physical iOS 4.3.3/5 tests were not performed. The
-installer verifies the iOS 4–6 ICU layout, keeps a backup and refuses iOS 7
-pending a complete iOS7 system-install/reboot/rollback test. The separate preview actually parses ICU51 and passes staged validation; the older cap is not evidence that ICU51 is inherently incompatible. The
-package contains IANA timezone data and generated ICU resources, not Apple SDK
-files.
+On iPad4,5/iOS7.1.2, installation/removal/reinstallation/reboot passed. Removal restored the original full ICU SHA256. All600 managed files verified after reboot. Both native armv7 and arm64 NSTimeZone/libc/NSDateFormatter matched IANA2026e across155 date/region cases each; Moscow2026UTC+3 and historical2010/2014 offsets remain correct. Repacker preserves2882 unrelated ICU51 resources byte-for-byte. Detailed results: projects/timezone/verification-ios7.json.
 
-A 2026e-2 adapter for the iOS 7 ICU 51 layout was built and staged on the mini 2
-/ 7.1.2: 600 files validated, the system ICU SHA256 stayed unchanged and no
-system files were modified. It is **not in the stable APT index** until a real install, reboot and removal round-trip pass. The separate manual preview is downloadable from docs/previews; it is not an automatic upgrade.
+The prior2026e-1 iOS6.1.3 round-trip/155-case result remains applicable evidence for unchanged data; this exact helper was not reinstalled on6 during the mini2-only work. iOS4/5 physical verification remains outstanding. iOS8+ and armv6 are excluded.
 
 ### Legacy Device Access 1.1.0 — `local.codex.device-access`
 
@@ -232,7 +228,7 @@ unlocks a device with a configured passcode.
   remains unlocalised and needs server-side capture.
 - On iOS 7.1.2 the entitlement-signed launch helper now starts Apple-signed apps
   (`com.apple.mobilesafari` returned 0; Preferences returned 3 while already
-  running). Later Cydia/Amnezia launch observations conflict across the icon-repair attempts; full GUI operation remains unverified. Absence of appinst does not establish why an already-present system app failed to launch. The two IPA installers really do require appinst/AppSync. `uicache` must run
+  running). Later Cydia/Amnezia launch observations conflicted across icon-repair attempts. On2026-10-29, Amnezia1.3.0 launched successfully through the same helper as mobile and passed the camera/scanner/review tests; full tunnel GUI workflow remains unverified. Absence of appinst does not establish why an already-present system app failed to launch. The two IPA installers really do require appinst/AppSync. `uicache` must run
   as mobile; the root run reports `cannot open cache file. incorrect user?`, so a
   small privilege-drop helper was used for the refresh.
 - `https://cydia.akemi.ai/Packages.gz` timed out from the Mac (20 s, zero bytes),

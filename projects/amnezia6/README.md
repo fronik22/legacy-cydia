@@ -1,7 +1,7 @@
 # Amnezia6
 
 Minimal native UIKit AmneziaWG client for jailbroken iOS4.3–7.x devices.
-Current release1.2.1. App/daemon/CLI use armv7 (including the iOS7 32-bit
+Current release1.3.0. App/daemon/CLI use armv7 (including the iOS7 32-bit
 compatibility runtime); the SpringBoard badge includes armv7+arm64 slices.
 Device validation: iPad2,2/iOS6.1.3 and iPad4,5/iOS7.1.2. The latter's shared
 engine completed a real handshake, HTTP response and configured-DNS query through
@@ -130,3 +130,23 @@ is root-only and changes routes/DNS temporarily: coordinate idle VPN state,
 use a private configuration and bounded duration, and verify cleanup. These
 probes are not installed by the Debian package. Public source contains no live
 VPN profile, endpoint, credential, SDK or original device dump.
+
+## 1.3.0 continuous and animated QR import
+
+The camera now scans live video with AVFoundation and quirc on iOS4.3–7,
+collecting official AmneziaVPN multipart QR chunks in any order with a visible
+received/total count. It stops when hidden, backgrounded, or complete. Import
+opens the existing editor for review; it never saves or activates a profile
+automatically. Static image QR import remains available.
+
+A series permits 255 chunks of 850 bytes, rejects malformed/conflicting chunks,
+expires after60 seconds, and checks the complete qCompress stream and profile.
+Official chunks contain no series identifier: scan one sender at a time. Plain
+JSON series have no wire checksum; final profile validation still applies.
+
+`make test` includes real four-part QR image → BGRA frame → quirc → assembly →
+profile validation and negative cases. `make fixtures-animated` regenerates
+public synthetic fixtures with the upstream QR encoder and official wire format.
+`python3 tools/render_animated_qr.py` creates a displayable animation (requires
+Pillow only for this optional fixture-rendering step). Actual target camera
+verification and remaining limits are recorded in ../../notes/ANIMATED-QR.md.

@@ -41,3 +41,23 @@ A real iPad mini2/iOS7.1.2 test exposed a fourfold RAM overstatement: a64bit tas
 Read-only native64 tests also verified2CPUcores, AGX GPU counter availability and the global render-server counter; the idle screen produced no counter delta, so this is no active-game FPS measurement. The actual universal preference bundle loads against iOS7 PSListController and required methods exist. HUD stayed OFF throughout. Pixel layout/rotation and live toggles on7 still require a coordinated enabled-UI test. No supported-game performance claim from these probes.
 
 Tests: probe/test_package.py, probe/metric-policy-test.c, probe/cpu-test.c, probe/rotation-test.c. Optional nonpersistent native metrics probe: python3 probe/build-metrics.py arm64 (armv7 for legacy), then run the resulting own CLI over authenticated SSH. It does not create/show the HUD or write preferences; diagnostics use only an own temporary log.
+
+## 2026-10-29 — iOS7 reported idle GPU/RAM investigation
+
+Native exclusive-window A/B after coordinated reboot: Settings HUD ON28–33%
+AGX/~1composited frame/s; repeat OFF0%/stationary frame counter. Home OFF
+14–17%/~10fps, first ON20–23%/~11fps. Live HUD redraw produces the apparent
+Settings idle GPU load; Home/compositor has additional foreground work.
+No process GPU-time or power attribution claimed. Driver counters clear to0
+when rendering stops; no percent arithmetic/display fix justified.
+
+RAM~531MiB =335active+79inactive+117wired;444MiBfree, no pageout/purge growth.
+0.1.10 page-size correction remains valid. Largest Settings RSS kernel82MiB,
+SpringBoard79MiB, Preferences18MiB; shared RSS cannot exactly decompose global
+VM queues. Short native windows do not establish battery draw/leak behavior.
+
+README calls RAM an allocation estimate and documents observer overhead. No
+product/package change or respring. Enabled=true restored, Home left unlocked
+for coordinated QR test; own temporary binaries/log removed. Full sanitized
+evidence/limits: notes/HUD-LOAD-DIAGNOSIS.md. Private raw and probe source kept
+outside public repository at work/cydia-ios7-tweaks-20261028.

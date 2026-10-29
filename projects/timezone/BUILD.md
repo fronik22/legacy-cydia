@@ -27,4 +27,4 @@ clang -fno-objc-arc -Wno-deprecated-declarations -framework Foundation TestICUPa
 ./test-icu-pack /private/path/to/original.dat
 ```
 
-This verifies resource preservation and malformed-input rejection. It writes `icudt49l-updated.private.dat` beside the sources for inspection; the filename is a test artifact, not an assumption in the installer. Physical runtime tests on each supported iOS version remain necessary. Host/device SSH orchestration scripts and credentials are deliberately excluded from this source kit.
+This verifies resource preservation and malformed-input rejection. An optional second argument chooses the updated output path; otherwise it writes `legacy-timezone-updated.private.dat` in the temporary directory; the filename is a test artifact, not an assumption in the installer. Physical runtime tests on each supported iOS version remain necessary. Host/device SSH orchestration scripts and credentials are deliberately excluded from this source kit.

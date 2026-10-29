@@ -1,33 +1,23 @@
-# Legacy Timezone preview — 2026e-2
-
-The stable Cydia index retains2026e-1 for iOS4–6. This source builds a preview adding iOS7/ICU51 validation; do not mistake staged tests for a completed system-install/reboot/rollback test on7.
-
-The preview repacker preserved2882unrelated ICU51resources byte-for-byte and passed malformed-layout tests. Native7.1.2 staged common-data loading changed Moscow2026offsets fromUTC+4 toUTC+3; six region/date sets passed without replacing system data. Native `legacy-timezone validate PAYLOAD` checked600planned system files with the original ICUfile hash unchanged. No full Apple ICUdata is distributed.
-
-`validate` accepts an alternate payload path only for a read-only check. `apply`/`restore` retain the fixed installed payload/backup locations and atomic hash-checked rollback. The original603payload manifest entries are unchanged from2026e-1. Both CLI utilities remainarmv7 and run through the7compatibilityruntime; no injection into64bit processes is needed. Source/tooling0BSD; data IANA/Unicode notices included.
-
-The original stable-release documentation follows and describes its narrower validated range.
-
----
-
-# Legacy Timezone Update — 2026e-1
+# Legacy Timezone Update — 2026e-2
 
 Updates obsolete iOS timezone rules, including current Russian regional offsets, using IANA 2026e and Unicode ICU timezone resources. Moscow becomes UTC+3 in winter and summer; historical offsets remain date-dependent.
 
 ## Compatibility
-- Jailbroken **armv7 iOS 4.3–6.x**; no MobileSubstrate or background daemon required.
-- Installer accepts little-endian system ICU versions 44–49 and validates the package layout before modifying files.
-- Tested on iPad2,2 with iOS 6.1.3: 155 date/region combinations through three system consumers, installation, removal and reinstallation. iOS 4.3.3/5 physical tests remain outstanding. armv6 devices and iOS 7+ are not supported by this binary.
+- Jailbroken **iOS 4.3–7.x with armv7 execution support**; no MobileSubstrate or background daemon required.
+- Installer accepts little-endian system ICU versions 44–49 or iOS 7 ICU 51 and validates the package layout before modifying files.
+- Tested on iPad2,2 with iOS 6.1.3: 155 date/region combinations through three system consumers, installation, removal and reinstallation. iOS 4.3.3/5 physical tests remain outstanding. iOS 7.1.2 / iPad mini 2 installation, 155 native date/region cases, removal, reinstallation and reboot also pass. armv6 and iOS 8+ are outside this package.
 - This does not remove the operating system's 32-bit date/time limits or repair an incorrect underlying UTC clock.
 
 ## Install / remove
-Install `local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb` using a Debian-package installer, or as root:
+Install `local.codex.legacy-timezone_2026e-2_iphoneos-arm.deb` using a Debian-package installer, or as root:
 
 ```
-dpkg -i local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
+dpkg -i local.codex.legacy-timezone_2026e-2_iphoneos-arm.deb
 ```
 
 **Reboot once after installation or removal.** Existing processes can retain old ICU timezone rules in memory. Cydia is asked to show its reboot button; command-line installation does not force a reboot.
+
+The iOS 7 adapter preserves 2,882 unrelated ICU resources byte-for-byte. Both CLI tools run as armv7; A7 uses the same updated system data in its arm64 consumers. No Substrate injection is needed.
 
 No manual hour adjustment is required. Keep the correct geographical timezone selected. The UTC clock, selected zone, automatic-time preference and saved events are not rewritten. Applications receive corrected local-time conversions; a locally scheduled alarm may consequently move to its correct local time.
 

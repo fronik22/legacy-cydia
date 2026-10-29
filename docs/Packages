@@ -1,6 +1,6 @@
 Package: com.mak.amnezia6
 Name: Amnezia6
-Version: 1.2.1
+Version: 1.3.0
 Architecture: iphoneos-arm
 Description: Lightweight AmneziaWG client for iOS 4-7
  A small native AmneziaWG client: a root daemon owns the UTUN device,
@@ -14,14 +14,14 @@ Section: Networking
 Priority: optional
 Maintainer: mak
 Author: mak
-Installed-Size: 1130
+Installed-Size: 1136
 Homepage: https://github.com/fronik22/legacy-cydia
 Icon: https://fronik22.github.io/legacy-cydia/assets/amnezia6.png
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.mak.amnezia6.html
-Filename: ./debs/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
-Size: 786844
-MD5sum: 5f073132658516c45215c9ea8d6f082a
-SHA256: e38a40ff7436c3a7171662a2549cf9a29aa0ce94b683e9ea97da5e57f0975512
+Filename: ./debs/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
+Size: 795464
+MD5sum: 9a847882e444b2968f9fd2aac88ea761
+SHA256: 1bca33f1f5946d963f8c25b5699769703a5ff1d683a9d534408db43119d43084
 
 Package: local.perfoverlay
 Name: Performance Overlay
@@ -152,21 +152,21 @@ SHA256: a1ebcff5c515435672ec819bf510d97a6aa1f0098f9cc39b5ad27eef6d99b23a
 
 Package: local.codex.legacy-timezone
 Name: Legacy Timezone Update
-Version: 2026e-1
+Version: 2026e-2
 Architecture: iphoneos-arm
-Description: IANA 2026e time rules for iOS 4.3-6 on armv7 devices.
+Description: IANA 2026e time rules for iOS 4.3-7 on armv7 devices.
  Updates system and ICU timezone data, including Russian UTC offsets.
  Preserves chosen timezone and UTC clock. Removal restores original data.
-Depends: firmware (>= 4.3), firmware (<< 7.0), gsc.armv7
+Depends: firmware (>= 4.3), firmware (<< 8.0), gsc.armv7
 Section: System
 Priority: optional
 Maintainer: Legacy iOS compatibility project
 Installed-Size: 1124
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.codex.legacy-timezone.html
-Filename: ./debs/local.codex.legacy-timezone_2026e-1_iphoneos-arm.deb
-Size: 359420
-MD5sum: e665a505e8974c76d12ded96cbc2d583
-SHA256: 5242c7017dade1bf684c43e0c646b6cc919b8a3e7a4994ec2fd4c2125e3fa405
+Filename: ./debs/local.codex.legacy-timezone_2026e-2_iphoneos-arm.deb
+Size: 359566
+MD5sum: 86d5a4a770cee65231624de6d92beff7
+SHA256: 5afe90572e06eaa9e1603d1cb86dcd4c85fdf78c5d86e83f4e17aeed74f30270
 
 Package: local.codex.device-access
 Name: Legacy Device Access

@@ -1,0 +1,17 @@
+{
+  "version": "1.3.0",
+  "date": "2026-10-29",
+  "host_regressions": "make test passed",
+  "package": "make deb and Debian archive verification passed",
+  "binary": "armv7, iOS 4.3 minimum, legacy LC_UNIXTHREAD entry",
+  "animated_qr": "4 actual upstream-encoded QR images -> padded rotated BGRA frames -> live shared quirc decoder -> collector -> byte-identical JSON -> A6ImportConfig passed",
+  "negative_cases": "repeat/order/conflict/malformed/canonical-base64/size/checksum/timeout/static passed",
+  "device_replay": "PASS iPad4,5 iOS7.1.2: actual packaged callback, CVPixelBuffer/CMSampleBuffer four-part rotated/repeated fixture opens A6ConfigController review without saving",
+  "camera_lifecycle": "PASS 37 real camera callbacks; navigation exit/reentry, resign/active notification stop/restart, no callbacks after stop, stop on completion",
+  "optical_animated_scan": "not tested: no physically aimed sender display",
+  "older_os_camera": "iOS 4/5/6 hardware execution not tested",
+  "package_sha256": "1bca33f1f5946d963f8c25b5699769703a5ff1d683a9d534408db43119d43084",
+  "profile_hashes_unchanged": true,
+  "clean_relaunch_and_helpers_removed": true,
+  "installed_binary_sha256": "390ed5b9ebe9d5b18c05a1bcf2dbfdb2ac6477dd6fc71810df83489eeb22736f"
+}

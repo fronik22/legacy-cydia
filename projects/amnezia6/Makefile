@@ -98,7 +98,8 @@ $(BUILD)/test_command_reply: tests/test_command_reply.m app/A6Daemon.m app/A6Dae
 $(BUILD)/test_tunnel_retry: tests/test_tunnel_retry.c src/tunnel.c $(HOST_COMMON_OBJ) | $(BUILD)
 	$(HOSTCC) $(HOST_CFLAGS) tests/test_tunnel_retry.c $(HOST_COMMON_OBJ) -o $@ $(HOST_LIBS)
 
-test: $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+test: $(BUILD)/test_qr_parts $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+	$(BUILD)/test_qr_parts tests/fixtures
 	$(BUILD)/test_control_permissions
 	$(BUILD)/test_profiles tests/fixtures
 	$(BUILD)/test_protocol
@@ -203,12 +204,12 @@ APP_CFLAGS  := -MMD -MP -target $(DEV_TARGET) -isysroot $(SDK) -std=gnu99 -O2 $(
 APP_LDFLAGS := -target $(DEV_TARGET) -isysroot $(SDK) -Wl,-dead_strip \
                -L"$(CURDIR)/toolchain/oldlibs" \
                -framework Foundation -framework UIKit -framework QuartzCore \
-               -framework CoreGraphics -lz -lm
+               -framework CoreGraphics -framework AVFoundation -framework CoreMedia -framework CoreVideo -lz -lm
 
 APP_SRC_M := app/main.m app/A6AppDelegate.m app/A6RootController.m \
              app/A6LogController.m app/A6ConfigController.m app/A6Daemon.m \
-             app/A6Profiles.m app/A6ProfilesController.m app/A6Import.m app/A6QR.m
-APP_SRC_C := src/client.c $(SRC_COMMON) third_party/monocypher/monocypher.c \
+             app/A6Profiles.m app/A6ProfilesController.m app/A6Import.m app/A6QR.m app/A6QRParts.m app/A6QRScannerController.m
+APP_SRC_C := src/qr_frame.c src/client.c $(SRC_COMMON) third_party/monocypher/monocypher.c \
              third_party/senko/amnezia_bundle.c third_party/senko/b64.c third_party/senko/third_party/cJSON.c \
              third_party/quirc/quirc.c third_party/quirc/identify.c third_party/quirc/decode.c third_party/quirc/version_db.c
 APP_OBJ   := $(APP_SRC_M:app/%.m=$(APP_OBJDIR)/app/%.o) \
@@ -255,9 +256,9 @@ $(BUILD)/ToggleRegression.bundle: tests/ToggleRegression.m app/A6Daemon.h | $(BU
 
 deb: device app
 	python3 tools/build_deb.py
-	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.2.1_iphoneos-arm.deb
+	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
 
--include $(wildcard build/host/*.d build/dev/*.d build/app/app/*.d build/app/src/*.d build/test_*.d)
+-include $(wildcard build/host/*.d build/dev/*.d $(APP_OBJ:.o=.d) build/test_*.d)
 
 .PHONY: host device app deb test test-live clean
 clean:
@@ -271,7 +272,7 @@ $(BUILD)/test_protocol: tests/test_protocol.c tests/cookie_vector.h $(HOST_COMMO
 	$(HOSTCC) $(HOST_CFLAGS) tests/test_protocol.c $(HOST_COMMON_OBJ) -framework CoreFoundation -o $@
 
 $(BUILD)/test_qr: tests/test_qr.c third_party/quirc/quirc.c third_party/quirc/identify.c third_party/quirc/decode.c third_party/quirc/version_db.c
-	$(HOSTCC) $(HOST_CFLAGS) $^ -lm -o $@
+	$(HOSTCC) $(HOST_CFLAGS) $(filter %.c %.o,$^) -lm -o $@
 
 $(BUILD)/test_protocol-device: tests/test_protocol.c tests/cookie_vector.h $(DEV_COMMON_OBJ)
 	$(DEVCLANG) $(DEV_CFLAGS) tests/test_protocol.c $(DEV_COMMON_OBJ) $(DEV_LDFLAGS) -o $@
@@ -292,4 +293,23 @@ $(BUILD)/device_tunnel_probe: tests/device_tunnel_probe.c $(DEV_COMMON_OBJ) $(DE
 
 $(BUILD)/device_control_probe: tests/device_control_probe.c $(DEV_OBJDIR)/control.o
 	$(DEVCLANG) $(DEV_CFLAGS) tests/device_control_probe.c $(DEV_OBJDIR)/control.o $(DEV_LDFLAGS) -o $@
+	$(LDID) -S $@
+
+# Test-only upstream QR encoder; never linked into the application.
+$(BUILD)/make_animated_qr: tools/make_animated_qr.cpp third_party/qrcodegen/qrcodegen.cpp third_party/qrcodegen/qrcodegen.hpp $(BUILD)/b64-fixture.o | $(BUILD)
+	$(CXX) -std=c++11 -O2 -Ithird_party/qrcodegen -Ithird_party/senko tools/make_animated_qr.cpp third_party/qrcodegen/qrcodegen.cpp $(BUILD)/b64-fixture.o -lz -o $@
+$(BUILD)/b64-fixture.o: third_party/senko/b64.c | $(BUILD)
+	$(HOSTCC) $(HOST_CFLAGS) -c $< -o $@
+$(BUILD)/test_qr_parts: tests/test_qr_parts.m app/A6QRParts.m app/A6QRParts.h app/A6Import.m app/A6Import.h src/qr_frame.c src/qr_frame.h $(IMPORT_C) $(HOST_COMMON_OBJ) third_party/quirc/quirc.c third_party/quirc/identify.c third_party/quirc/decode.c third_party/quirc/version_db.c
+	$(HOSTCC) $(HOST_CFLAGS) -Iapp -fno-objc-arc $(filter %.m %.c %.o,$^) -framework Foundation -lz -lm -o $@
+fixtures-animated: $(BUILD)/make_animated_qr
+	$(BUILD)/make_animated_qr tests/fixtures/profile.json tests/fixtures
+.PHONY: fixtures-animated
+
+$(BUILD)/test_qr_parts-device: tests/test_qr_parts.m app/A6QRParts.m app/A6QRParts.h app/A6Import.m app/A6Import.h src/qr_frame.c src/qr_frame.h $(IMPORT_C) $(DEV_COMMON_OBJ) third_party/quirc/quirc.c third_party/quirc/identify.c third_party/quirc/decode.c third_party/quirc/version_db.c
+	$(DEVCLANG) $(APP_CFLAGS) $(filter %.m %.c %.o,$^) -L"$(CURDIR)/toolchain/oldlibs" -framework Foundation -framework CoreFoundation -lz -lm -o $@
+	$(LDID) -S $@
+
+$(BUILD)/QRRegression.bundle: tests/QRRegression.m app/A6QRScannerController.h | $(BUILD)
+	$(DEVCLANG) $(APP_CFLAGS) -L"$(CURDIR)/toolchain/oldlibs" -bundle tests/QRRegression.m -framework Foundation -framework UIKit -framework AVFoundation -framework CoreMedia -framework CoreVideo -o $@
 	$(LDID) -S $@

@@ -113,5 +113,59 @@
     "tweak/MetricPolicy.h": "dc3d70abbd0e07ae08a701a8f62bc0227eb1f949c055a18351e468fa6ab0fd9d",
     "tweak/CPUCounters.h": "718c5980438a5321ef0bb026ddc05b1a6dca8ed2188d936cf42285d837eacbec",
     "tweak/PerfOverlay.m": "7239d5ccee5771a921e56d5d9f2e6e071fa4a0e7ad99dc2e65c0cb2e66e7d3d1"
+  },
+  "idle_load_diagnosis_2026_10_29": {
+    "installed_version": "0.1.10",
+    "native_arch": "arm64",
+    "controlled_AB": {
+      "settings_HUD_on": {
+        "gpu_driver_percent_range": [
+          28,
+          33
+        ],
+        "gpu_driver_percent_mean": 30.058823529411764,
+        "composited_fps": 0.99
+      },
+      "settings_HUD_off_repeat": {
+        "gpu_driver_percent_range": [
+          0,
+          0
+        ],
+        "composited_fps": 0
+      },
+      "home_HUD_off": {
+        "gpu_driver_percent_range": [
+          14,
+          17
+        ],
+        "composited_fps": 10
+      },
+      "home_HUD_on_first": {
+        "gpu_driver_percent_range": [
+          20,
+          23
+        ],
+        "composited_fps": 11.02
+      }
+    },
+    "ram_MiB": {
+      "used": 531.26953125,
+      "active": 334.75390625,
+      "inactive": 79.38671875,
+      "wired": 117.12890625,
+      "free": 444.30859375,
+      "physical": 975.96484375
+    },
+    "pageout_and_purge_growth": 0,
+    "conclusion": "HUD redraw causes Settings idle GPU counter; Home compositor adds foreground workload. RAM includes inactive/system allocations; no new metric bug established.",
+    "product_code_changed": false,
+    "temporary_device_paths_removed": true,
+    "restored_HUD_enabled": true,
+    "limits": [
+      "Driver frequency/averaging interval and battery watts uncalibrated",
+      "Specific Home animation not isolated; no process GPU-time attribution",
+      "Short post-reboot windows, not long-term leak test or game performance test"
+    ],
+    "details": "../../notes/HUD-LOAD-DIAGNOSIS.md"
   }
 }

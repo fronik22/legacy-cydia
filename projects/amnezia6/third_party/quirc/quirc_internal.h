@@ -29,7 +29,8 @@
 #define QUIRC_PIXEL_REGION	2
 
 #ifndef QUIRC_MAX_REGIONS
-#define QUIRC_MAX_REGIONS	254
+/* Dense official Amnezia 850-byte chunks exceed 254 connected regions. */
+#define QUIRC_MAX_REGIONS	1024
 #endif
 #define QUIRC_MAX_CAPSTONES	32
 #define QUIRC_MAX_GRIDS		(QUIRC_MAX_CAPSTONES * 2)

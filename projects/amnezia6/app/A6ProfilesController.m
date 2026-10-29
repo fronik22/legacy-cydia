@@ -3,6 +3,7 @@
 #import "A6ConfigController.h"
 #import "A6Import.h"
 #import "A6QR.h"
+#import "A6QRScannerController.h"
 #import <dispatch/dispatch.h>
 @interface A6FilesController : UITableViewController {
     NSString *_directory; NSArray *_items; A6ProfilesController *_importer;
@@ -58,7 +59,7 @@
 - (void)actionSheet:(UIActionSheet *)sheet clickedButtonAtIndex:(NSInteger)index {
     if(index==0){NSString *text=[UIPasteboard generalPasteboard].string;[self importData:[text dataUsingEncoding:NSUTF8StringEncoding]name:nil];}
     else if(index==1){A6FilesController *files=[[A6FilesController alloc]initWithDirectory:nil importer:self];[self.navigationController pushViewController:files animated:YES];[files release];}
-    else if(index==2)[self pickImage:UIImagePickerControllerSourceTypeCamera];
+    else if(index==2){A6QRScannerController *scanner=[[A6QRScannerController alloc]initWithImporter:self];[self.navigationController pushViewController:scanner animated:YES];[scanner release];}
     else if(index==3)[self pickImage:UIImagePickerControllerSourceTypePhotoLibrary];
     else if(index==4){A6ConfigController *editor=[[A6ConfigController alloc]initWithIdentifier:nil config:nil name:nil];[self.navigationController pushViewController:editor animated:YES];[editor release];}
 }

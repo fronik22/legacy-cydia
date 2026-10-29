@@ -141,7 +141,7 @@ rate. NCSettings stores its toggle list and theme in
   at 0%. This is expected and does not mean the GPU is unused.
 - `GPU3D` is unavailable on hardware/drivers that do not expose
   `PerformanceStatistics`; the row then shows `n/a`.
-- RAM is a system-wide pressure estimate, not an exact per-process figure.
+- RAM is a system-wide allocation estimate, not an exact per-process figure.
   It includes reclaimable inactive pages.
 - NCSettings is available only on iOS5/6. Settings > Performance HUD
   provides the master visibility switch on all supported systems. iOS 9 hardware was not available, so the arm64 slice and the
@@ -201,3 +201,26 @@ A real iPad mini2/iOS7.1.2 test exposed a fourfold RAM overstatement: a64bit tas
 Read-only native64 tests also verified2CPUcores, AGX GPU counter availability and the global render-server counter; the idle screen produced no counter delta, so this is no active-game FPS measurement. The actual universal preference bundle loads against iOS7 PSListController and required methods exist. HUD stayed OFF throughout. Pixel layout/rotation and live toggles on7 still require a coordinated enabled-UI test. No supported-game performance claim from these probes.
 
 Tests: probe/test_package.py, probe/metric-policy-test.c, probe/cpu-test.c, probe/rotation-test.c. Optional nonpersistent native metrics probe: python3 probe/build-metrics.py arm64 (armv7 for legacy), then run the resulting own CLI over authenticated SSH. It does not create/show the HUD or write preferences; diagnostics use only an own temporary log.
+
+## iOS7 idle-load diagnosis (2026-10-29)
+
+A native read-only A/B on iPad mini2/iOS7.1.2 confirmed the GPU percentage is
+the AGX driver value, not a cumulative counter mistakenly formatted as a percent.
+With HUD hidden, idle Settings settled at0% with no new render-server frames.
+Showing HUD produced28–33% and approximately1 frame/s; hiding it again returned
+to0% and stationary frames. The live HUD's own redraws therefore account for
+the apparent Settings idle load. These driver percentages are not calibrated
+power readings or percentages of maximum-frequency GPU performance.
+
+Home itself continued compositing at10 frames/s with HUD hidden (14–17%);
+showing HUD raised this to approximately11 frames/s (20–23% in the first run).
+This establishes foreground Home/compositor work, without identifying a
+specific Home animation or assigning private per-process GPU time.
+
+After reboot the native RAM read was approximately531MiB:335MiB active,79MiB
+inactive and117MiB wired;444MiB was free. No pageout or purge growth occurred
+in these short windows. Earlier576MiB and the reported~600MiB include system
+allocations and reclaimable inactive pages; they do not imply one app owns
+600MiB or that memory pressure is high. Process RSS overlaps shared memory
+and must not be summed as an exact decomposition. Detailed results and limits:
+[HUD load diagnosis](../../notes/HUD-LOAD-DIAGNOSIS.md).

@@ -18,15 +18,15 @@ also served from the `docs/` directory of this repository.
 
 | Package | Version | Declared firmware | iOS 7 status |
 |---|---|---|---|
-| `com.mak.amnezia6` — Amnezia6 | 1.2.1 | 4.3 – 7.x | Installed and engine-traffic checked on 7.1.2; direct endpoint test timed out |
-| `local.perfoverlay` — Performance Overlay | 0.1.10 | 4.3 – 9.x | Installed, arm64 hook loaded, SpringBoard stable; HUD stays off |
+| `com.mak.amnezia6` — Amnezia6 | 1.3.0 | 4.3 – 7.x | Live camera/lifecycle and official multipart QR frame replay verified on7.1.2; optical sender test pending |
+| `local.perfoverlay` — Performance Overlay | 0.1.10 | 4.3 – 9.x | Native A7 counters and HUD ON/OFF GPU A/B verified |
 | `local.legacypower` — Power Logger | 1.1.1 | 6.0 – 7.x | Installed, launchd daemon and native arm64 sampling; recording off |
 | `local.legacy-game-fps` — Legacy Game FPS | 0.2.2 | 6.0 – 7.x | Installed and Settings bundle loads; **no iOS 7 game session** |
 | `local.codex.veteris-ipad` — Veteris Native iPad | 1.2.0 | 5.0 – 7.x | **Untested on iOS 7**; Veteris 4 is not installed on the test device |
 | `local.codex.localsend-installer` — LocalSend (IPA Installer) | 5.7.4340 | 5.0 – 7.x | **Install not run on iOS 7**; needs official appinst + AppSync |
 | `local.codex.troubadour-installer` — Troubadour (IPA Installer) | 1.6.447 | 5.0 – 7.x | **Install not run on iOS 7**; needs official appinst + AppSync |
 | `local.codex.blastron-revival` — Blastron Revival | 0.1.15 | 6.0 – 6.x | Legacy-only; intentionally capped below 7.0 |
-| `local.codex.legacy-timezone` — Legacy Timezone Update | 2026e-1 | 4.3 – 6.x | Legacy-only; a 2026e-2 iOS 7 adapter is staged but not published |
+| `local.codex.legacy-timezone` — Legacy Timezone Update | 2026e-2 | 4.3 – 7.x | Install/removal/reinstall/reboot and native32/64 date conversions verified on7.1.2 |
 | `local.codex.device-access` — Legacy Device Access | 1.1.0 | 4.3 – 7.x | Verified on 7.1.2 for status, lock and unlock; passcode refused |
 | Legacy C++ Runtime | 1.0.0 | 4.3.x only | iOS7 has its own runtime; do not replace it |
 | Legacy 1080p60 Timing Fix | 1.0.0 | iPad2 / 4.3.3 only | Decoder-specific workaround; not applicable to7 without a reproduced regression |
@@ -70,7 +70,7 @@ Package upgrades preserve existing app data/profiles and disabled monitor prefer
 - Amnezia6's app, daemon and CLI stay `armv7` and run under the 32-bit runtime
   on iOS 7. This is intentional: the networking code and the UTUN/route/DNS
   paths were validated on the 32-bit runtime.
-- The LocalSend/Troubadour **IPA installer packages** require appinst and AppSync. This dependency does not establish the cause of an Amnezia6 launch failure: its direct system-app package follows a different path. iOS 7 GUI/launch reports conflict, so full UI workflows remain unverified.
+- The LocalSend/Troubadour **IPA installer packages** require appinst and AppSync. This dependency does not establish the cause of an Amnezia6 launch failure: its direct system-app package follows a different path. The1.3.0 app launched as mobile and passed native scanner/review workflow tests on7.1.2; optical sender scanning and full tunnel GUI workflows remain unverified.
 - Power Logger ships a universal daemon and preference bundle.
 - Preferences, daemons and launchd plists keep the same paths on both systems,
   so an upgrade from the iOS 6 packages preserves configuration.
@@ -137,7 +137,7 @@ Repository tooling uses GNU GPLv3 (LICENSE); project and data licenses remain in
 - Amnezia6 is GPL-2.0; Device Access, Blastron, HUD, Power Logger, Game FPS, Veteris and the app ports use GPL-3.0. Timezone tooling is 0BSD, with IANA/Unicode data licenses; the C++ runtime retains LLVM notices.
 - The obsolete direct LocalSend 0.5.7 package has been withdrawn from the active index to prevent duplicate app bundle IDs with the current IPA installer. Existing installed apps/data are not removed automatically. Export data before manually migrating a direct system-app installation.
 - iOS 4-only runtime, video timing and photo gate packages remain available with their strict original firmware guards; their hooks must not be forced onto iOS 7.
-- [Timezone 2026e-2 preview](https://fronik22.github.io/legacy-cydia/previews/local.codex.legacy-timezone_2026e-2_iphoneos-arm.deb) supports ICU 51 in staged iOS 7 tests. System installation, reboot and rollback on iOS 7 are still untested, so the stable index retains 2026e-1 for iOS 4–6.
+- Timezone2026e-2 is now stable: native7.1.2 install/removal/reinstall/reboot checks and155 date/region cases in both32/64-bit consumers pass.
 - This repository is not affiliated with Apple, SaurikIT, Cydia or any game
   publisher.
 
