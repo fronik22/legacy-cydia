@@ -1,11 +1,11 @@
 {
   "amnezia6": {
-    "archive": "amnezia6-1.3.3-source.zip",
-    "bytes": 941409,
-    "files": 144,
+    "archive": "amnezia6-1.3.4-source.zip",
+    "bytes": 952445,
+    "files": 147,
     "license": "GPL-2.0",
     "origin": "projects/amnezia6",
-    "sha256": "a130493a4f7d97efc2136ca2a09c9204b4afbb03c132e6b0e3111bb60ef35460"
+    "sha256": "cc4cff2822027ca758cde7c8ecb26e30431cdd366e3508df68cef1e0a9976fd1"
   },
   "blastron": {
     "archive": "blastron-0.1.15-source.zip",

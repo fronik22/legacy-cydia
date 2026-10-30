@@ -46,7 +46,9 @@ typedef struct {
     uint64_t rekey_at_ms;
     uint64_t reject_at_ms;
     uint64_t persistent_keepalive_at_ms, keepalive_at_ms, new_handshake_at_ms;
-    int keepalive_pending_again;
+    int keepalive_pending_again, rekey_requested, receive_rekey_requested;
+    uint8_t staged_packet[A6_MAX_DATAGRAM];
+    size_t staged_length;
 
     uint32_t handshake_attempts, max_handshake_attempts;
     uint32_t rekey_after_seconds;

@@ -7,7 +7,7 @@
 #include <stdio.h>
 #include <string.h>
 static const char conf[]="[Interface]\nPrivateKey=AQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQEBAQE=\nAddress=10.0.0.2\nContentPaddingAddition=10-20\n[Peer]\nPublicKey=AgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgI=\nEndpoint=192.0.2.1:443\n";
-static void config_test(void){a6_config_t c;char error[256],text[4096];assert(!a6_config_parse(conf,strlen(conf),&c,error,sizeof error));assert(c.content_padding_addition.min==10&&c.content_padding_addition.max==20);
+static void config_test(void){a6_config_t c;char error[256],text[4096];assert(!a6_config_parse(conf,strlen(conf),&c,error,sizeof error));assert(c.content_padding_addition.min==10&&c.content_padding_addition.max==20);assert(!c.persistent_keepalive.min&&!c.persistent_keepalive.max);
  const char*bad[]={"ContentPaddingAddition=20-10","ContentPaddingAddition=-1","ContentPaddingAddition=65536","S1=4294967295","Jmax=9000","H1=2"};
  for(unsigned i=0;i<sizeof bad/sizeof bad[0];i++){snprintf(text,sizeof text,"[Interface]\n%s\n%s",bad[i],conf+12);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));}
  const char *unsupported_interface[]={"Address=10.0.0.2/32, fd00::2/128","Address=fd00::2/128","DNS=192.0.2.53,2001:db8::53"};

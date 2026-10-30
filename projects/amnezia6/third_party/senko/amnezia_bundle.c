@@ -207,9 +207,18 @@ static amz_status_t emit(const char *conf, const cJSON *root, char *out, size_t 
     return AMZ_OK;
 }
 
-amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
+static void copy_name(const cJSON *root, const char *key, char out[AMZ_BUNDLE_NAME_CAP]) {
+    const cJSON *value = cJSON_GetObjectItemCaseSensitive(root, key);
+    if (!cJSON_IsString(value)) return;
+    size_t n = strlen(value->valuestring);
+    if (n < AMZ_BUNDLE_NAME_CAP) memcpy(out, value->valuestring, n + 1);
+}
+
+amz_status_t amz_bundle_extract_conf_named(const char *in, size_t len,
                                      char *out, size_t cap, size_t *out_len,
+                                     amz_bundle_name *name,
                                      char *reason, size_t reason_cap) {
+    if (name) memset(name, 0, sizeof *name);
     if (!in || !out || !out_len || cap == 0) return AMZ_ERR_ARG;
     *out_len = 0;
     /* every later path either replaces this or returns AMZ_ERR_NOT_BUNDLE, so
@@ -268,6 +277,16 @@ amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
         }
     }
 
+    /* The config/name API uses C strings; never silently truncate JSON NUL text. */
+    int nul = memchr(json, 0, json_len) != NULL;
+    for (size_t i = 0; !nul && i < json_len; i++) if (json[i] == '\\') {
+        nul = json_len - i >= 6 && !memcmp(json + i, "\\u0000", 6);
+        i++;
+    }
+    if (nul) {
+        free(json);set_reason(reason, reason_cap, "amnezia bundle contains unsupported NUL text");
+        return AMZ_ERR_JSON;
+    }
     cJSON *root = cJSON_ParseWithLength(json, json_len);
     free(json);
     if (!root) {
@@ -294,8 +313,18 @@ amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
     }
 
     amz_status_t r = emit(conf, root, out, cap, out_len, reason, reason_cap);
+    if (r == AMZ_OK && name) {
+        copy_name(root, "description", name->description);
+        copy_name(root, "hostName", name->host_name);
+    }
     if (owned) cJSON_Delete(owned);
     cJSON_Delete(root);
     if (r == AMZ_OK) set_reason(reason, reason_cap, "ok");
     return r;
+}
+
+amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
+                                     char *out, size_t cap, size_t *out_len,
+                                     char *reason, size_t reason_cap) {
+    return amz_bundle_extract_conf_named(in, len, out, cap, out_len, NULL, reason, reason_cap);
 }

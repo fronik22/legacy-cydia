@@ -9,6 +9,8 @@
 #include <string.h>
 #include <time.h>
 #include <sys/time.h>
+#include <mach/mach_time.h>
+#include <pthread.h>
 
 static const uint8_t k_construction[] = "Noise_IKpsk2_25519_ChaChaPoly_BLAKE2s";
 static const uint8_t k_identifier[] = "WireGuard v1 zx2c4 Jason@zx2c4.com";
@@ -18,10 +20,13 @@ static void set_error(a6_session_t *s, const char *text) {
     if (s) snprintf(s->last_error, sizeof s->last_error, "%s", text);
 }
 
+static mach_timebase_info_data_t timebase;
+static pthread_once_t timebase_once = PTHREAD_ONCE_INIT;
+static void init_timebase(void) { mach_timebase_info(&timebase); }
+
 uint64_t a6_now_ms(void) {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return (uint64_t)tv.tv_sec * 1000ULL + (uint64_t)tv.tv_usec / 1000ULL;
+    pthread_once(&timebase_once, init_timebase);
+    return (uint64_t)((long double)mach_absolute_time() * timebase.numer / timebase.denom / 1000000.0L);
 }
 
 static void handshake_nonce(uint64_t counter, uint8_t nonce[12]) {

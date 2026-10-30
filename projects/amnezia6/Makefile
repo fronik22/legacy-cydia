@@ -98,7 +98,8 @@ $(BUILD)/test_command_reply: tests/test_command_reply.m app/A6Daemon.m app/A6Dae
 $(BUILD)/test_tunnel_retry: tests/test_tunnel_retry.c src/tunnel.c $(HOST_COMMON_OBJ) | $(BUILD)
 	$(HOSTCC) $(HOST_CFLAGS) tests/test_tunnel_retry.c $(HOST_COMMON_OBJ) -o $@ $(HOST_LIBS)
 
-test: $(BUILD)/dns-fixtures/animated-profile.json $(BUILD)/test_qr_parts $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+test: $(BUILD)/test_clock $(BUILD)/dns-fixtures/animated-profile.json $(BUILD)/test_qr_parts $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+	$(BUILD)/test_clock
 	$(BUILD)/test_qr_parts tests/fixtures $(BUILD)/dns-fixtures
 	$(BUILD)/test_control_permissions
 	$(BUILD)/test_profiles tests/fixtures
@@ -256,7 +257,7 @@ $(BUILD)/ToggleRegression.bundle: tests/ToggleRegression.m app/A6Daemon.h | $(BU
 
 deb: device app
 	python3 tools/build_deb.py
-	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.3.3_iphoneos-arm.deb
+	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.3.4_iphoneos-arm.deb
 
 -include $(wildcard build/host/*.d build/dev/*.d $(APP_OBJ:.o=.d) build/test_*.d)
 
@@ -324,4 +325,11 @@ $(BUILD)/dns-fixtures/animated-profile.json: tests/fixtures/profile-awg31-full-t
 
 $(BUILD)/test_tunnel_retry-device: tests/test_tunnel_retry.c src/tunnel.c src/tunnel.h $(DEV_COMMON_OBJ)
 	$(DEVCLANG) $(DEV_CFLAGS) tests/test_tunnel_retry.c $(DEV_COMMON_OBJ) $(DEV_LDFLAGS) -o $@
+	$(LDID) -S $@
+
+$(BUILD)/test_clock: tests/test_clock.c src/protocol.c $(filter-out $(HOST_OBJDIR)/protocol.o,$(HOST_COMMON_OBJ))
+	$(HOSTCC) $(HOST_CFLAGS) tests/test_clock.c $(filter-out $(HOST_OBJDIR)/protocol.o,$(HOST_COMMON_OBJ)) -o $@ $(HOST_LIBS)
+
+$(BUILD)/test_clock-device: tests/test_clock.c src/protocol.c $(filter-out $(DEV_OBJDIR)/protocol.o,$(DEV_COMMON_OBJ))
+	$(DEVCLANG) $(DEV_CFLAGS) tests/test_clock.c $(filter-out $(DEV_OBJDIR)/protocol.o,$(DEV_COMMON_OBJ)) $(DEV_LDFLAGS) -o $@
 	$(LDID) -S $@

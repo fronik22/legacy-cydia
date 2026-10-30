@@ -20,13 +20,13 @@ apps, profiles and saves were preserved. HUD visibility is restored to its as-fo
 
 ## Package matrix
 
-### Amnezia6 1.3.3 — `com.mak.amnezia6`
+### Amnezia6 1.3.4 — `com.mak.amnezia6`
 
 Declared: `firmware (>= 4.3), firmware (<< 8.0), mobilesubstrate`.
 
 | Check | iOS 6.1.3 | iOS 7.1.2 |
 |---|---|---|
-| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.3.3 over 1.3.2) |
+| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.3.4 over 1.3.3) |
 | App bundle, daemon and CLI present | Verified | Verified |
 | Root daemon starts under launchd | Verified | Verified |
 | Control socket permissions | Not re-run | Verified `0660 root:mobile` |
@@ -58,6 +58,8 @@ The existing profile is not shipped in the package. Upgrading preserves
 1.3.1 adds nativeiOS7AVCaptureMetadataOutput QR detection/continuousautofocus, retaining guardedquirc fallback forolderOS. Valid padded/unpadded2parttails (= and==) pass host/native tests; currentofficialsenderusesOmitTrailingEquals, so padding is compatibility support, not a provenuserrootcause. A confirmed completion-error loop is fixed: invalid/unsupported completedprofiles stopcamera and keep theerror visible afterfurthercallbacks. Last-scan diagnostic is0600/<8KiB andcontainsfixedcodes/counts/header lengths only; noQR/config/keys/endpoints. Native capture setup/lifecycle/replay/sticky-error tests pass and profiles are unchanged. Actual user scans reached 2/2; the remaining errors were DNS template expansion and then unsupported keepalive ranges. See notes/QR-OPTICAL-FIX.md.
 
 1.3.2 expands official DNS placeholders from bundle metadata and preserves the full ordered IPv4 DNS list. 1.3.3 accepts `PersistentKeepalive` as off/0, scalar or ordered range (up to 65535 seconds), applies sampled persistent/delayed-reply/handshake timers, samples handshake-attempt ranges per round, and accepts authenticated padded keepalives. Incomplete templates and unsupported I1–I5 signature syntax fail at import. Host regressions cover the full current native AWG3.1/WireGuard templates, authenticated versus bad-tag/replayed traffic, timer cancellation and overflow. This is not an exhaustive protocol-conformance claim. Metadata-only custom MTU overrides and IPv6 remain unsupported. The user confirmed the same physical animated QR opens the profile editor in 1.3.3. Real authenticated VPN traffic was subsequently observed after user activity; no automated server-compatibility matrix was run. Exact final device-test results are recorded in the versioned Amnezia test receipts.
+
+1.3.4 follows the reviewed upstream keepalive/idle paths: absent interval stays off, explicit scalar/ranges reset after authenticated traffic, accepted keys get immediate transport confirmation, traffic drives renewal and idle key expiry preserves interface/routes. A bounded validated first-packet slot, jitter/attempt limits, monotonic duration clock and deadline-based daemon polling are tested. Existing reconnect backoff and one-packet queue are app policies, not full upstream queue/keyring conformance. Native7.1.2 clock/protocol/timer/DNS/import/QR executables pass; packaged two-part QR review retains official description/hostName and both DNS. Real home/list/scanner/editor status styles are Default; before/after UIKit renders confirm the white-on-white fault is resolved. Existing names/config/profiles are preserved; reimport is needed for old discarded metadata. See the1.3.4 receipt and project IMPORT-NAMES/KEEPALIVE-AUDIT documents.
 
 ### Performance Overlay 0.1.12 — `local.perfoverlay`
 

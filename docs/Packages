@@ -1,6 +1,6 @@
 Package: com.mak.amnezia6
 Name: Amnezia6
-Version: 1.3.3
+Version: 1.3.4
 Architecture: iphoneos-arm
 Description: Lightweight AmneziaWG client for iOS 4-7
  A small native AmneziaWG client: a root daemon owns the UTUN device,
@@ -14,14 +14,14 @@ Section: Networking
 Priority: optional
 Maintainer: mak
 Author: mak
-Installed-Size: 1154
+Installed-Size: 1171
 Homepage: https://github.com/fronik22/legacy-cydia
 Icon: https://fronik22.github.io/legacy-cydia/assets/amnezia6.png
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.mak.amnezia6.html
-Filename: ./debs/com.mak.amnezia6_1.3.3_iphoneos-arm.deb
-Size: 800582
-MD5sum: 92079a1f144a835c69571d4537ab362f
-SHA256: 8e40ec9f34c048187669570e5ad811a51a91756e0d77a383a5ae7f51abc8310e
+Filename: ./debs/com.mak.amnezia6_1.3.4_iphoneos-arm.deb
+Size: 802966
+MD5sum: 727724639915724c112bbd24cc573bee
+SHA256: a5b2a5d15edfdddfe0ca7a60547ae3ca22e47d3d2cc18ca4f7629b0e4aad139e
 
 Package: local.perfoverlay
 Name: Performance Overlay

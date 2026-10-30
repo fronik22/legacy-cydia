@@ -5,6 +5,8 @@
 #include "config.h"
 #include <sys/stat.h>
 #include <unistd.h>
+#include <zlib.h>
+#include "b64.h"
 #import <dispatch/dispatch.h>
 static dispatch_semaphore_t enteredStart,allowStart;
 @interface FakeDaemon:A6Daemon { @public int starts,stops;BOOL failStart,failSave,failStop; A6Status state; }
@@ -46,6 +48,42 @@ static void TestDNSImport(void){
  assert([A6ImportConfig([NSJSONSerialization dataWithJSONObject:bundle options:0 error:NULL],&error)isEqual:explicit]);
  puts("Amnezia DNS templates: string/object last_config, both resolvers, explicit preservation, missing/invalid/IPv6 metadata and unresolved tokens passed");
 }
+static NSData *NameBundle(id description,id host){
+ NSMutableDictionary *bundle=[NSMutableDictionary dictionaryWithObject:[NSArray arrayWithObject:[NSDictionary dictionaryWithObjectsAndKeys:@"amnezia-awg",@"container",[NSDictionary dictionaryWithObject:[NSDictionary dictionaryWithObject:Conf(@"192.0.2.1")forKey:@"config"]forKey:@"last_config"],@"awg",nil]]forKey:@"containers"];
+ if(description)[bundle setObject:description forKey:@"description"];if(host)[bundle setObject:host forKey:@"hostName"];
+ return[NSJSONSerialization dataWithJSONObject:bundle options:0 error:NULL];
+}
+static NSData *NameWire(NSData *json,int mode){
+ if(!mode)return json;
+ size_t capacity=compressBound([json length])+4;unsigned char *raw=malloc(capacity);uLongf size=capacity-4;assert(raw);
+ if(mode==3){memcpy(raw,[json bytes],[json length]);size=[json length];}
+ else {unsigned n=(unsigned)[json length];raw[0]=n>>24;raw[1]=n>>16;raw[2]=n>>8;raw[3]=n;assert(compress2(raw+4,&size,[json bytes],[json length],8)==Z_OK);size+=4;}
+ char *encoded=malloc(size*2+8);size_t length=0;assert(encoded&&!b64_encode(raw,size,encoded,size*2+8,&length));
+ while(length&&encoded[length-1]=='=')length--;encoded[length]=0;for(size_t i=0;i<length;i++){if(encoded[i]=='+')encoded[i]='-';if(encoded[i]=='/')encoded[i]='_';}
+ NSString *text=[NSString stringWithUTF8String:encoded];if(mode==1)text=[@"vpn://"stringByAppendingString:text];NSData *result=[text dataUsingEncoding:NSUTF8StringEncoding];free(encoded);free(raw);return result;
+}
+static void TestImportNames(void){
+ NSString *error=nil,*name=nil,*expected=Conf(@"192.0.2.1");
+ for(int mode=0;mode<4;mode++){
+  NSData *wire=NameWire(NameBundle(@"  Berlin — Сервер 🐈  ",@"host.example"),mode);
+  assert([A6ImportConfigWithName(wire,&name,&error)isEqual:expected]&&[name isEqual:@"Berlin — Сервер 🐈"]);
+  assert([A6ImportConfig(wire,&error)isEqual:expected]);
+ }
+ for(id invalid in [NSArray arrayWithObjects:@"",@" \n ",@"bad\nname",@"bad\tname",@"bad\u202ename",[@"x"stringByPaddingToLength:129 withString:@"x"startingAtIndex:0],[@"界"stringByPaddingToLength:600 withString:@"界"startingAtIndex:0],[NSNumber numberWithInt:7],[NSArray arrayWithObject:@"name"],nil]){
+  assert(A6ImportConfigWithName(NameBundle(invalid,@"host.example"),&name,&error)&&[name isEqual:@"host.example"]);
+ }
+ assert(A6ImportConfigWithName(NameBundle([@"界"stringByPaddingToLength:128 withString:@"界"startingAtIndex:0],nil),&name,&error)&&[name length]==128);
+ assert(A6ImportConfigWithName(NameBundle(nil,@"  host.example  "),&name,&error)&&[name isEqual:@"host.example"]);
+ assert(A6ImportConfigWithName(NameBundle(nil,nil),&name,&error)&&!name);
+ assert(A6ImportConfigWithName(NameBundle(@"literal \\u0000",nil),&name,&error)&&[name isEqual:@"literal \\u0000"]);
+ unichar nulText[]={'a',0,'b'};NSData *nul=NameBundle([NSString stringWithCharacters:nulText length:3],nil);
+ for(int mode=0;mode<4;mode++)assert(!A6ImportConfigWithName(NameWire(nul,mode),&name,&error)&&!name&&[error rangeOfString:@"NUL"].location!=NSNotFound);
+ assert(A6ImportConfigWithName([expected dataUsingEncoding:NSUTF8StringEncoding],&name,&error)&&!name);
+ NSMutableDictionary *wrong=[NSJSONSerialization JSONObjectWithData:NameBundle(nil,nil)options:NSJSONReadingMutableContainers error:NULL];[wrong setObject:@"not the official self-hosted name key"forKey:@"name"];[wrong setObject:@"also not the exported self-hosted name"forKey:@"displayName"];
+ assert(A6ImportConfigWithName([NSJSONSerialization dataWithJSONObject:wrong options:0 error:NULL],&name,&error)&&!name);
+ name=@"stale";assert(!A6ImportConfigWithName([@"invalid"dataUsingEncoding:NSUTF8StringEncoding],&name,&error)&&!name);
+ puts("Import names: official description/hostName, JSON/URL/bare/compressed modes, Unicode/whitespace, bounds/control/type fallback, NUL rejection, plain config and legacy API passed");
+}
 int main(int argc,char**argv){NSAutoreleasePool*pool=[NSAutoreleasePool new];char temp[]="/tmp/a6-profiles.XXXXXX";assert(mkdtemp(temp));NSString*directory=[NSString stringWithUTF8String:temp];
  FakeDaemon*d=[FakeDaemon new];d.configPath=[directory stringByAppendingPathComponent:@"amnezia6.conf"];d->state=A6StatusIdle;NSString*error=nil;assert([d saveConfig:Conf(@"192.0.2.1")error:&error]);
  FailStore*s=[[FailStore alloc]initWithDaemon:d];assert(![s loadError]&&[[s profiles]count]==1);NSString*original=[[s activeIdentifier]copy];
@@ -69,7 +107,7 @@ int main(int argc,char**argv){NSAutoreleasePool*pool=[NSAutoreleasePool new];cha
  assert([d saveConfig:Conf(@"192.0.2.3")error:&error]);[s release];s=[[FailStore alloc]initWithDaemon:d];assert(![s loadError]&&[[s profiles]count]==2);assert([[s profile:b][@"config"]isEqual:Conf(@"192.0.2.2")]);assert(![[s activeIdentifier]isEqual:b]);
  /* OFF switching does not issue START. */
  d->state=A6StatusIdle;before=d->starts;assert([s activate:b error:&error]);assert(d->starts==before&&d->state==A6StatusIdle);
- TestDNSImport();
+ TestDNSImport();TestImportNames();
  NSString*path=[directory stringByAppendingPathComponent:@"profiles.plist"];[@"broken"writeToFile:path atomically:YES encoding:NSUTF8StringEncoding error:NULL];[s release];s=[[FailStore alloc]initWithDaemon:d];assert([s loadError]);assert(![s saveName:@"x"config:Conf(@"192.0.2.4")identifier:nil error:&error]);assert([[NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:NULL]isEqual:@"broken"]);
  /* Same normalizer serves clipboard, file, URL and QR input. */
  assert(A6ImportConfig([Conf(@"192.0.2.1")dataUsingEncoding:NSUTF8StringEncoding],&error));assert(!A6ImportConfig([@"not a vpn profile"dataUsingEncoding:NSUTF8StringEncoding],&error));

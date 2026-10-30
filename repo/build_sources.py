@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'source-archives'
 RELEASES = ROOT.parent / 'outputs'
 PROJECTS = {
-    'amnezia6': ('1.3.3', 'GPL-2.0', 'src app status tools tests third_party packaging'),
+    'amnezia6': ('1.3.4', 'GPL-2.0', 'src app status tools tests third_party packaging'),
     'perfoverlay': ('0.1.12', 'GPL-3.0', 'tweak settings ncsettings probe build-support'),
     'power-logger': ('1.1.1', 'GPL-3.0', 'settings build-support'),
     'game-fps': ('0.2.2', 'GPL-3.0', 'src settings tools'),
@@ -69,7 +69,7 @@ def project_files(project, directories):
     root = ROOT / 'projects' / project
     files = {}
     roots = set(directories.split())
-    docs = {'README.md', 'README-UPSTREAM.md', 'README-iOS4.md', 'BUILD.md', 'PORTING.md', 'PORT-IOS4.md', 'CYDIA-INSTALLER.md', 'THIRD_PARTY.md', 'PROVENANCE.json', 'SUPPORTED-BUILDS.json', 'TEMPLATE-AUDIT-1.3.3.md'}
+    docs = {'README.md', 'README-UPSTREAM.md', 'README-iOS4.md', 'BUILD.md', 'PORTING.md', 'PORT-IOS4.md', 'CYDIA-INSTALLER.md', 'THIRD_PARTY.md', 'PROVENANCE.json', 'SUPPORTED-BUILDS.json', 'TEMPLATE-AUDIT-1.3.3.md', 'IMPORT-NAMES.md', 'KEEPALIVE-AUDIT-1.3.4.md'}
     for path in sorted(root.rglob('*')):
         rel = path.relative_to(root).as_posix()
         if not path.is_file() or path.is_symlink() or not allowed(rel, project):

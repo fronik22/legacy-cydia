@@ -55,7 +55,7 @@ static void RejectCompletedProfile(void){
   NSDictionary *stats=[NSDictionary dictionaryWithContentsOfFile:path];struct stat info;
   NSSet *allowed=[NSSet setWithObjects:@"app_version",@"decoded_frames",@"last_frame",@"status",@"part",@"duplicate",@"conflict",@"complete",@"invalid_compression",@"profile_rejected",@"invalid_frame",@"static",nil];BOOL keysOK=YES;for(id key in stats)if(![allowed containsObject:key])keysOK=NO;
   NSSet *frameKeys=[NSSet setWithObjects:@"event",@"string_length",@"count",@"index",@"part_length",@"received",nil];for(id key in[stats objectForKey:@"last_frame"])if(![frameKeys containsObject:key])keysOK=NO;
-  [result setObject:@([[stats objectForKey:@"app_version"]isEqual:@"1.3.3"])forKey:@"diagnostic_app_version_correct"];
+  [result setObject:@([[stats objectForKey:@"app_version"]isEqual:@"1.3.4"])forKey:@"diagnostic_app_version_correct"];
   [result setObject:@(keysOK&&[[stats objectForKey:@"status"]isEqual:@"profile_rejected"]&&[stats count]<20&&[[stats description]rangeOfString:@"public unsupported profile"].location==NSNotFound)forKey:@"private_bounded_diagnostic_codes_only"];
   [result setObject:@(!stat([path fileSystemRepresentation],&info)&&(info.st_mode&0777)==0600&&info.st_size<8192)forKey:@"diagnostic_mode0600_and_small"];Save();NSSetUncaughtExceptionHandler(priorException);
   [navigation popToRootViewControllerAnimated:NO];[scanner release];scanner=nil;
@@ -68,7 +68,9 @@ static void Finish(void){
  [result setObject:@(![Session() isRunning])forKey:@"camera_stopped_after_completion"];
  [result setObject:@(realFrames)forKey:@"real_camera_callbacks"];
  if(dnsMode&&[navigation.topViewController isKindOfClass:NSClassFromString(@"A6ConfigController")]){
+  [result setObject:@([UIApplication sharedApplication].statusBarStyle==UIStatusBarStyleDefault)forKey:@"editor_status_bar_dark"];
   NSString *text=[navigation.topViewController valueForKey:@"initialConfig"];
+  [result setObject:@([[navigation.topViewController valueForKey:@"initialName"]isEqual:@"Berlin — Test Server"]&&[[[navigation.topViewController valueForKey:@"nameField"]text]isEqual:@"Berlin — Test Server"])forKey:@"official_server_name_in_review"];
   [result setObject:@([text rangeOfString:@"DNS = 192.0.2.53, 198.51.100.53"].location!=NSNotFound&&[text rangeOfString:@"$"].location==NSNotFound)forKey:@"two_part_official_dns_template_both_resolvers_in_review"];
   [result setObject:@([text rangeOfString:@"PersistentKeepalive = 25-35"].location!=NSNotFound&&[text rangeOfString:@"KeepaliveTimeout = 5-15"].location!=NSNotFound&&[text rangeOfString:@"HeaderProtectionKey ="].location!=NSNotFound&&[text rangeOfString:@"MaxHandshakeAttempts = 15-20"].location!=NSNotFound)forKey:@"full_awg31_template_in_review"];
  }
@@ -115,8 +117,8 @@ static void Observe(int attempts){
    [result setObject:NSStringFromClass([navigation.topViewController class])forKey:@"physical_top_controller"];
    [result setObject:@([navigation.topViewController isKindOfClass:NSClassFromString(@"A6ConfigController")])forKey:@"actual_optical_import_review"];
    NSDictionary *stats=[NSDictionary dictionaryWithContentsOfFile:@"/var/mobile/Library/Preferences/Amnezia6/qr-last-scan.plist"];
-   [result setObject:@([[stats objectForKey:@"app_version"]isEqual:@"1.3.3"])forKey:@"new_version_scan_seen"];
-   if([[stats objectForKey:@"app_version"]isEqual:@"1.3.3"]){[result setObject:[stats objectForKey:@"status"]?:@"unknown"forKey:@"physical_status"];[result setObject:[stats objectForKey:@"decoded_frames"]?:@0 forKey:@"physical_decoded_frames"];}
+   [result setObject:@([[stats objectForKey:@"app_version"]isEqual:@"1.3.4"])forKey:@"new_version_scan_seen"];
+   if([[stats objectForKey:@"app_version"]isEqual:@"1.3.4"]){[result setObject:[stats objectForKey:@"status"]?:@"unknown"forKey:@"physical_status"];[result setObject:[stats objectForKey:@"decoded_frames"]?:@0 forKey:@"physical_decoded_frames"];}
    [result setObject:@NO forKey:@"replay_used_public_synthetic_fixture"];Save();
    method_setImplementation(class_getInstanceMethod(NSClassFromString(@"A6QRScannerController"),@selector(captureOutput:didOutputSampleBuffer:fromConnection:)),frameIMP);
    NSSetUncaughtExceptionHandler(priorException);if(navigation.topViewController==scanner)[navigation popToRootViewControllerAnimated:NO];[scanner release];scanner=nil;
@@ -134,6 +136,7 @@ static void Observe(int attempts){
   [result setObject:@"camera not running/authorized; replay skipped"forKey:@"error"];[result setObject:[[scanner valueForKey:@"progress"]text]?:@""forKey:@"diagnostic_progress"];[result setObject:@([UIApplication sharedApplication].applicationState)forKey:@"application_state"];[result setObject:@([AVCaptureDevice authorizationStatusForMediaType:AVMediaTypeVideo])forKey:@"camera_authorization"];[result setObject:@([Session() isRunning])forKey:@"session_running"];[result setObject:@([[scanner valueForKey:@"visible"]boolValue])forKey:@"scanner_visible"];[result setObject:@([Session().outputs count])forKey:@"session_output_count"];[result setObject:@(realFrames)forKey:@"real_camera_callbacks"];Save();return;
  }
  [result setObject:@YES forKey:@"native_camera_running"];
+ [result setObject:@([UIApplication sharedApplication].statusBarStyle==UIStatusBarStyleDefault)forKey:@"scanner_status_bar_dark"];
  AVCaptureMetadataOutput *metadata=[scanner valueForKey:@"metadataOutput"];
  [result setObject:@(metadata&&[metadata.metadataObjectTypes containsObject:AVMetadataObjectTypeQRCode]&&metadata.metadataObjectsDelegate==scanner)forKey:@"native_qr_metadata_configured"];
  AVCaptureDevice *device=[[[Session() inputs]objectAtIndex:0]device];
@@ -174,11 +177,13 @@ __attribute__((constructor))static void Load(void){
  dispatch_after(dispatch_time(DISPATCH_TIME_NOW,NSEC_PER_SEC),dispatch_get_main_queue(),^{
   physicalMode=[[NSFileManager defaultManager]fileExistsAtPath:@"/tmp/a6-qr13/physical-mode"];dnsMode=[[NSFileManager defaultManager]fileExistsAtPath:@"/tmp/a6-qr13/dns-mode"];result=[NSMutableDictionary new];navigation=(id)[UIApplication sharedApplication].keyWindow.rootViewController;
   if(![navigation isKindOfClass:[UINavigationController class]]){[result setObject:@"navigation missing"forKey:@"error"];Save();return;}
+  [result setObject:@([UIApplication sharedApplication].statusBarStyle==UIStatusBarStyleDefault)forKey:@"home_status_bar_dark"];
   priorException=NSGetUncaughtExceptionHandler();NSSetUncaughtExceptionHandler(TestException);[result setObject:@"before_navigation"forKey:@"phase"];Save();
   [navigation popToRootViewControllerAnimated:NO];
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW,500*NSEC_PER_MSEC),dispatch_get_main_queue(),^{
    id profiles=[[NSClassFromString(@"A6ProfilesController")alloc]init];[navigation pushViewController:profiles animated:NO];[result setObject:@"profiles_presented"forKey:@"phase"];Save();
    dispatch_after(dispatch_time(DISPATCH_TIME_NOW,500*NSEC_PER_MSEC),dispatch_get_main_queue(),^{
+    [result setObject:@([UIApplication sharedApplication].statusBarStyle==UIStatusBarStyleDefault)forKey:@"profiles_status_bar_dark"];
     scanner=[[NSClassFromString(@"A6QRScannerController")alloc]initWithImporter:profiles];[profiles release];
     if(!scanner){[result setObject:@"scanner class missing"forKey:@"error"];Save();return;}
     frameIMP=method_setImplementation(class_getInstanceMethod([scanner class],@selector(captureOutput:didOutputSampleBuffer:fromConnection:)),(IMP)CountFrame);

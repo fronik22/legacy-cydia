@@ -135,7 +135,6 @@ static int parse_endpoint(const char *s, char *host, size_t host_cap,
 static void config_defaults(a6_config_t *cfg) {
     memset(cfg, 0, sizeof *cfg);
     cfg->mtu = 1280;
-    cfg->persistent_keepalive.min = cfg->persistent_keepalive.max = 25;
     cfg->h[0].min = cfg->h[0].max = 1;
     cfg->h[1].min = cfg->h[1].max = 2;
     cfg->h[2].min = cfg->h[2].max = 3;

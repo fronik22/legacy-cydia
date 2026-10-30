@@ -62,7 +62,7 @@ int main(int argc,char **argv){NSAutoreleasePool *pool=[NSAutoreleasePool new];a
  if(argc==3){
   NSString *dnsBase=[NSString stringWithUTF8String:argv[2]];A6QRParts *parts=[A6QRParts new];NSString *error=nil;NSData *data=nil;int order[]={1,1,0};
   for(int i=0;i<3;i++){NSString *frame=Frame([dnsBase stringByAppendingPathComponent:[NSString stringWithFormat:@"animated-%d.pgm",order[i]]],i&1);data=[parts consume:frame atTime:1+i error:&error];assert(!error);if(i<2)assert(!data);}
-  assert(data&&[data isEqual:[NSData dataWithContentsOfFile:[dnsBase stringByAppendingPathComponent:@"animated-profile.json"]]]);NSString *imported=A6ImportConfig(data,&error);assert(imported);
+  assert(data&&[data isEqual:[NSData dataWithContentsOfFile:[dnsBase stringByAppendingPathComponent:@"animated-profile.json"]]]);NSString *name=nil,*imported=A6ImportConfigWithName(data,&name,&error);assert(imported&&[name isEqual:@"Berlin — Test Server"]);
   a6_config_t cfg;char why[256];assert(!a6_config_parse([imported UTF8String],[imported lengthOfBytesUsingEncoding:NSUTF8StringEncoding],&cfg,why,sizeof why));assert(!strcmp(cfg.dns,"192.0.2.53,198.51.100.53"));assert(cfg.persistent_keepalive.min==25&&cfg.persistent_keepalive.max==35&&cfg.has_header_protection&&cfg.random_trailers&&cfg.disable_cookies&&cfg.max_handshake_attempts.min==15&&cfg.max_handshake_attempts.max==20&&cfg.keepalive_timeout.min==5&&cfg.keepalive_timeout.max==15);a6_config_wipe(&cfg);[parts release];puts("Official two-part fullAWG3.1 template QR images -> BGRA -> collector -> import -> both DNS resolvers passed");
  }
  A6QRParts *parts=[A6QRParts new];NSString *error=nil;NSData *data=nil;

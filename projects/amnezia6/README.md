@@ -120,8 +120,9 @@ requests instead of silently ignoring them. A common dual default AllowedIPs
 list (`0.0.0.0/0, ::/0`) remains accepted without rewriting the saved profile,
 but **only IPv4 is tunneled**. Physical IPv6 remains unprotected, even with an
 IPv4-only profile. The app always states this and the absence of a kill switch.
-For multiple IPv4 DNS entries, the current engine selects the first; it does
-not provide resolver failover. One IPv4 tunnel address is supported.
+All configured IPv4 DNS entries are installed in order through the system
+resolver; this client does not implement a separate resolver-health monitor.
+One IPv4 tunnel address is supported.
 
 Offline checks: `make test`; native diagnostic targets
 `build/test_protocol-device`, `build/test_profiles-device`,
@@ -192,3 +193,46 @@ and expanded size are checked before networking. DisableCookies controls respond
 cookie generation upstream; this initiator-only client still handles remote cookie
 challenges. See TEMPLATE-AUDIT-1.3.3.md for parameter coverage and limits. User
 confirmed the same real animated QR opens the editor on1.3.3.
+
+## Imported server names
+
+Amnezia self-hosted shares populate the profile editor name from their official
+root description, falling back to hostName. Unicode names are bounded/validated;
+file-name/endpoint fallback remains when metadata is absent. Clipboard, files,
+vpn URLs, photo QR and animated QR share this path. Existing profiles/manual
+names are not renamed; reimport a share whose metadata an older build discarded.
+See IMPORT-NAMES.md for pinned upstream evidence and tests.
+
+## 1.3.4 protocol timers and idle state
+
+An omitted PersistentKeepalive remains off; explicit ranges choose a fresh idle
+deadline after authenticated traffic, rather than adding periodic packets during
+active transfers. Off still allows protocol confirmation/reply packets. The
+initiator confirms every accepted response immediately using one staged data
+packet or an authenticated empty transport. One validated outbound IPv4 packet
+can wait for negotiation; extra packets are bounded drops and Stop/retry wipes
+the slot.
+
+Key renewal is requested by traffic and key age. A wholly idle off-profile no
+longer sends periodic rekeys or tears down its interface on key expiry. Expired
+transport keys are wiped and rejected while interface/routes remain up. Retry
+jitter/attempt bounds, sampled-zero cancellation and adaptive timer polling are
+covered by deterministic tests. OFF waits for control/signals instead of a
+periodic wakeup. Duration/uptime/cookie ages use monotonic Mach time; wire TAI64N
+remains wall-clock based.
+
+See KEEPALIVE-AUDIT-1.3.4.md for pinned upstream evidence,
+remaining app-specific reconnection policy and conformance limits. Full host,
+legacy armv7 test compilation/link, and timer/protocol/clock ASAN+UBSan checks pass;
+this review did not run device executables or measure battery/server behavior.
+
+## 1.3.4 iOS7 status bar
+
+The old BlackOpaque setting made the actual iOS7 status text white over the
+light navigation background. Info now selects Default and explicitly enables
+controller-based appearance. Native before/after renders confirm dark readable
+status text; the real packaged home, profile list, QR scanner and imported editor
+all retain Default style. No global overlay or drawing timer is added.
+
+Parent integration results are recorded in TEST-RESULTS-1.3.4.json and
+../../notes/AMNEZIA-UI-AND-NAMES-134.md; existing profiles/manual names are preserved.

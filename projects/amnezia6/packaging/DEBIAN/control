@@ -1,6 +1,6 @@
 Package: com.mak.amnezia6
 Name: Amnezia6
-Version: 1.3.3
+Version: 1.3.4
 Architecture: iphoneos-arm
 Description: Lightweight AmneziaWG client for iOS 4-7
  A small native AmneziaWG client: a root daemon owns the UTUN device,

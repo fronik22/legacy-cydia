@@ -18,7 +18,7 @@ also served from the `docs/` directory of this repository.
 
 | Package | Version | Declared firmware | iOS 7 status |
 |---|---|---|---|
-| `com.mak.amnezia6` — Amnezia6 | 1.3.3 | 4.3 – 7.x | Animated QR import confirmed on iOS7; DNS templates and AWG3.1 keepalive ranges fixed |
+| `com.mak.amnezia6` — Amnezia6 | 1.3.4 | 4.3 – 7.x | Automatic exported names, readable iOS7 status bar and corrected keepalive/idle timers |
 | `local.perfoverlay` — Performance Overlay | 0.1.12 | 4.3 – 9.x | Selectedrefresh restored; iOS7A7 cumulative GPU on~0.5% at1Hz, qualifieddriverfallback elsewhere |
 | `local.legacypower` — Power Logger | 1.1.1 | 6.0 – 7.x | Installed, launchd daemon and native arm64 sampling; recording off |
 | `local.legacy-game-fps` — Legacy Game FPS | 0.2.2 | 6.0 – 7.x | Installed and Settings bundle loads; **no iOS 7 game session** |

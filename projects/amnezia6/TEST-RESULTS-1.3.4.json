@@ -1,0 +1,54 @@
+{
+  "version": "1.3.4",
+  "date": "2026-10-30",
+  "target": "iPad4,5 / iOS7.1.2 / 11D257",
+  "package_sha256": "a5b2a5d15edfdddfe0ca7a60547ae3ca22e47d3d2cc18ca4f7629b0e4aad139e",
+  "installed_app_sha256": "47ada5ad65ae40d26a3c05e445fa444f318c162881eedf5086a337a50c4f4672",
+  "all_installed_payload_files_match": 19,
+  "native_executables_passed": [
+    "clock",
+    "protocol/authenticated-padding/cookies/replay",
+    "idle/rekey/staging/Stop/network mocks",
+    "DNS arrays/rollback",
+    "profile/import names",
+    "actual generated two-part QR image chain"
+  ],
+  "status_bar": {
+    "before_style": 2,
+    "after_style": 0,
+    "controller_based_appearance": true,
+    "native_before_after_render_visually_verified": true,
+    "home_profiles_scanner_editor_style_checks": true
+  },
+  "automatic_name": "Official description -> hostName -> filename/endpoint fallback; actual named editor verified through packaged multipart callback; manual profiles unchanged",
+  "host": "Full make test and exact package tests passed",
+  "sanitizers": "Profile/QR and clock/protocol/timer ASAN+UBSan suites passed; Foundation global leak checks disabled",
+  "live_traffic": {
+    "direct_socket_bypasses_HTTP_proxy": true,
+    "http_statuses": [
+      301,
+      301,
+      301,
+      301
+    ],
+    "elapsed_seconds": 135.47,
+    "accepted_key_establishments_during_controlled_interval": 2,
+    "session_uptime_survived_rekey": true,
+    "restored_as_found_OFF": true
+  },
+  "preservation": {
+    "config_hash_unchanged": true,
+    "profile_list_hash_unchanged": true,
+    "manual_names_not_rewritten": true,
+    "prior_user_scan_diagnostic_restored_byte_exact": true,
+    "own_temporary_helpers_removed": true,
+    "iOS6_device_not_touched": true
+  },
+  "limits": [
+    "iOS4-6 exact build hardware not retested",
+    "No battery/power or long-session performance measurement",
+    "IPv4-only; full keyring, counter exhaustion, responder and exhaustive AWG conformance not claimed",
+    "One pending outbound packet is a bounded application queue policy; old missing imported names require reimport"
+  ],
+  "clean_extracted_corresponding_source_host_suite": "passed"
+}

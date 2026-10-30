@@ -2,18 +2,18 @@
   "packages": [
     {
       "id": "com.mak.amnezia6",
-      "deb": "repo/incoming/com.mak.amnezia6_1.3.3_iphoneos-arm.deb",
+      "deb": "repo/incoming/com.mak.amnezia6_1.3.4_iphoneos-arm.deb",
       "title": "Amnezia6",
       "tagline": "Lightweight AmneziaWG client for iOS 4.3\u20137",
-      "status_label": "iOS 7: animated QR + current AWG templates",
-      "status_text": "1.3.3 fixes current AWG3.1 keepalive ranges and timer consumers, ordered IPv4 DNS lists and bundle DNS placeholders. Native iOS7 QR scanning and sticky completion errors replace the misleading 1/2 loop. User confirmed the same physical animated QR opens the profile editor; authenticated traffic was observed after user connection. Native generated multipart import, timer/authentication regressions and package tests pass. IPv6, exhaustive protocol conformance and older-device optical testing remain unclaimed.",
+      "status_label": "iOS 7: readable UI and named QR imports",
+      "status_text": "1.3.4 imports official description/hostName automatically through QR, URL and file paths; preserves existing manual names and profiles. Fixes white-on-white iOS7 status bar. Keepalive/timer follow-up removes invented omitted-field keepalives, confirms new keys immediately and renews expired/idle sessions on traffic with bounded staging and monotonic deadlines. Exact host/native/runtime verification is recorded in project receipts; IPv6 and exhaustive AWG conformance remain outside the supported scope.",
       "source": "projects/amnezia6",
       "license": "GPL-2.0",
       "order": 1,
       "homepage": "https://github.com/fronik22/legacy-cydia",
       "icon": "assets/amnezia6.png",
-      "source_archive": "amnezia6-1.3.3-source.zip",
-      "source_sha256": "a130493a4f7d97efc2136ca2a09c9204b4afbb03c132e6b0e3111bb60ef35460"
+      "source_archive": "amnezia6-1.3.4-source.zip",
+      "source_sha256": "cc4cff2822027ca758cde7c8ecb26e30431cdd366e3508df68cef1e0a9976fd1"
     },
     {
       "id": "local.perfoverlay",

@@ -11,6 +11,11 @@ extern "C" {
    as a .vpn file holding the same base64 body, or as the plain json. all three
    wrap the amneziawg .conf inside containers[].awg.last_config.config */
 #define AMZ_BUNDLE_MAX_JSON (512 * 1024)
+#define AMZ_BUNDLE_NAME_CAP 513
+typedef struct {
+    char description[AMZ_BUNDLE_NAME_CAP];
+    char host_name[AMZ_BUNDLE_NAME_CAP];
+} amz_bundle_name;
 
 typedef enum {
     AMZ_OK = 0,
@@ -30,6 +35,11 @@ int amz_bundle_looks_like(const char *text, size_t len);
 /* write the embedded amneziawg config text, newline terminated */
 amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
                                      char *out, size_t cap, size_t *out_len,
+                                     char *reason, size_t reason_cap);
+/* Optional display metadata from the same decoded bundle; never network settings. */
+amz_status_t amz_bundle_extract_conf_named(const char *in, size_t len,
+                                     char *out, size_t cap, size_t *out_len,
+                                     amz_bundle_name *name,
                                      char *reason, size_t reason_cap);
 
 #ifdef __cplusplus

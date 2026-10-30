@@ -66,11 +66,11 @@
 - (void)importData:(NSData *)data name:(NSString *)name {
     if(_working)return;_working=YES;self.navigationItem.rightBarButtonItem.enabled=NO;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT,0),^{
-        NSAutoreleasePool *pool=[NSAutoreleasePool new];NSString *error=nil;NSString *text=A6ImportConfig(data,&error);
+        NSAutoreleasePool *pool=[NSAutoreleasePool new];NSString *error=nil,*importedName=nil;NSString *text=A6ImportConfigWithName(data,&importedName,&error);
         dispatch_async(dispatch_get_main_queue(),^{_working=NO;self.navigationItem.rightBarButtonItem.enabled=YES;
             if(!text){[self showError:error];return;}
             [self.navigationController popToViewController:self animated:NO];
-            A6ConfigController *editor=[[A6ConfigController alloc]initWithIdentifier:nil config:text name:name];[self.navigationController pushViewController:editor animated:YES];[editor release];
+            A6ConfigController *editor=[[A6ConfigController alloc]initWithIdentifier:nil config:text name:importedName?:name];[self.navigationController pushViewController:editor animated:YES];[editor release];
         });[pool drain];
     });
 }

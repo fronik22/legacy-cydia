@@ -96,7 +96,7 @@
     }
     if(complete){
         _finished=YES;[self stopCamera];
-        if(config)[_importer importData:[config dataUsingEncoding:NSUTF8StringEncoding]name:nil];
+        if(config)[_importer importData:data name:nil];
         else _progress.text=[NSString stringWithFormat:@"%@\nНажмите «Назад», чтобы повторить сканирование.",error?:@"Не удалось импортировать профиль"];
         return;
     }
