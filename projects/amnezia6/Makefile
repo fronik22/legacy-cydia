@@ -98,8 +98,8 @@ $(BUILD)/test_command_reply: tests/test_command_reply.m app/A6Daemon.m app/A6Dae
 $(BUILD)/test_tunnel_retry: tests/test_tunnel_retry.c src/tunnel.c $(HOST_COMMON_OBJ) | $(BUILD)
 	$(HOSTCC) $(HOST_CFLAGS) tests/test_tunnel_retry.c $(HOST_COMMON_OBJ) -o $@ $(HOST_LIBS)
 
-test: $(BUILD)/test_qr_parts $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
-	$(BUILD)/test_qr_parts tests/fixtures
+test: $(BUILD)/dns-fixtures/animated-profile.json $(BUILD)/test_qr_parts $(BUILD)/test_control_permissions $(BUILD)/test_profiles $(BUILD)/test_protocol $(BUILD)/test_qr $(BUILD)/test_tunnel_retry $(BUILD)/test_command_reply $(BUILD)/test_tunnel_send $(BUILD)/test_client $(BUILD)/test_crypto $(BUILD)/test_dns $(BUILD)/test_config_save $(BUILD)/test_route
+	$(BUILD)/test_qr_parts tests/fixtures $(BUILD)/dns-fixtures
 	$(BUILD)/test_control_permissions
 	$(BUILD)/test_profiles tests/fixtures
 	$(BUILD)/test_protocol
@@ -119,7 +119,7 @@ test-live: $(BUILD)/test_handshake
 
 # ------------------------------------------------------------- device build ---
 # iOS 4.3 keeps the client usable on every iOS 4-7 device. The newer SDK no
-# longer ships crt1.3.1.o / libgcc_s.1, so toolchain/oldlibs carries copies.
+# longer ships crt1.3.3.o / libgcc_s.1, so toolchain/oldlibs carries copies.
 DEV_TARGET  := armv7-apple-ios4.3
 DEV_CFLAGS  := -MMD -MP -target $(DEV_TARGET) -isysroot $(SDK) -std=gnu99 -O2 $(WARN) \
                -fsigned-char -fno-common \
@@ -256,7 +256,7 @@ $(BUILD)/ToggleRegression.bundle: tests/ToggleRegression.m app/A6Daemon.h | $(BU
 
 deb: device app
 	python3 tools/build_deb.py
-	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
+	python3 tests/test_package.py $(BUILD)/com.mak.amnezia6_1.3.3_iphoneos-arm.deb
 
 -include $(wildcard build/host/*.d build/dev/*.d $(APP_OBJ:.o=.d) build/test_*.d)
 
@@ -312,4 +312,16 @@ $(BUILD)/test_qr_parts-device: tests/test_qr_parts.m app/A6QRParts.m app/A6QRPar
 
 $(BUILD)/QRRegression.bundle: tests/QRRegression.m app/A6QRScannerController.h | $(BUILD)
 	$(DEVCLANG) $(APP_CFLAGS) -L"$(CURDIR)/toolchain/oldlibs" -bundle tests/QRRegression.m -framework Foundation -framework UIKit -framework AVFoundation -framework CoreMedia -framework CoreVideo -o $@
+	$(LDID) -S $@
+
+$(BUILD)/test_dns-device: tests/test_dns.c src/dns.c src/dns.h src/log.c src/log.h | $(BUILD)
+	$(DEVCLANG) $(DEV_CFLAGS) tests/test_dns.c src/log.c $(DEV_LDFLAGS) -o $@
+	$(LDID) -S $@
+
+$(BUILD)/dns-fixtures/animated-profile.json: tests/fixtures/profile-awg31-full-template.json $(BUILD)/make_animated_qr
+	@mkdir -p $(BUILD)/dns-fixtures
+	$(BUILD)/make_animated_qr $< $(BUILD)/dns-fixtures two
+
+$(BUILD)/test_tunnel_retry-device: tests/test_tunnel_retry.c src/tunnel.c src/tunnel.h $(DEV_COMMON_OBJ)
+	$(DEVCLANG) $(DEV_CFLAGS) tests/test_tunnel_retry.c $(DEV_COMMON_OBJ) $(DEV_LDFLAGS) -o $@
 	$(LDID) -S $@

@@ -58,7 +58,7 @@ def build_armv7():
     obj = B / 'PerfOverlay.armv7.o'
     out = B / 'PerfOverlay.armv7.dylib'
     run(['xcrun', 'clang', '-target', 'armv7-apple-ios4.3', '-isysroot', SDK,
-         '-fno-objc-arc', '-Os', '-Wall', '-Wno-deprecated-declarations',
+         '-fno-objc-arc','-fblocks', '-Os', '-Wall', '-Wno-deprecated-declarations',
          '-c', SRC, '-o', obj])
     run(['xcrun', 'ld-classic', '-dylib', '-arch', 'armv7', '-iphoneos_version_min', '4.3',
          '-install_name', INSTALL_NAME, '-syslibroot', STUB, '-L' + str(STUB / 'usr/lib'),
@@ -74,7 +74,7 @@ def build_toggle():
     obj = B / 'PerfOverlayToggle.armv7.o'
     out = B / 'PerfOverlayToggle.dylib'
     run(['xcrun', 'clang', '-target', 'armv7-apple-ios4.3', '-isysroot', SDK,
-         '-fno-objc-arc', '-Os', '-Wall', '-Wno-deprecated-declarations',
+         '-fno-objc-arc','-fblocks', '-Os', '-Wall', '-Wno-deprecated-declarations',
          '-c', TOGGLE_SRC, '-o', obj])
     run(['xcrun', 'ld-classic', '-dylib', '-arch', 'armv7', '-iphoneos_version_min', '4.3',
          '-install_name', TOGGLE_INSTALL_NAME, '-syslibroot', STUB, '-L' + str(STUB / 'usr/lib'),
@@ -89,13 +89,13 @@ def build_arm64():
     obj = B / 'PerfOverlay.arm64.o'
     out = B / 'PerfOverlay.arm64.dylib'
     run(['xcrun', 'clang', '-target', 'arm64-apple-ios7.0', '-isysroot', sdk,
-         '-fno-objc-arc', '-Os', '-Wall', '-Wno-deprecated-declarations',
+         '-fno-objc-arc','-fblocks', '-Os', '-Wall', '-Wno-deprecated-declarations',
          '-c', SRC, '-o', obj])
     run(['xcrun', 'ld-classic', '-dylib', '-arch', 'arm64', '-iphoneos_version_min', '7.0',
          '-install_name', INSTALL_NAME, '-syslibroot', sdk, '-L' + str(sdk / 'usr/lib'),
          '-o', out, obj, '-framework', 'UIKit', '-framework', 'Foundation',
          '-framework', 'QuartzCore', '-framework', 'CoreGraphics', '-framework', 'CoreFoundation',
-         '-lobjc', '-lSystem'])
+         '-L'+str(ROOT/'build-support'), '-lGPUTimeC', '-lobjc', '-lSystem'])
     run([LDID, '-Cadhoc', '-Hsha1', '-S', out])
     return out
 
@@ -104,7 +104,7 @@ def build_preferences():
     slices=[]
     for arch,version,sdk,stub in [('armv7','4.3',SDK,STUB),('arm64','7.0',prepare_arm64_sdk(),prepare_arm64_sdk())]:
         obj=B/('PerfOverlayPrefs.'+arch+'.o');out=B/('PerfOverlayPrefs.'+arch)
-        run(['xcrun','clang','-target',arch+'-apple-ios'+version,'-isysroot',sdk,'-fno-objc-arc','-Os','-Wall','-Wno-deprecated-declarations','-c',ROOT/'settings/PerfOverlayPrefs.m','-o',obj])
+        run(['xcrun','clang','-target',arch+'-apple-ios'+version,'-isysroot',sdk,'-fno-objc-arc','-fblocks','-Os','-Wall','-Wno-deprecated-declarations','-c',ROOT/'settings/PerfOverlayPrefs.m','-o',obj])
         run(['xcrun','ld-classic','-bundle','-arch',arch,'-iphoneos_version_min',version,'-syslibroot',stub,'-L'+str(stub/'usr/lib'),'-F'+str(stub/'System/Library/PrivateFrameworks'),'-o',out,obj,'-framework','Preferences','-framework','UIKit','-framework','Foundation','-framework','CoreFoundation','-lobjc','-lSystem',*(['-lgcc_s.1'] if arch=='armv7' else [])])
         slices.append(out)
     final=B/'PerfOverlayPrefs';run(['lipo','-create',*slices,'-output',final]);run([LDID,'-Cadhoc','-Hsha1','-S',final])

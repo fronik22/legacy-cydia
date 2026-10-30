@@ -1,0 +1,21 @@
+{
+  "version": "1.3.2",
+  "date": "2026-10-29",
+  "device": "iPad4,5 iOS7.1.2/11D257",
+  "package_sha256": "5e06bb44c620aeae854cd9cd6494b9bd502ea1d2bd797e7016aa42c7f8c4853a",
+  "installed_app_sha256": "55115068e9d13e3c0838a0cb9443de37a08d4ce509a45a9070f40f50ce97c769",
+  "host": "Full make test and package archive verification pass",
+  "sanitizers": "Targeted template/import/config/DNS CFArray/QR tests pass ASAN+UBSan in separate build/sanitize; Foundation global leak detection disabled",
+  "device_standalone": "Actual encoded two-part official DNS template QR images -> rotated/padded BGRA -> shared decoder -> collector -> import -> config preserves both resolvers; padded tails/negative imports/profile tests/CFArray removal and partial-write rollback pass",
+  "packaged_app": "Actual callback replay of two-part template (repeat/order, metadata+BGRA) opens review containing both expanded DNS resolvers,26 physical diagnostic callbacks, lifecycle/stop/sticky-error/privacy allowlist/version tests pass",
+  "dns_grammar": "IPv4 literals, comma or whitespace separated/repeated DNS lines, canonical full list within63 characters; IPv6/hostname/CIDR/empty elements/unresolved tokens/overflow rejected",
+  "bundle_dns": "Referenced $PRIMARY_DNS/$SECONDARY_DNS expand only from strict IPv4 dns1/dns2 string metadata; missing/empty/invalid values reject clearly, explicit DNS unchanged, no invented defaults",
+  "actual_user_optical_before_dns_fix": "Actual user1.3.1 scan completed2/2;23 decoded frames,21duplicates; remaining failure DNS profile validation",
+  "actual_optical_after_dns_fix": "10-second physical-only probe on1.3.2 decoded no QR/new-version diagnostic; actual sender import needs user retest",
+  "profile_config_hashes_unchanged": true,
+  "daemon": "idle tx0 rx0",
+  "clean_relaunch_and_own_helpers_removed": true,
+  "pretest_real_diagnostic_restored": true,
+  "older_os_hardware": "iOS4/5/6 hardware not tested; armv7 minimumiOS4.3 build preserved",
+  "network_limit": "No actual VPN activation, network DNS mutation or server connectivity test performed"
+}

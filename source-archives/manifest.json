@@ -1,11 +1,11 @@
 {
   "amnezia6": {
-    "archive": "amnezia6-1.3.0-source.zip",
-    "bytes": 926767,
-    "files": 140,
+    "archive": "amnezia6-1.3.3-source.zip",
+    "bytes": 941409,
+    "files": 144,
     "license": "GPL-2.0",
     "origin": "projects/amnezia6",
-    "sha256": "d2f5abb447432a57879918d47c14b13ee12f65bd2f8ac345e93e277acbaea84d"
+    "sha256": "a130493a4f7d97efc2136ca2a09c9204b4afbb03c132e6b0e3111bb60ef35460"
   },
   "blastron": {
     "archive": "blastron-0.1.15-source.zip",
@@ -17,11 +17,11 @@
   },
   "device-access": {
     "archive": "device-access-1.1.0-source.zip",
-    "bytes": 22436,
-    "files": 9,
+    "bytes": 22855,
+    "files": 10,
     "license": "GPL-3.0",
     "origin": "projects/device-access",
-    "sha256": "5d6cce2e066c773aa4d79e7c8a9091d422a7e0ae9fe38a0a019782e97eb1144d"
+    "sha256": "f8975236355cd51ad4085fb2b7da439430ae2dcfe1e3c8686bd9014ce57885d9"
   },
   "game-fps": {
     "archive": "game-fps-0.2.2-source.zip",
@@ -56,20 +56,20 @@
     "sha256": "866c0d70c7884caf46b8e4803c09346ac49eb06652ea2c79ee6e3f09a20b075a"
   },
   "perfoverlay": {
-    "archive": "perfoverlay-0.1.11-source.zip",
-    "bytes": 78543,
-    "files": 49,
+    "archive": "perfoverlay-0.1.12-source.zip",
+    "bytes": 82637,
+    "files": 51,
     "license": "GPL-3.0",
     "origin": "projects/perfoverlay",
-    "sha256": "27a54e30708756780a8af6b1c171406e11230c65ae271afc8c77296b3effbea7"
+    "sha256": "068edf978d14aedd995c7764bb8f9126cf6a753a059aee2f91fb00847e1d9c6d"
   },
   "power-logger": {
     "archive": "power-logger-1.1.1-source.zip",
-    "bytes": 39410,
-    "files": 22,
+    "bytes": 39849,
+    "files": 23,
     "license": "GPL-3.0",
     "origin": "projects/power-logger",
-    "sha256": "ddb74b86c6a3d10795b404fb1b78ae40ab5d431f8545c34192d9b4215a38fc94"
+    "sha256": "981231d11ac2289bb7169bb18ca37f342e1aaa7f91a9bbf5965dc2f804fa5171"
   },
   "timezone": {
     "archive": "timezone-2026e-2-source.zip",

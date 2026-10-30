@@ -1,7 +1,7 @@
 # Amnezia6
 
 Minimal native UIKit AmneziaWG client for jailbroken iOS4.3–7.x devices.
-Current release1.3.0. App/daemon/CLI use armv7 (including the iOS7 32-bit
+Current release1.3.3. App/daemon/CLI use armv7 (including the iOS7 32-bit
 compatibility runtime); the SpringBoard badge includes armv7+arm64 slices.
 Device validation: iPad2,2/iOS6.1.3 and iPad4,5/iOS7.1.2. The latter's shared
 engine completed a real handshake, HTTP response and configured-DNS query through
@@ -150,3 +150,45 @@ public synthetic fixtures with the upstream QR encoder and official wire format.
 `python3 tools/render_animated_qr.py` creates a displayable animation (requires
 Pillow only for this optional fixture-rendering step). Actual target camera
 verification and remaining limits are recorded in ../../notes/ANIMATED-QR.md.
+
+## 1.3.1 camera QR capture
+
+On iOS7 the scanner also uses the system QR metadata detector as its primary
+camera path, feeding the same multipart collector. Older or unsupported systems retain
+quirc. Continuous autofocus/exposure are explicitly enabled when supported.
+Native output availability is checked at runtime; the QR type is weak imported.
+Optical animation and older-device execution must be reported separately from
+synthetic callback regression results.
+
+Completed QR imports that fail validation now stop scanning and keep the error
+visible; use Back to retry. Multipart frames accept canonical URL-safe Base64
+with or without the required trailing padding; extra padding is rejected.
+For diagnosis, the app overwrites a private `qr-last-scan.plist` in its existing
+preferences folder with capped counts, lengths, part indexes and fixed status
+codes only. It stores no QR text, configuration, keys or endpoint.
+
+## 1.3.2 Amnezia DNS templates and resolver lists
+
+Bundle imports expand the official `$PRIMARY_DNS`/`$SECONDARY_DNS` tokens from
+`dns1`/`dns2` only when those tokens occur. Missing or non-IPv4 metadata produces
+a clear error; no replacement DNS is invented. Explicit DNS settings stay intact.
+The shared parser preserves all comma- or whitespace-separated IPv4 resolvers
+(including repeated DNS lines), normalized within the existing63-character field.
+The DNS service installs every resolver in order. IPv6, hostname resolvers, empty
+list elements and oversized lists are rejected before networking changes.
+
+## 1.3.3 current AWG3.1 native templates
+
+PersistentKeepalive accepts `off`, `0`, a scalar or an ordered seconds range
+through65535; official AWG3.1 exports use25–35. Timer deadlines sample the range
+after authenticated traffic using libc's cached CSPRNG; constant values need no
+random draw. Invalid tags/replays leave deadlines unchanged. KeepaliveTimeout
+controls delayed replies and unanswered-data rehandshakes; outgoing authenticated
+packets cancel delayed replies. Padded authenticated empty packets remain keepalives.
+MaxHandshakeAttempts samples its configured range once per handshake round.
+
+Unresolved value placeholders are rejected before field parsing, and I1–I5 syntax
+and expanded size are checked before networking. DisableCookies controls responder
+cookie generation upstream; this initiator-only client still handles remote cookie
+challenges. See TEMPLATE-AUDIT-1.3.3.md for parameter coverage and limits. User
+confirmed the same real animated QR opens the editor on1.3.3.

@@ -6,18 +6,19 @@
 #import <CoreVideo/CoreVideo.h>
 #include "quirc.h"
 #include "qr_frame.h"
+#include <sys/stat.h>
 @interface A6QRScannerController ()
 - (void)startCamera;
 - (void)stopCamera;
 @end
 @implementation A6QRScannerController
 - (id)initWithImporter:(A6ProfilesController *)importer {
-    if((self=[super init])){_importer=importer;self.title=@"Сканировать QR";_parts=[A6QRParts new];_queue=dispatch_queue_create("com.mak.amnezia6.qr",NULL);_decoder=quirc_new();}return self;
+    if((self=[super init])){_importer=importer;self.title=@"Сканировать QR";_parts=[A6QRParts new];_scanStats=[NSMutableDictionary new];[_scanStats setObject:[[NSBundle mainBundle]objectForInfoDictionaryKey:@"CFBundleShortVersionString"]?:@"unknown"forKey:@"app_version"];_queue=dispatch_queue_create("com.mak.amnezia6.qr",NULL);_decoder=quirc_new();}return self;
 }
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter]removeObserver:self];[self stopCamera];
     dispatch_sync(_queue,^{});if(_decoder)quirc_destroy(_decoder);dispatch_release(_queue);
-    [_output release];[_session release];[_preview release];[_progress release];[_parts release];[super dealloc];
+    [_metadataOutput release];[_output release];[_session release];[_preview release];[_progress release];[_parts release];[_scanStats release];[super dealloc];
 }
 - (void)loadView {
     self.view=[[[UIView alloc]initWithFrame:[[UIScreen mainScreen]applicationFrame]]autorelease];self.view.backgroundColor=[UIColor blackColor];
@@ -30,7 +31,7 @@
 - (void)viewDidAppear:(BOOL)animated {[super viewDidAppear:animated];_visible=YES;[self startCamera];}
 - (void)viewWillDisappear:(BOOL)animated {_visible=NO;[self stopCamera];[_parts reset];[super viewWillDisappear:animated];}
 - (void)expireParts {if([_parts expireAtTime:CACurrentMediaTime()])_progress.text=@"Время сборки QR истекло. Сканируйте заново.\n0 / ?";}
-- (void)stopCamera {[_timeout invalidate];[_timeout release];_timeout=nil;[_parts reset];[_output setSampleBufferDelegate:nil queue:NULL];[_session stopRunning];}
+- (void)stopCamera {[_timeout invalidate];[_timeout release];_timeout=nil;[_parts reset];[_output setSampleBufferDelegate:nil queue:NULL];[_metadataOutput setMetadataObjectsDelegate:nil queue:NULL];[_session stopRunning];}
 - (void)startCamera {
     if(!_visible||_finished||[UIApplication sharedApplication].applicationState!=UIApplicationStateActive)return;
     if(!_decoder){_progress.text=@"Недостаточно памяти для камеры";return;}
@@ -53,17 +54,64 @@
             _progress.text=@"Камера недоступна. Закройте сканер и попробуйте снова.";[_session release];_session=nil;[_output release];_output=nil;return;
         }
         [_session addInput:input];[_session addOutput:_output];
+        if([device lockForConfiguration:NULL]){
+            if([device isFocusModeSupported:AVCaptureFocusModeContinuousAutoFocus])device.focusMode=AVCaptureFocusModeContinuousAutoFocus;
+            if([device isExposureModeSupported:AVCaptureExposureModeContinuousAutoExposure])device.exposureMode=AVCaptureExposureModeContinuousAutoExposure;
+            [device unlockForConfiguration];
+        }
+        // Native QR capture exists on iOS 7; quirc serves older or unsupported systems.
+        Class metadataClass=NSClassFromString(@"AVCaptureMetadataOutput");
+        if(metadataClass && &AVMetadataObjectTypeQRCode && AVMetadataObjectTypeQRCode){
+            AVCaptureMetadataOutput *metadata=[[metadataClass alloc]init];
+            if([_session canAddOutput:metadata]){
+                [_session addOutput:metadata];
+                if([metadata.availableMetadataObjectTypes containsObject:AVMetadataObjectTypeQRCode]){
+                    metadata.metadataObjectTypes=[NSArray arrayWithObject:AVMetadataObjectTypeQRCode];_metadataOutput=metadata;
+                }else{[_session removeOutput:metadata];[metadata release];}
+            }else[metadata release];
+        }
         _preview=[[AVCaptureVideoPreviewLayer alloc]initWithSession:_session];_preview.videoGravity=AVLayerVideoGravityResizeAspect;
         _preview.frame=self.view.bounds;if([_preview isOrientationSupported])_preview.orientation=(AVCaptureVideoOrientation)self.interfaceOrientation;[self.view.layer insertSublayer:_preview atIndex:0];
     }
-    [_output setSampleBufferDelegate:self queue:_queue];[_session startRunning];
+    if(_metadataOutput)[_metadataOutput setMetadataObjectsDelegate:self queue:dispatch_get_main_queue()];
+    else [_output setSampleBufferDelegate:self queue:_queue];
+    [_session startRunning];
     if(!_timeout)_timeout=[[NSTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(expireParts) userInfo:nil repeats:YES]retain];
 }
 - (void)receiveText:(NSString *)text {
     if(!_visible||_finished||![_session isRunning])return;
     NSString *error=nil;NSData *data=[_parts consume:text atTime:CACurrentMediaTime() error:&error];
-    if(data){NSString *config=A6ImportConfig(data,&error);if(config){_finished=YES;[self stopCamera];[_importer importData:[config dataUsingEncoding:NSUTF8StringEncoding]name:nil];return;}}
+    NSString *event=[[_parts diagnostic]objectForKey:@"event"],*config=nil;
+    if(data){config=A6ImportConfig(data,&error);if(!config)event=@"profile_rejected";}
+    _scanFrames=MIN(_scanFrames+1,(NSUInteger)1000000);
+    [_scanStats setObject:[NSNumber numberWithUnsignedInteger:_scanFrames]forKey:@"decoded_frames"];
+    [_scanStats setObject:[_parts diagnostic]forKey:@"last_frame"];
+    [_scanStats setObject:[NSNumber numberWithUnsignedInteger:MIN([[_scanStats objectForKey:event]unsignedIntegerValue]+1,(NSUInteger)1000000)]forKey:event];
+    BOOL complete=data||[event isEqual:@"invalid_compression"];
+    if(complete||(_diagnosticWrites<120&&CACurrentMediaTime()-_lastDiagnostic>=1)){
+        [_scanStats setObject:event forKey:@"status"];
+        NSString *path=@"/var/mobile/Library/Preferences/Amnezia6/qr-last-scan.plist";
+        if([_scanStats writeToFile:path atomically:YES])chmod([path fileSystemRepresentation],0600);
+        _lastDiagnostic=CACurrentMediaTime();_diagnosticWrites++;
+    }
+    if(complete){
+        _finished=YES;[self stopCamera];
+        if(config)[_importer importData:[config dataUsingEncoding:NSUTF8StringEncoding]name:nil];
+        else _progress.text=[NSString stringWithFormat:@"%@\nНажмите «Назад», чтобы повторить сканирование.",error?:@"Не удалось импортировать профиль"];
+        return;
+    }
     _progress.text=error?:[NSString stringWithFormat:@"Получено %lu / %lu\nДержите код в кадре до завершения.",(unsigned long)[_parts received],(unsigned long)[_parts total]];
+}
+- (void)captureOutput:(AVCaptureOutput *)output didOutputMetadataObjects:(NSArray *)objects fromConnection:(AVCaptureConnection *)connection {
+    if(!_visible||_finished||![_session isRunning])return;
+    NSString *text=nil;
+    for(AVMetadataObject *object in objects){
+        if(![object.type isEqual:AVMetadataObjectTypeQRCode]||![object respondsToSelector:@selector(stringValue)])continue;
+        NSString *value=[(AVMetadataMachineReadableCodeObject *)object stringValue];
+        if(![value length])continue;
+        if(text){_progress.text=@"В кадре несколько QR. Оставьте один.";return;}text=value;
+    }
+    if(text)[self receiveText:text];
 }
 - (void)captureOutput:(AVCaptureOutput *)output didOutputSampleBuffer:(CMSampleBufferRef)sample fromConnection:(AVCaptureConnection *)connection {
     CFTimeInterval now=CACurrentMediaTime();if(now-_lastFrame<0.15)return;_lastFrame=now;

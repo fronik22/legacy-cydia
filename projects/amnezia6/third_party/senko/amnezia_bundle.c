@@ -4,6 +4,7 @@
 #include "third_party/cJSON.h"
 
 #include <ctype.h>
+#include <arpa/inet.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -160,7 +161,7 @@ static const char *config_text_of(const cJSON *proto, cJSON **owned) {
     return cfg->valuestring;
 }
 
-static amz_status_t emit(const char *conf, char *out, size_t cap, size_t *out_len,
+static amz_status_t emit(const char *conf, const cJSON *root, char *out, size_t cap, size_t *out_len,
                          char *reason, size_t reason_cap) {
     size_t n = strlen(conf);
     while (n && (conf[n - 1] == '\n' || conf[n - 1] == '\r' || conf[n - 1] == ' '))
@@ -173,10 +174,36 @@ static amz_status_t emit(const char *conf, char *out, size_t cap, size_t *out_le
         set_reason(reason, reason_cap, "amnezia config does not fit");
         return AMZ_ERR_SPACE;
     }
-    memcpy(out, conf, n);
-    out[n] = '\n';
-    out[n + 1] = '\0';
-    *out_len = n + 1;
+    const char *tokens[] = {"$PRIMARY_DNS", "$SECONDARY_DNS"};
+    const char *fields[] = {"dns1", "dns2"};
+    const char *dns[2] = {NULL, NULL};
+    for (int i = 0; i < 2; i++) if (strstr(conf, tokens[i])) {
+        const cJSON *value = cJSON_GetObjectItem((cJSON *)root, fields[i]);
+        struct in_addr address;
+        if (!cJSON_IsString(value) || !value->valuestring[0]) {
+            set_reason(reason, reason_cap, "amnezia DNS placeholder requires bundle dns1 and dns2");
+            return AMZ_ERR_JSON;
+        }
+        if (inet_pton(AF_INET, value->valuestring, &address) != 1) {
+            set_reason(reason, reason_cap, strchr(value->valuestring, ':') ?
+                "IPv6 DNS is unsupported; bundle DNS must use IPv4" :
+                "amnezia bundle DNS must be an IPv4 address");
+            return AMZ_ERR_UNSUPPORTED;
+        }
+        dns[i] = value->valuestring;
+    }
+    size_t used = 0;
+    for (size_t pos = 0; pos < n;) {
+        const char *value = conf + pos;size_t length = 1, consumed = 1;
+        for (int i = 0; i < 2; i++) if (dns[i] && !strncmp(conf + pos, tokens[i], strlen(tokens[i]))) {
+            value = dns[i];length = strlen(value);consumed = strlen(tokens[i]);break;
+        }
+        if (length > cap - used - 2) {
+            set_reason(reason, reason_cap, "amnezia config does not fit");return AMZ_ERR_SPACE;
+        }
+        memcpy(out + used, value, length);used += length;pos += consumed;
+    }
+    out[used++] = '\n';out[used] = '\0';*out_len = used;
     return AMZ_OK;
 }
 
@@ -266,7 +293,7 @@ amz_status_t amz_bundle_extract_conf(const char *in, size_t len,
         return AMZ_ERR_JSON;
     }
 
-    amz_status_t r = emit(conf, out, cap, out_len, reason, reason_cap);
+    amz_status_t r = emit(conf, root, out, cap, out_len, reason, reason_cap);
     if (owned) cJSON_Delete(owned);
     cJSON_Delete(root);
     if (r == AMZ_OK) set_reason(reason, reason_cap, "ok");

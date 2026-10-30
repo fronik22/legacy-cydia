@@ -225,10 +225,24 @@ allocations and reclaimable inactive pages; they do not imply one app owns
 and must not be summed as an exact decomposition. Detailed results and limits:
 [HUD load diagnosis](../../notes/HUD-LOAD-DIAGNOSIS.md).
 
-## Idle redraw optimization —0.1.11
+## Superseded idle redraw experiment —0.1.11
+
+**Rejected/reverted in0.1.12.** This reduced visible refresh and is not an accepted repair. The GPU percent means below were later found sampling-dependent because reading PerformanceStatistics consumes its counters; they do not quantify GPU/battery savings.
 
 A changed-text guard and global-frame-counter idle policy stop the HUD from sustaining a1Hz compositing loop on otherwise static screens. Global activity detection also runs when the FPS row is hidden. Sampling continues at the configured interval; only visible text redraws are capped toonce/5s while global frame activity is no greater than the HUD's own expected cadence. Active content and display-link fallback retain configured refresh. Unchanged text is never reassigned. Settings/toggle restart clears the draw timestamp. Geometry, metrics and preferences are unchanged. A live overlay necessarily causes occasional rendering; this is not a zero-GPU guarantee.
 
 Native7.1.2 Settings comparison: global frames0.993→0.192/s and mean AGX driver snapshot29.82→6.28%, with brief peaks up to46%. ActiveHome remains at the measured normal cadence (see verification-idle-ios7.json). This is a short driver/frame measurement, not calibrated peak GPU capacity, battery watts or a game benchmark. HUD restored toas-foundOFF. A tight-window experiment did not reduceGPU and was discarded.
 
-Self-check: `clang -Wall -Wextra -Werror probe/render-policy-test.c -o /tmp/hud-render-test && /tmp/hud-render-test`. Eleven assertions cover initial/idle/active/fallback/reset/interval behavior. Exact final package is checked with probe/test_package.py. iOS4–6/8–9 hardware execution of this change remains untested.
+The historical idle-policy self-check was removed with that rejected policy; its raw experimental results remain in verification-idle-ios7.json.
+
+## Corrected GPU timing / full refresh —0.1.12
+
+No automatic idle slowdown: the user-selected refresh interval is preserved. Equal strings alone are not reassigned. The old destructive AGX driver snapshot was not a sustained utilization measurement:53/53positive first reads becamezero on an immediate second read. Plain labels/bitmaps had similar behavior. IndependentIOReport measurements at the same1HzHUD rate show~0.50%GPU non-OFF residency; completedactivityhistogram~0.67% has different boundary semantics and is not used as shader utilization.
+
+The verifiediOS7/arm64/A7 adapter dynamically loads existingPowerlogCoreLoggers helperexports and subscribes only to GPU PerformanceStates. It validates the known7stateIDs, monotonic deltas, overflow, and agreement between the total residency delta and Mach elapsed ticks within5%. First/reset/invalid samples showunknown. Hiding theHUD releases the subscription. No extra daemon, Metal dependency, PerformanceStatistics read or faster internal polling is added.
+
+The label is explicitly **GPU on**: time outside the provider'sOFF state, not shader occupancy. Unsupported platforms retain a qualified **GPUdrv** snapshot, which must not be treated as interval busytime. New cumulative support is gated to verifiediOS7 arm64 and exactA7schema; armv7/otherOS remain on fallback. The 32-bitprivatehelper probe did not initialize, so it was not enabled by assumption.
+
+NativeSpringBoard10sample trace uses the newsource and chosen1s interval; final settled value~0.50%, launch animations produce legitimate transients. UID501standalone initialization/reset cycles pass. Header arithmetic tests reject counterreset, sentinel, overflow and bad timebase. Build requires-fblocks and the included minimal standardlibSystem __Unwind_Resume declaration for the incomplete localarm64 SDKstub. See verification-cumulative-ios7.json and notes/HUD-CAUSAL-DIAGNOSIS.md. Actual GPU shader-occupancy/battery-watt calibration and other-device new-counter tests remain unclaimed.
+
+Current self-checks: `clang -Wall -Wextra -Werror probe/gpu-time-test.c -o /tmp/gpu-time-test && /tmp/gpu-time-test`; nativecounterCLI: `python3 probe/build-metrics.py arm64 gpu-time-native`. The default native-metrics CLI retains its legacy snapshot field and explicitly labels that source.

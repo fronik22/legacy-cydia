@@ -1,0 +1,19 @@
+{
+  "version": "1.3.3",
+  "date": "2026-10-30",
+  "device": "iPad4,5 iOS7.1.2/11D257",
+  "package_sha256": "8e40ec9f34c048187669570e5ad811a51a91756e0d77a383a5ae7f51abc8310e",
+  "installed_app_sha256": "456865bbe45a8cd98aa965dd6662591a6c3d419c3705b58ea95dcc281e5390d5",
+  "host": "Full make test and final Debian archive verification passed",
+  "native": "Standalone fullWG/fullAWG3.1 import, actual generated two-part fullAWG3.1 QR -> BGRA decoder -> collector -> parser, protocol/padded empty keepalive, and mocked network timer regressions passed",
+  "packaged_app": "Two-part fullAWG3.1 callback replay opens review with both DNS and PersistentKeepalive25-35, all timing fields;26 physical diagnostic callbacks, lifecycle/sticky error/privacy/version tests passed",
+  "sanitizers": "Separate ASAN+UBSan profiles/config/protocol/timer/QR tests passed; Foundation process-global leak detection disabled",
+  "keepalive": "off/0/scalar/ordered range through65535; cached libc CSPRNG only for nonconstant timer ranges; saturated deadline addition; authenticated TX/RX resets, invalid tag/replay do not reset; padded empty RX accepted without reply ping-pong",
+  "other_timers": "Nonempty RX delayed reply and cancel on authenticated TX; silence retry uses keepalive upper bound + randomized rekey timeout; max attempts sampled once per handshake round",
+  "template_validation": "All value placeholders preflight before fields (comments excluded); late DNS expansion retained; invalid/oversized I1-I5 rejected before networking",
+  "actual_user_optical_import": "PASS: user confirmed same real animated QR opens editor on1.3.3",
+  "observed_real_connection": "Parent observed connected with real endpoint and advancing TX/RX after UI release; no agent-issued VPN start",
+  "profile_state": "Profile/config hashes changed during concurrent user import/save; existing new state and real connection preserved, no restoration",
+  "test_cleanup": "Clean app relaunch removes injected code; pretest real1.3.2 diagnostic restored before user retest; own helpers/fixtures removed only",
+  "limits": "iOS4/5/6 hardware and full protocol/server conformance not tested; IPv4-only; metadata-only custom MTU is not applied when absent from native config text"
+}

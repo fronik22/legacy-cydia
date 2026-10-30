@@ -27,7 +27,7 @@ typedef struct {
     char endpoint_host[128];
     uint16_t endpoint_port;
     uint32_t mtu;
-    uint32_t persistent_keepalive;
+    a6_range persistent_keepalive;
 
     uint32_t jc;
     uint32_t jmin;

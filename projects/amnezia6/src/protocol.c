@@ -498,7 +498,7 @@ int a6_open_transport(a6_session_t *s, const uint8_t *packet, size_t len,
     replay_commit(s, counter);
     if (len > s->udp_window) s->udp_window = len;
 
-    if (ct_len == 0) {
+    if (ct_len == 0 || ip[0] == 0) {
         *ip_len = 0;
         return 0;
     }

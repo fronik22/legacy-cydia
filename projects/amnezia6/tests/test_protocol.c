@@ -15,6 +15,22 @@ static void config_test(void){a6_config_t c;char error[256],text[4096];assert(!a
   snprintf(text,sizeof text,"[Interface]\n%s\n%s",unsupported_interface[i],conf+12);
   assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));assert(strstr(error,"IPv6"));
  }
+ const char *dns_good[]={"192.0.2.53", "192.0.2.53, 198.51.100.53", " 192.0.2.53 \t 198.51.100.53 ", "192.0.2.53\nDNS=198.51.100.53"};
+ for(unsigned i=0;i<sizeof dns_good/sizeof *dns_good;i++){
+  snprintf(text,sizeof text,"[Interface]\nDNS=%s\n%s",dns_good[i],conf+12);assert(!a6_config_parse(text,strlen(text),&c,error,sizeof error));
+  assert(!strcmp(c.dns,i?"192.0.2.53,198.51.100.53":"192.0.2.53"));
+ }
+ const char *dns_bad[]={"", "resolver.example", "192.0.2.53/bad", "192.0.2.53,bad", "192.0.2.53,", ",192.0.2.53", "192.0.2.53,,198.51.100.53", "$PRIMARY_DNS", "192.0.2.53,198.51.100.53,203.0.113.53,255.255.255.255,255.255.255.255"};
+ for(unsigned i=0;i<sizeof dns_bad/sizeof *dns_bad;i++){
+  snprintf(text,sizeof text,"[Interface]\nDNS=%s\n%s",dns_bad[i],conf+12);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));assert(strstr(error,"DNS")||strstr(error,"placeholder"));
+ }
+ const char *keepalive[]={"0","off","OFF","25","25-35","65535"};
+ for(unsigned i=0;i<sizeof keepalive/sizeof *keepalive;i++){snprintf(text,sizeof text,"%sPersistentKeepalive=%s\n",conf,keepalive[i]);assert(!a6_config_parse(text,strlen(text),&c,error,sizeof error));assert(c.persistent_keepalive.max==(i<3?0:i==3?25:i==4?35:65535));}
+ const char *keepalive_bad[]={"-1","35-25","65536","1-65536","on","25-"};
+ for(unsigned i=0;i<sizeof keepalive_bad/sizeof *keepalive_bad;i++){snprintf(text,sizeof text,"%sPersistentKeepalive=%s\n",conf,keepalive_bad[i]);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));assert(strstr(error,"PersistentKeepalive"));}
+ snprintf(text,sizeof text,"[Interface]\nPrivateKey=invalid\nMTU=$UNKNOWN\n%s",conf+12);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error)&&strstr(error,"unresolved template"));
+ snprintf(text,sizeof text,"# $COMMENT\n%s",conf);assert(!a6_config_parse(text,strlen(text),&c,error,sizeof error));
+ snprintf(text,sizeof text,"[Interface]\nI1=<unsupported>\n%s",conf+12);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error)&&strstr(error,"signature"));
  const char *unsupported_peer[]={"AllowedIPs=10.0.0.0/8","AllowedIPs=::/0","AllowedIPs=0.0.0.0/0,2001:db8::/32","Endpoint=[2001:db8::1]:443"};
  for(unsigned i=0;i<sizeof unsupported_peer/sizeof *unsupported_peer;i++){
   snprintf(text,sizeof text,"%s%s\n",conf,unsupported_peer[i]);assert(a6_config_parse(text,strlen(text),&c,error,sizeof error));
@@ -46,7 +62,12 @@ static void cookie_test(int protect){a6_config_t cfg;char why[256];assert(!a6_co
 static void padding_test(void){a6_config_t c;char why[256];assert(!a6_config_parse(conf,strlen(conf),&c,why,sizeof why));a6_session_t tx,rx;a6_session_init(&tx,&c);a6_session_init(&rx,&c);tx.established=rx.established=1;tx.remote_index=rx.local_index=7;memset(tx.send_key,4,32);memset(rx.recv_key,4,32);
  unsigned char ip[1280]={0x45},wire[2048],out[2048];size_t length,got;ip[3]=100;
  for(int i=0;i<200;i++){assert(!a6_build_transport(&tx,ip,100,wire,sizeof wire,&length));assert(length>=142&&length<=152);assert(!a6_open_transport(&rx,wire,length,out,sizeof out,&got)&&got==100&&!memcmp(ip,out,100));assert(a6_open_transport(&rx,wire,length,out,sizeof out,&got));}
- c.content_padding_addition.min=c.content_padding_addition.max=65535;assert(!a6_build_transport(&tx,ip,100,wire,sizeof wire,&length));assert(length==500);
+ for(int trailer=0;trailer<=1;trailer++){
+  c.random_trailers=trailer;c.content_padding_addition.min=10;c.content_padding_addition.max=100;
+  assert(!a6_build_transport(&tx,NULL,0,wire,sizeof wire,&length)&&length>32);wire[length-1]^=1;assert(a6_open_transport(&rx,wire,length,out,sizeof out,&got));wire[length-1]^=1;
+  assert(!a6_open_transport(&rx,wire,length,out,sizeof out,&got)&&got==0);assert(a6_open_transport(&rx,wire,length,out,sizeof out,&got));
+ }
+ c.random_trailers=0;c.content_padding_addition.min=c.content_padding_addition.max=65535;assert(!a6_build_transport(&tx,ip,100,wire,sizeof wire,&length));assert(length==500);
  ip[2]=5;ip[3]=0;assert(!a6_build_transport(&tx,ip,1280,wire,sizeof wire,&length));assert(length==1312);assert(a6_build_transport(&tx,ip,1280,wire,200,&length));
  c.content_padding_addition.min=c.content_padding_addition.max=0;c.random_trailers=1;assert(!a6_build_transport(&tx,ip,100,wire,sizeof wire,&length));assert(length<=1312);a6_session_wipe(&tx);a6_session_wipe(&rx);
 }

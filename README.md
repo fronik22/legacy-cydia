@@ -18,8 +18,8 @@ also served from the `docs/` directory of this repository.
 
 | Package | Version | Declared firmware | iOS 7 status |
 |---|---|---|---|
-| `com.mak.amnezia6` — Amnezia6 | 1.3.0 | 4.3 – 7.x | Live camera/lifecycle and official multipart QR frame replay verified on7.1.2; optical sender test pending |
-| `local.perfoverlay` — Performance Overlay | 0.1.11 | 4.3 – 9.x | Idle redraw optimization verified on7.1.2: meanGPU driver snapshot29.8→6.3%; active-content refresh preserved |
+| `com.mak.amnezia6` — Amnezia6 | 1.3.3 | 4.3 – 7.x | Animated QR import confirmed on iOS7; DNS templates and AWG3.1 keepalive ranges fixed |
+| `local.perfoverlay` — Performance Overlay | 0.1.12 | 4.3 – 9.x | Selectedrefresh restored; iOS7A7 cumulative GPU on~0.5% at1Hz, qualifieddriverfallback elsewhere |
 | `local.legacypower` — Power Logger | 1.1.1 | 6.0 – 7.x | Installed, launchd daemon and native arm64 sampling; recording off |
 | `local.legacy-game-fps` — Legacy Game FPS | 0.2.2 | 6.0 – 7.x | Installed and Settings bundle loads; **no iOS 7 game session** |
 | `local.codex.veteris-ipad` — Veteris Native iPad | 1.2.0 | 5.0 – 7.x | **Untested on iOS 7**; Veteris 4 is not installed on the test device |

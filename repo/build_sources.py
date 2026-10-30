@@ -10,8 +10,8 @@ ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / 'source-archives'
 RELEASES = ROOT.parent / 'outputs'
 PROJECTS = {
-    'amnezia6': ('1.3.0', 'GPL-2.0', 'src app status tools tests third_party packaging'),
-    'perfoverlay': ('0.1.11', 'GPL-3.0', 'tweak settings ncsettings probe'),
+    'amnezia6': ('1.3.3', 'GPL-2.0', 'src app status tools tests third_party packaging'),
+    'perfoverlay': ('0.1.12', 'GPL-3.0', 'tweak settings ncsettings probe build-support'),
     'power-logger': ('1.1.1', 'GPL-3.0', 'settings build-support'),
     'game-fps': ('0.2.2', 'GPL-3.0', 'src settings tools'),
     'veteris-ipad': ('1.2.0', 'GPL-3.0', 'src tools tests'),
@@ -34,7 +34,11 @@ def safe_path(name):
 
 def allowed(name, project):
     p = PurePosixPath(name)
-    if not safe_path(name) or any(x in EXCLUDED or x.startswith('build-') or x.endswith('.sdk') for x in p.parts):
+    if not safe_path(name):
+        return False
+    if (project, name) in {('perfoverlay','build-support/libGPUTimeC.tbd'), ('power-logger','build-support/ios7-system-symbols.tbd'), ('device-access','build-support/libAccessC.tbd')}:
+        return True
+    if any(x in EXCLUDED or x.startswith('build-') or x.endswith('.sdk') for x in p.parts):
         return False
     if re.search(r'(^|\.)private($|\.)', p.name.lower()) or p.suffix in BINARY_SUFFIXES:
         return False
@@ -51,6 +55,8 @@ def allowed(name, project):
 def check(name, data, project):
     assert allowed(name, project), name
     assert not data.startswith(MAGICS), 'Compiled input: ' + name
+    if name.endswith('.tbd'):
+        assert len(data)<4096 and re.search(rb"(?m)^install-name:\s*[\"']?/usr/lib/libSystem\.B\.dylib[\"']?\s*$",data), 'Not an owned minimal ABI declaration: '+name
     assert not re.search(rb'-----BEGIN (?:[A-Z0-9]+ )*PRIVATE KEY-----\r?\n[A-Za-z0-9+/]{32}', data), 'Private key: ' + name
     keys = re.findall(rb'(?im)^\s*PrivateKey\s*=\s*([A-Za-z0-9+/]{43}=)', data)
     assert not keys or (project == 'amnezia6' and name == 'tests/fixtures/profile.conf' and
@@ -63,7 +69,7 @@ def project_files(project, directories):
     root = ROOT / 'projects' / project
     files = {}
     roots = set(directories.split())
-    docs = {'README.md', 'README-UPSTREAM.md', 'README-iOS4.md', 'BUILD.md', 'PORTING.md', 'PORT-IOS4.md', 'CYDIA-INSTALLER.md', 'THIRD_PARTY.md', 'PROVENANCE.json', 'SUPPORTED-BUILDS.json'}
+    docs = {'README.md', 'README-UPSTREAM.md', 'README-iOS4.md', 'BUILD.md', 'PORTING.md', 'PORT-IOS4.md', 'CYDIA-INSTALLER.md', 'THIRD_PARTY.md', 'PROVENANCE.json', 'SUPPORTED-BUILDS.json', 'TEMPLATE-AUDIT-1.3.3.md'}
     for path in sorted(root.rglob('*')):
         rel = path.relative_to(root).as_posix()
         if not path.is_file() or path.is_symlink() or not allowed(rel, project):
@@ -107,6 +113,9 @@ def write_archive(project, version, license_name, files, origin):
         'Use the included build scripts and project documentation; set their SDK,\n' +
         'linker and signer environment variables for your own development setup.\n' +
         'Source availability does not imply a reproducible or device-tested build.\n')
+    if project in {'perfoverlay', 'power-logger', 'device-access'}:
+        instructions = instructions.replace('sysroots/import stubs', 'sysroots/SDK import stubs')
+        instructions += 'Includes the project-owned minimal libSystem ABI declaration in build-support/.\n'
     if project == 'localsend':
         instructions += 'Rebuild HEIC dependencies with scripts/build_heic.py and scripts/build_heic_ios4.py;\nthen scripts/build_heic_ios4_runtime.py, scripts/build_ios4.py and packaging/package_cydia.py.\nThis kit corresponds to 5.7.4340, not an asserted match for the older 0.5.7 direct DEB.\n'
     if project == 'blastron':
@@ -136,6 +145,9 @@ def main():
     OUT.mkdir(exist_ok=True)
     for name in ('../bad.c', '/bad.c', 'build/bad.c', 'foo.mobileprovision', 'config.private.json', 'sdk/a.h'):
         assert not allowed(name, 'localsend'), name
+    for project, name in [('perfoverlay','libGPUTimeC.tbd'), ('power-logger','ios7-system-symbols.tbd'), ('device-access','libAccessC.tbd')]:
+        assert allowed('build-support/' + name, project)
+        assert not allowed('build-support/SDK.tbd', project)
     try:
         check('secret.c', b'-----BEGIN PRIVATE KEY-----\n' + b'A' * 40, 'localsend')
     except AssertionError:

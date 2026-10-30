@@ -9,7 +9,7 @@ ROOT = Path(__file__).resolve().parent
 sys.path.insert(0, str(ROOT))
 from package_deb import build_deb
 
-VERSION = '0.1.11'
+VERSION = '0.1.12'
 B = ROOT / 'build'
 STAGE = B / 'stage'
 CONTROL = B / 'control'
@@ -86,7 +86,8 @@ Rows:
   CPU   system load averaged across all cores (0-100%)
   CPU1/CPU2/... individual core load (0-100% each)
   RAM   active + inactive + wired memory / physical memory
-  GPU3D PowerVR 3D-core utilization, not the H.264 video decoder
+  GPU on  verified iOS7/A7 non-OFF residency; not shader occupancy
+  GPUdrv  driver snapshot on other platforms; not calibrated interval load
 
 FPS shows "idle" when fewer than one frame per second is composited.
 The overlay is visual only; touches pass through it. It loads only into

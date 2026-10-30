@@ -4,6 +4,7 @@
 
 static CFMutableDictionaryRef values;
 static int writes, fail_at;
+static CFArrayRef last_servers;
 
 static void *fake_create(CFAllocatorRef a, CFStringRef n, void *cb, void *ctx) {
     return (void *)CFRetain(values);
@@ -11,6 +12,10 @@ static void *fake_create(CFAllocatorRef a, CFStringRef n, void *cb, void *ctx) {
 static Boolean fake_add(void *store, CFStringRef key, CFPropertyListRef value) {
     assert(value != NULL);
     assert(CFStringHasPrefix(key, CFSTR("State:/Network/Service/com.mak.amnezia6/")));
+    if (CFStringHasSuffix(key, CFSTR("/DNS"))) {
+        if (last_servers) CFRelease(last_servers);
+        last_servers = CFRetain(CFDictionaryGetValue(value, CFSTR("ServerAddresses")));
+    }
     if (++writes == fail_at) return false;
     CFDictionarySetValue(store, key, value);
     return true;
@@ -32,10 +37,16 @@ int main(void) {
     a6_dns_down(&dns);
     assert(CFDictionaryGetCount(values) == 0 && !dns.store);
     a6_dns_down(&dns);
+    assert(a6_dns_up(&dns, "utun0", "10.0.0.2", "192.0.2.53,198.51.100.53") == 0);
+    assert(CFArrayGetCount(last_servers) == 2);
+    assert(CFEqual(CFArrayGetValueAtIndex(last_servers, 0), CFSTR("192.0.2.53")));
+    assert(CFEqual(CFArrayGetValueAtIndex(last_servers, 1), CFSTR("198.51.100.53")));
+    a6_dns_down(&dns);assert(CFDictionaryGetCount(values) == 0 && !dns.store);
     writes = 0; fail_at = 2;
-    assert(a6_dns_up(&dns, "utun0", "10.0.0.2", "10.0.0.1") == -1);
+    assert(a6_dns_up(&dns, "utun0", "10.0.0.2", "192.0.2.53,198.51.100.53") == -1);
+    assert(CFArrayGetCount(last_servers) == 2);
     assert(CFDictionaryGetCount(values) == 0 && !dns.store);
-    CFRelease(values);
+    CFRelease(last_servers);CFRelease(values);
     puts("DNS cleanup and partial-failure tests passed");
     return 0;
 }

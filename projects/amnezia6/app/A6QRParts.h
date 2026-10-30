@@ -2,6 +2,7 @@
 /* Official Amnezia QDataStream QR series; no profile is saved here. */
 @interface A6QRParts : NSObject {
     NSMutableDictionary *_parts;
+    NSMutableDictionary *_diagnostic;
     NSUInteger _total;
     NSTimeInterval _started;
 }
@@ -10,4 +11,5 @@
 - (BOOL)expireAtTime:(NSTimeInterval)now;
 - (NSUInteger)received;
 - (NSUInteger)total;
+- (NSDictionary *)diagnostic;
 @end

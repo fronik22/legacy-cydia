@@ -6,7 +6,7 @@
 #define A6_CONTROL_PATH "/var/tmp/amnezia6d.sock"
 #define A6_CONFIG_PATH "/var/mobile/Library/Preferences/Amnezia6/amnezia6.conf"
 #define A6_LOG_PATH "/var/log/amnezia6d.log"
-#define A6_VERSION "1.3.0"
+#define A6_VERSION "1.3.3"
 
 int a6_control_open(const char *path);
 void a6_control_close(int fd, const char *path);

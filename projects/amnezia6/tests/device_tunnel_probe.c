@@ -60,7 +60,8 @@ int main(int argc,char **argv){
  double limit=argc==3?atof(argv[2]):40;if(limit<1||limit>40)return 2;
  signal(SIGTERM,stop_now);signal(SIGINT,stop_now);signal(SIGALRM,stop_now);signal(SIGPIPE,SIG_IGN);alarm(50);
  a6_config_t cfg;char error[256];if(a6_config_load(argv[1],&cfg,error,sizeof error)){fprintf(stderr,"config rejected: %s\n",error);return 2;}
- snprintf(dns_server,sizeof dns_server,"%s",cfg.dns);char before_gateway[64]={0},after_gateway[64]={0};int before_route=a6_route_gateway(cfg.endpoint_host,before_gateway,sizeof before_gateway);
+ /* Probe the first resolver; the daemon installs the full list. */
+ snprintf(dns_server,sizeof dns_server,"%.*s",(int)strcspn(cfg.dns,","),cfg.dns);char before_gateway[64]={0},after_gateway[64]={0};int before_route=a6_route_gateway(cfg.endpoint_host,before_gateway,sizeof before_gateway);
  route_snapshot(cfg.endpoint_host);
  CFPropertyListRef before_dns=dns_snapshot();a6_tunnel_t t;a6_tunnel_init(&t);a6_tunnel_start(&t,&cfg,error,sizeof error);usleep(200000);route_snapshot(t.endpoint_ip);a6_config_wipe(&cfg);
  double started=CFAbsoluteTimeGetCurrent();int launched=0,connected=0;pthread_t thread;

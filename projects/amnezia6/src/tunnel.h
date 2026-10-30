@@ -45,8 +45,10 @@ typedef struct {
     uint64_t next_handshake_ms;
     uint64_t rekey_at_ms;
     uint64_t reject_at_ms;
+    uint64_t persistent_keepalive_at_ms, keepalive_at_ms, new_handshake_at_ms;
+    int keepalive_pending_again;
 
-    uint32_t handshake_attempts;
+    uint32_t handshake_attempts, max_handshake_attempts;
     uint32_t rekey_after_seconds;
     uint32_t reject_after_seconds;
 

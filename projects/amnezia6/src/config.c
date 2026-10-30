@@ -92,6 +92,25 @@ static int parse_ipv4(const char *s, char *out, size_t cap) {
     return 0;
 }
 
+/* Keep every requested resolver; cfg->dns is a canonical comma-separated list. */
+static int parse_dns(const char *value, char *out, size_t capacity) {
+    size_t used = strlen(out);const char *p = value;
+    while (*p && isspace((unsigned char)*p)) p++;
+    if (!*p) return -1;
+    for (;;) {
+        char token[INET_ADDRSTRLEN];struct in_addr address;size_t n = 0;
+        while (p[n] && p[n] != ',' && !isspace((unsigned char)p[n])) n++;
+        if (!n || n >= sizeof token) return -1;
+        memcpy(token, p, n);token[n] = 0;
+        if (inet_pton(AF_INET, token, &address) != 1 || used + n + (used != 0) >= capacity) return -1;
+        if (used) out[used++] = ',';
+        memcpy(out + used, token, n);used += n;out[used] = 0;p += n;
+        while (*p && isspace((unsigned char)*p)) p++;
+        if (!*p) return 0;
+        if (*p == ',') {p++;while (*p && isspace((unsigned char)*p)) p++;if (!*p) return -1;}
+    }
+}
+
 static int parse_endpoint(const char *s, char *host, size_t host_cap,
                           uint16_t *port) {
     const char *colon = strrchr(s, ':');
@@ -116,7 +135,7 @@ static int parse_endpoint(const char *s, char *host, size_t host_cap,
 static void config_defaults(a6_config_t *cfg) {
     memset(cfg, 0, sizeof *cfg);
     cfg->mtu = 1280;
-    cfg->persistent_keepalive = 25;
+    cfg->persistent_keepalive.min = cfg->persistent_keepalive.max = 25;
     cfg->h[0].min = cfg->h[0].max = 1;
     cfg->h[1].min = cfg->h[1].max = 2;
     cfg->h[2].min = cfg->h[2].max = 3;
@@ -124,7 +143,7 @@ static void config_defaults(a6_config_t *cfg) {
     cfg->rekey_after.min = cfg->rekey_after.max = 120;
     cfg->rekey_timeout.min = cfg->rekey_timeout.max = 5;
     cfg->reject_after.min = cfg->reject_after.max = 180;
-    cfg->keepalive_timeout.min = cfg->keepalive_timeout.max = 15;
+    cfg->keepalive_timeout.min = cfg->keepalive_timeout.max = 10;
     cfg->max_handshake_attempts.min = cfg->max_handshake_attempts.max = 18;
 }
 
@@ -145,12 +164,16 @@ static int apply_interface(a6_config_t *cfg, const char *key, const char *val,
             return -1;
         }
     } else if (!strcasecmp(key, "DNS")) {
+        if (strchr(val, '$')) {
+            set_error(err, err_cap, "unresolved DNS placeholder; import the Amnezia bundle with dns1/dns2 or enter IPv4 DNS values");
+            return -1;
+        }
         if (strchr(val, ':')) {
             set_error(err, err_cap, "IPv6 DNS is unsupported; use an IPv4 DNS address");
             return -1;
         }
-        if (parse_ipv4(val, cfg->dns, sizeof cfg->dns) != 0) {
-            set_error(err, err_cap, "DNS is not an IPv4 address");
+        if (parse_dns(val, cfg->dns, sizeof cfg->dns) != 0) {
+            set_error(err, err_cap, "DNS must be an IPv4 address list (comma or space separated, up to 63 characters)");
             return -1;
         }
     } else if (!strcasecmp(key, "MTU")) {
@@ -265,8 +288,9 @@ static int apply_peer(a6_config_t *cfg, const char *key, const char *val,
         /* Common dual-default exports remain usable; this engine tunnels IPv4 only. */
         if (!ipv4_default) { set_error(err, err_cap, "AllowedIPs needs 0.0.0.0/0; IPv6 is not protected"); return -1; }
     } else if (!strcasecmp(key, "PersistentKeepalive")) {
-        if (parse_u32(val, &cfg->persistent_keepalive) != 0) {
-            set_error(err, err_cap, "PersistentKeepalive is invalid");
+        if (!strcasecmp(val, "off")) cfg->persistent_keepalive.min = cfg->persistent_keepalive.max = 0;
+        else if (parse_range(val, &cfg->persistent_keepalive) != 0 || cfg->persistent_keepalive.max > 65535) {
+            set_error(err, err_cap, "PersistentKeepalive must be off, 0, or an ordered seconds range up to 65535");
             return -1;
         }
     }
@@ -286,6 +310,14 @@ static int config_read(FILE *f, a6_config_t *cfg, char *err, size_t err_cap) {
         return -1;
     }
     config_defaults(cfg);
+    /* Check every value first so incomplete templates cannot fail one field at a time. */
+    while (fgets(line, sizeof line, f)) {
+        char *s = trim(line), *eq;
+        if (!*s || *s == '#' || *s == ';') continue;
+        eq = strchr(s, '=');
+        if (eq && strchr(eq + 1, '$')) {set_error(err, err_cap, "unresolved template placeholder; export a complete client profile");goto done;}
+    }
+    if (ferror(f) || fseek(f, 0, SEEK_SET)) {set_error(err, err_cap, "cannot preflight configuration");goto done;}
 
     while (fgets(line, sizeof line, f)) {
         if (!strchr(line, '\n') && !feof(f)) {
@@ -360,6 +392,12 @@ static int config_read(FILE *f, a6_config_t *cfg, char *err, size_t err_cap) {
         }
     }
 
+    for (int i = 0; i < A6_SIG_COUNT; i++) if (cfg->signature_present[i]) {
+        uint8_t packet[A6_MAX_DATAGRAM];size_t size = 0;
+        int invalid = a6_signature_expand(cfg->signature[i], packet, sizeof packet, &size);
+        a6_wipe(packet, sizeof packet);
+        if (invalid) {set_error(err, err_cap, "I1-I5 signature syntax or expanded size is unsupported");goto done;}
+    }
     a6_x25519_keypair(cfg->public_key, cfg->private_key);
     ok = 0;
 

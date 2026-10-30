@@ -1,0 +1,32 @@
+{
+  "version": "0.1.12",
+  "target": "iPad4,5 / iOS7.1.2 / arm64 SpringBoard",
+  "selected_refresh_seconds": 1,
+  "visible_refresh_throttle_removed": true,
+  "paired_read_consumption": {
+    "positive_first": 53,
+    "immediate_second_zero": 53,
+    "first_render_sum": 270,
+    "second_render_sum": 0
+  },
+  "independent_counter": "IOReport GPU Performance States: non-OFF delta / all-state delta",
+  "steady_full_rate_gpu_powered_percent": 0.4973,
+  "completed_activity_histogram_percent": 0.67,
+  "state_partition_to_mach_ratio_range": [
+    0.99967,
+    1.000358
+  ],
+  "shader_busy_time_claimed": false,
+  "native_UI_samples": 10,
+  "native_UI_uses_cumulative_counter": true,
+  "native_UI_selected_interval_preserved": true,
+  "native_UI_last_gpu_powered_percent": 0.5041503356778826,
+  "unsupported_platform_fallback": "GPUdrv qualified driver snapshot; cumulative adapter gated to verified iOS7 arm64/A7 schema",
+  "armv7_new_counter_supported": false,
+  "arithmetic_negative_tests": "idle/partial/full/reset/monotonic/overflow/sentinel/clock calibration/invalid inputs passed",
+  "package_sha256": "9c3169ee2d6065428a70587962b3dacc8448a3adf72a43394ae0c037d07a4d03",
+  "packaged_readme_metric_labels_corrected": true,
+  "final_installed_payload_files_matched": 26,
+  "doc_only_finalization": "Executable payload unchanged; corrected packaged README and Settings label copied, all26 installed file SHA256 values match final DEB. No respring while user VPN active.",
+  "temporary_gpu_probes_removed": true
+}

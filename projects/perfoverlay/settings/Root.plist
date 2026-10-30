@@ -36,7 +36,7 @@
 			<key>label</key>
 			<string>Показатели</string>
 			<key>footerText</key>
-			<string>CPU и GPU — системная загрузка. CPU1, CPU2… показывают отдельные ядра.</string>
+			<string>CPU — системная загрузка. CPU1, CPU2… — отдельные ядра. GPU on — доля времени GPU вне состояния OFF, а не занятость шейдеров. GPUdrv — снимок драйвера при отсутствии независимого счётчика.</string>
 		</dict>
 		<dict>
 			<key>cell</key>
@@ -106,7 +106,7 @@
 			<key>cell</key>
 			<string>PSSwitchCell</string>
 			<key>label</key>
-			<string>GPU 3D</string>
+			<string>GPU</string>
 			<key>key</key>
 			<string>ShowGPU</string>
 			<key>defaults</key>
@@ -124,7 +124,7 @@
 			<key>label</key>
 			<string>Оформление</string>
 			<key>footerText</key>
-			<string>На неподвижном экране HUD перерисовывается не чаще раза в5 секунд. Сбор показателей и обновление при активном содержимом используют выбранный интервал.</string>
+			<string>Показатели обновляются с выбранным интервалом, без замедления на неподвижном экране.</string>
 		</dict>
 		<dict>
 			<key>cell</key>

@@ -4,7 +4,7 @@
 #import <UIKit/UIKit.h>
 #import <QuartzCore/QuartzCore.h>
 #import "HUDLayout.h"
-#import "HUDRenderPolicy.h"
+#import "GPUTime.h"
 #import "CPUCounters.h"
 #import "MetricPolicy.h"
 #include <CoreFoundation/CoreFoundation.h>
@@ -386,12 +386,13 @@ static BOOL MemoryUsage(double *usedMB, double *totalMB) {
     double _totalMB;
     BOOL _ramValid;
     int _gpu;
+    double _gpuAwake;
+    BOOL _gpuAwakeSource;
     BOOL _overlayVisible;
     BOOL _showFPS,_showCPU,_showCores,_showRAM,_showGPU;
     int _corner;
     CGFloat _fontSize,_opacity;
     NSTimeInterval _sampleInterval;
-    CFTimeInterval _lastTextRender;
 }
 + (PerfOverlay *)shared;
 - (void)start;
@@ -638,7 +639,7 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
 }
 
 - (void)stopSampling {
-    _lastTextRender=0;
+    PerfGPUAwakeReset();
     if (_link) _link.paused = YES;
     if (_timer) {
         [_timer invalidate];
@@ -669,12 +670,12 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
     if (!_window) return;
     [self updateOrientation]; // Existing one-second sampler covers missed/older OS notifications.
 
-    if (!_globalFPSTried) {
+    if (_showFPS && !_globalFPSTried) {
         _globalFPSTried = YES;
         _useGlobalFPS = LoadGlobalFrameCounter();
     }
     if (_link) _link.paused = !_showFPS || _useGlobalFPS;
-    if (_useGlobalFPS) {
+    if (_showFPS && _useGlobalFPS) {
         uint32_t counter = 0;
         if (!ReadGlobalFrameCounter(&counter)) {
             // Only a real API/port failure may switch to the display link.
@@ -741,7 +742,9 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
         _ramValid = YES;
     }
 
-    int gpu = _showGPU?GPUUtilization():-1;
+    _gpuAwake=_showGPU?PerfGPUAwakePercent():-1;
+    _gpuAwakeSource=_showGPU&&PerfGPUAwakeAvailable();
+    int gpu = _showGPU&&!_gpuAwakeSource?GPUUtilization():-1;
     _gpu = gpu;
 
     NSMutableArray *rows=[NSMutableArray array];
@@ -750,23 +753,24 @@ static void PerfOverlaySettingsNotification(CFNotificationCenterRef center,void 
     if(_showCores)for(unsigned int i=0;i<gCoreCount;i++)
         [rows addObject:gCoreUsage[i]>=0?[NSString stringWithFormat:@"CPU%u %2.0f%%",i+1,gCoreUsage[i]]:[NSString stringWithFormat:@"CPU%u --",i+1]];
     if(_showRAM)[rows addObject:_ramValid?[NSString stringWithFormat:@"RAM  %3.0f/%3.0fM",_usedMB,_totalMB]:@"RAM  --"];
-    if(_showGPU)[rows addObject:_gpu>=0?[NSString stringWithFormat:@"GPU3D %2d%%",_gpu]:@"GPU3D n/a"];
+    if(_showGPU){
+        if(_gpuAwakeSource)[rows addObject:_gpuAwake>=0?[NSString stringWithFormat:@"GPU on %.1f%%",_gpuAwake]:@"GPU on --"];
+        else [rows addObject:_gpu>=0?[NSString stringWithFormat:@"GPUdrv %2d%%",_gpu]:@"GPUdrv n/a"];
+    }
     _panel.hidden=rows.count==0;
     NSString *text=[rows componentsJoinedByString:@"\n"];
-    CFTimeInterval now=CACurrentMediaTime();
-    if(PerfHUDRenderDue(now,_lastTextRender,_sampleInterval,_useGlobalFPS,_fpsValid,_fps,![_label.text isEqualToString:text])){
+    if(![_label.text isEqualToString:text]){
         _label.text=text;
         [self layoutPanel];
-        _lastTextRender=now;
     }
 
     NSMutableArray *cores=[NSMutableArray array];
     if(_showCores)for(unsigned int i=0;i<gCoreCount;i++)[cores addObject:gCoreUsage[i]>=0?[NSString stringWithFormat:@"%.1f",gCoreUsage[i]]:@"--"];
-    PLog(@"tick fps=%@ src=%@ cpu=%@ cores=%@ ram=%.0f/%.0f gpu=%d",
+    PLog(@"tick fps=%@ src=%@ cpu=%@ cores=%@ ram=%.0f/%.0f gpu=%d awake=%.3f cumulative=%d",
          _fpsValid ? [NSString stringWithFormat:@"%.1f", _fps] : @"--",
          _useGlobalFPS ? @"global" : @"displaylink",
          _cpuValid ? [NSString stringWithFormat:@"%.1f", _cpu] : @"--",
-         [cores componentsJoinedByString:@","], _usedMB, _totalMB, _gpu);
+         [cores componentsJoinedByString:@","], _usedMB, _totalMB, _gpu, _gpuAwake, _gpuAwakeSource);
 }
 
 @end

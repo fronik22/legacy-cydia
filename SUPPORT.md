@@ -20,13 +20,13 @@ apps, profiles and saves were preserved. HUD visibility is restored to its as-fo
 
 ## Package matrix
 
-### Amnezia6 1.3.0 — `com.mak.amnezia6`
+### Amnezia6 1.3.3 — `com.mak.amnezia6`
 
 Declared: `firmware (>= 4.3), firmware (<< 8.0), mobilesubstrate`.
 
 | Check | iOS 6.1.3 | iOS 7.1.2 |
 |---|---|---|
-| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.3.0 over 1.2.1) |
+| Package install / upgrade via `dpkg -i` | Verified (1.2.0; 1.2.1 not installed) | Verified (1.3.3 over 1.3.2) |
 | App bundle, daemon and CLI present | Verified | Verified |
 | Root daemon starts under launchd | Verified | Verified |
 | Control socket permissions | Not re-run | Verified `0660 root:mobile` |
@@ -55,14 +55,18 @@ normal daemon stayed idle and the existing profile was preserved byte-for-byte.
 The existing profile is not shipped in the package. Upgrading preserves
 `/var/mobile/Library/Preferences/Amnezia6/amnezia6.conf`.
 
-### Performance Overlay 0.1.11 — `local.perfoverlay`
+1.3.1 adds nativeiOS7AVCaptureMetadataOutput QR detection/continuousautofocus, retaining guardedquirc fallback forolderOS. Valid padded/unpadded2parttails (= and==) pass host/native tests; currentofficialsenderusesOmitTrailingEquals, so padding is compatibility support, not a provenuserrootcause. A confirmed completion-error loop is fixed: invalid/unsupported completedprofiles stopcamera and keep theerror visible afterfurthercallbacks. Last-scan diagnostic is0600/<8KiB andcontainsfixedcodes/counts/header lengths only; noQR/config/keys/endpoints. Native capture setup/lifecycle/replay/sticky-error tests pass and profiles are unchanged. Actual user scans reached 2/2; the remaining errors were DNS template expansion and then unsupported keepalive ranges. See notes/QR-OPTICAL-FIX.md.
+
+1.3.2 expands official DNS placeholders from bundle metadata and preserves the full ordered IPv4 DNS list. 1.3.3 accepts `PersistentKeepalive` as off/0, scalar or ordered range (up to 65535 seconds), applies sampled persistent/delayed-reply/handshake timers, samples handshake-attempt ranges per round, and accepts authenticated padded keepalives. Incomplete templates and unsupported I1–I5 signature syntax fail at import. Host regressions cover the full current native AWG3.1/WireGuard templates, authenticated versus bad-tag/replayed traffic, timer cancellation and overflow. This is not an exhaustive protocol-conformance claim. Metadata-only custom MTU overrides and IPv6 remain unsupported. The user confirmed the same physical animated QR opens the profile editor in 1.3.3. Real authenticated VPN traffic was subsequently observed after user activity; no automated server-compatibility matrix was run. Exact final device-test results are recorded in the versioned Amnezia test receipts.
+
+### Performance Overlay 0.1.12 — `local.perfoverlay`
 
 Declared: `firmware (>= 4.3), firmware (<< 10.0), mobilesubstrate,
 preferenceloader`.
 
 | Check | iOS 6.1.3 | iOS 7.1.2 |
 |---|---|---|
-| Install | Verified (0.1.8) | Verified (0.1.11 over 0.1.10) |
+| Install | Verified (0.1.8) | Verified (0.1.12 over 0.1.11) |
 | Universal dylib | armv7 only in 0.1.8 | armv7 + arm64 |
 | Hook loads into SpringBoard | Verified | Verified |
 | SpringBoard stable after respawn | Verified | Verified, no crash report |
@@ -79,7 +83,7 @@ confirmed".
 
 Controlled native A/B on7.1.2 (2026-10-29) reproduced Settings28–33% AGX driver snapshot with HUDON/~1 redraw per second, and0% with HUDOFF/no new frames. Home withoutHUD still rendered~10fps/14–17%; exactHome animation was not isolated. RAM531MiB includes79MiB inactive;444MiB free, no pageout growth during the short test. The driver percentage is not calibrated peak GPU power. See notes/HUD-LOAD-DIAGNOSIS.md; no metric formula or package version changed.
 
-0.1.11 fixes the observer loop with changed-text-only assignment and at mostone redraw/5s when global frame activity is no greater than expected HUD-own activity. Sampling continues at the selected interval; active content/fallback keep normal refresh. NativeSettings0.993→0.192frames/s, mean AGX snapshot29.82→6.28%; activeHome10.055frames/s. BriefGPU peaks remain; no battery-watt calibration or realgame benchmark. A tight-window experiment had noGPU improvement and was discarded. Original geometry retained. Installed dylib/Settings metadata match the final package and HUDOFF/Home state was restored. See projects/perfoverlay/verification-idle-ios7.json.
+**Correction:0.1.11 idlethrottling is rejected and removed in0.1.12.** It reduced visible refresh; the rawGPUmeans were not calibrated physicalsavings. NativepairedAGXpropertyreadsconsume counters:53/53positivefirstqueriesimmediatelyzero onsecond. IndependentIOReport states aremonotonic andsumtoMachtime(.99967–1.00036ratio). Same1HzHUD has~0.4973%non-OFFresidency; completedactivityhist~0.6700% hasdifferentboundarysemantics. NewiOS7arm64/A7 backend shows **GPU on** (powered/non-OFFtime, notshaderoccupancy). Existingselectedrefresh andoriginalgeometry retained; math/overflow/reset/timebase, nativeUID501 andSpringBoardUItests pass. Otherplatforms fall back to **GPUdrv** qualifiedsnapshots; 32bitnewbackend deliberatelydisabled afterprobeunavailable. NoGPUshaderrewrite needed/proven. See notes/HUD-CAUSAL-DIAGNOSIS.md and verification-cumulative-ios7.json.
 
 Detailed native VM64 attribution:548.41MiB used =177.56anonymous+256.35occupiedfile-backed+114.50wired, with427.12free. LargestRSS SpringBoard80.13/kernel79.73/Preferences17.57/CommCenter15.41/backboardd15.24MiB; ownVPNdaemon0.31MiB and PowerLogger1.61MiB. RSS includes shared mappings; do not sum it as global ownership. Cached iOS6 same-formula173.71MiB is from a different iPad2/512MiB versus currentmini2/1GiB; no controlledOS-only delta claimed. See notes/RAM-IOS7-ATTRIBUTION.md.
 

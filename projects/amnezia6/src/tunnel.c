@@ -11,6 +11,7 @@
 #include <netdb.h>
 #include <netinet/in.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <sys/socket.h>
 #include <unistd.h>
@@ -92,6 +93,26 @@ static int send_packet(a6_tunnel_t *t, const uint8_t *packet, size_t len) {
     return 0;
 }
 
+/* libc's cached CSPRNG avoids a /dev/urandom read for every packet timer reset. */
+static uint32_t timer_seconds(a6_range range) {
+    if (range.max <= range.min) return range.min;
+    return range.min + (uint32_t)(((uint64_t)arc4random() * ((uint64_t)range.max - range.min + 1)) >> 32);
+}
+static uint64_t timer_deadline(uint64_t now, uint32_t seconds) {
+    uint64_t delay = (uint64_t)seconds * 1000;
+    return delay > UINT64_MAX - now ? UINT64_MAX : now + delay;
+}
+static void authenticated_traversal(a6_tunnel_t *t, uint64_t now, int sent) {
+    if (sent) {t->keepalive_at_ms = 0;t->keepalive_pending_again = 0;}
+    else t->new_handshake_at_ms = 0;
+    t->persistent_keepalive_at_ms = t->cfg.persistent_keepalive.max ?
+        timer_deadline(now, timer_seconds(t->cfg.persistent_keepalive)) : 0;
+}
+static void schedule_reply_keepalive(a6_tunnel_t *t, uint64_t now) {
+    uint32_t seconds = t->cfg.keepalive_timeout.max ? timer_seconds(t->cfg.keepalive_timeout) : 10;
+    t->keepalive_at_ms = timer_deadline(now, seconds);
+}
+
 static int send_obfuscation(a6_tunnel_t *t) {
     uint8_t buf[A6_MAX_DATAGRAM];
     int i;
@@ -116,8 +137,7 @@ static int send_obfuscation(a6_tunnel_t *t) {
 }
 
 static void schedule_handshake(a6_tunnel_t *t) {
-    uint32_t seconds = a6_random_range(t->cfg.rekey_timeout.min,
-                                      t->cfg.rekey_timeout.max);
+    uint32_t seconds = timer_seconds(t->cfg.rekey_timeout);
     if (seconds < 1) seconds = 1;
     uint64_t now = a6_now_ms();
     if (t->next_handshake_ms < now + 200) {
@@ -130,6 +150,10 @@ static int send_handshake(a6_tunnel_t *t) {
     size_t len = 0;
     uint64_t now = a6_now_ms();
 
+    if (!t->handshake_attempts) {
+    t->max_handshake_attempts = timer_seconds(t->cfg.max_handshake_attempts);
+    if (!t->max_handshake_attempts) t->max_handshake_attempts = 18;
+    }
     /* Failed sends also consume an attempt and wait for the retry deadline. */
     t->handshake_attempts++;
     schedule_handshake(t);
@@ -148,6 +172,7 @@ static int send_handshake(a6_tunnel_t *t) {
     }
     now = a6_now_ms();
     t->last_initiation_ms = now;
+    authenticated_traversal(t, now, 1);
     if (t->handshake_attempts == 1) {
         a6_log("handshake sent to %s:%u (attempt %u)",
                t->endpoint_ip, t->cfg.endpoint_port, t->handshake_attempts);
@@ -156,10 +181,8 @@ static int send_handshake(a6_tunnel_t *t) {
 }
 
 static void update_rekey_deadlines(a6_tunnel_t *t, uint64_t now) {
-    t->rekey_after_seconds = a6_random_range(t->cfg.rekey_after.min,
-                                             t->cfg.rekey_after.max);
-    t->reject_after_seconds = a6_random_range(t->cfg.reject_after.min,
-                                              t->cfg.reject_after.max);
+    t->rekey_after_seconds = timer_seconds(t->cfg.rekey_after);
+    t->reject_after_seconds = timer_seconds(t->cfg.reject_after);
     if (!t->rekey_after_seconds) t->rekey_after_seconds = 120;
     if (!t->reject_after_seconds) t->reject_after_seconds = 180;
     t->rekey_at_ms = now + (uint64_t)t->rekey_after_seconds * 1000;
@@ -227,6 +250,7 @@ int a6_tunnel_start(a6_tunnel_t *t, const a6_config_t *cfg,
     t->routes_up = 0;
     t->dns_up = 0;
     t->handshake_attempts = 0;
+    t->persistent_keepalive_at_ms = t->keepalive_at_ms = t->new_handshake_at_ms = 0;t->keepalive_pending_again = 0;
     t->tx_bytes = t->rx_bytes = 0;
     t->tx_packets = t->rx_packets = 0;
     a6_session_init(&t->session, &t->cfg);
@@ -347,6 +371,7 @@ void a6_tunnel_handle_udp(a6_tunnel_t *t) {
             t->handshake_attempts = 0;
             t->error[0] = 0;
             update_rekey_deadlines(t, now);
+            authenticated_traversal(t, now, 0);
             a6_log("connected to %s:%u via %s",
                    t->endpoint_ip, t->cfg.endpoint_port, t->ifname);
         }
@@ -359,7 +384,10 @@ void a6_tunnel_handle_udp(a6_tunnel_t *t) {
                               inner + 4, sizeof inner - 4, &ip_len) != 0)
             return;
         t->last_rx_ms = a6_now_ms();
+        authenticated_traversal(t, t->last_rx_ms, 0);
         if (ip_len == 0) return; /* keepalive */
+        if (!t->keepalive_at_ms) schedule_reply_keepalive(t, t->last_rx_ms);
+        else t->keepalive_pending_again = 1;
         t->rx_bytes += ip_len;
         t->rx_packets++;
         {
@@ -395,6 +423,12 @@ void a6_tunnel_handle_utun(a6_tunnel_t *t) {
         return;
     if (send_packet(t, packet, len) != 0) { reconnect_later(t, t->error); return; }
     t->last_tx_ms = a6_now_ms();
+    authenticated_traversal(t, t->last_tx_ms, 1);
+    if (!t->new_handshake_at_ms) {
+        uint32_t silence = t->cfg.keepalive_timeout.max ? t->cfg.keepalive_timeout.max : 10;
+        uint32_t retry = t->cfg.rekey_timeout.max ? timer_seconds(t->cfg.rekey_timeout) : 5;
+        t->new_handshake_at_ms = timer_deadline(timer_deadline(t->last_tx_ms, silence), retry);
+    }
     t->tx_bytes += (uint64_t)got - 4;
     t->tx_packets++;
 }
@@ -407,6 +441,7 @@ static int send_keepalive(a6_tunnel_t *t) {
         return -1;
     if (send_packet(t, packet, len) != 0) return -1;
     t->last_tx_ms = a6_now_ms();
+    authenticated_traversal(t, t->last_tx_ms, 1);
     return 0;
 }
 
@@ -436,7 +471,7 @@ void a6_tunnel_timers(a6_tunnel_t *t) {
         }
     }
     if (t->state == A6_STATE_CONNECTING) {
-        if ((t->handshake_attempts >= t->cfg.max_handshake_attempts.max &&
+        if ((t->handshake_attempts >= t->max_handshake_attempts &&
              now >= t->next_handshake_ms) || now >= t->reject_at_ms) {
             reconnect_later(t, "handshake timed out");
             return;
@@ -449,10 +484,14 @@ void a6_tunnel_timers(a6_tunnel_t *t) {
         reconnect_later(t, "rekey timed out");
         return;
     }
+    if (t->new_handshake_at_ms && now >= t->new_handshake_at_ms) {
+        t->new_handshake_at_ms = 0;t->rekey_at_ms = now;
+        if (!t->session.pending.active) t->handshake_attempts = 0;
+    }
     /* Both a failed send and an exhausted attempt round must honor their deadline. */
     if (now >= t->rekey_at_ms && now >= t->next_handshake_ms) {
         if (t->session.pending.active &&
-            t->handshake_attempts >= t->cfg.max_handshake_attempts.max) {
+            t->handshake_attempts >= t->max_handshake_attempts) {
             t->session.pending.active = 0;
             t->handshake_attempts = 0;
             t->next_handshake_ms = now + 30000;
@@ -462,8 +501,12 @@ void a6_tunnel_timers(a6_tunnel_t *t) {
             if (send_handshake(t) != 0) { reconnect_later(t, t->error); return; }
         }
     }
-    if (t->cfg.persistent_keepalive &&
-        now - t->last_tx_ms >= (uint64_t)t->cfg.persistent_keepalive * 1000) {
+    if (t->keepalive_at_ms && now >= t->keepalive_at_ms) {
+        int again = t->keepalive_pending_again;
+        if (send_keepalive(t) != 0) {reconnect_later(t, t->error);return;}
+        if (again) schedule_reply_keepalive(t, now);
+    }
+    if (t->cfg.persistent_keepalive.max && now >= t->persistent_keepalive_at_ms) {
         if (send_keepalive(t) != 0) reconnect_later(t, t->error);
     }
 }

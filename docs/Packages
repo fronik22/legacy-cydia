@@ -1,6 +1,6 @@
 Package: com.mak.amnezia6
 Name: Amnezia6
-Version: 1.3.0
+Version: 1.3.3
 Architecture: iphoneos-arm
 Description: Lightweight AmneziaWG client for iOS 4-7
  A small native AmneziaWG client: a root daemon owns the UTUN device,
@@ -14,18 +14,18 @@ Section: Networking
 Priority: optional
 Maintainer: mak
 Author: mak
-Installed-Size: 1136
+Installed-Size: 1154
 Homepage: https://github.com/fronik22/legacy-cydia
 Icon: https://fronik22.github.io/legacy-cydia/assets/amnezia6.png
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/com.mak.amnezia6.html
-Filename: ./debs/com.mak.amnezia6_1.3.0_iphoneos-arm.deb
-Size: 795464
-MD5sum: 9a847882e444b2968f9fd2aac88ea761
-SHA256: 1bca33f1f5946d963f8c25b5699769703a5ff1d683a9d534408db43119d43084
+Filename: ./debs/com.mak.amnezia6_1.3.3_iphoneos-arm.deb
+Size: 800582
+MD5sum: 92079a1f144a835c69571d4537ab362f
+SHA256: 8e40ec9f34c048187669570e5ad811a51a91756e0d77a383a5ae7f51abc8310e
 
 Package: local.perfoverlay
 Name: Performance Overlay
-Version: 0.1.11
+Version: 0.1.12
 Architecture: iphoneos-arm
 Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
  Shows live system counters in a small non-interactive overlay.
@@ -33,13 +33,13 @@ Description: FPS / CPU / RAM / GPU HUD for iOS 4-9.
 Depends: mobilesubstrate, preferenceloader, firmware (>= 4.3), firmware (<< 10.0)
 Section: Tweaks
 Maintainer: Local
-Installed-Size: 369
+Installed-Size: 371
 Homepage: https://github.com/fronik22/legacy-cydia
 Depiction: https://fronik22.github.io/legacy-cydia/depictions/local.perfoverlay.html
-Filename: ./debs/local.perfoverlay_0.1.11_iphoneos-arm.deb
-Size: 66584
-MD5sum: de95217634f791eb3109c0364afc7e83
-SHA256: c84e3ff793eac0cef8ef2dee4f831671e12ef8cb6338d56f9d512d34885a3ca6
+Filename: ./debs/local.perfoverlay_0.1.12_iphoneos-arm.deb
+Size: 71162
+MD5sum: 93b9836f5e8f5f27d663259a0aed8eef
+SHA256: 9c3169ee2d6065428a70587962b3dacc8448a3adf72a43394ae0c037d07a4d03
 
 Package: local.legacypower
 Name: Power Logger

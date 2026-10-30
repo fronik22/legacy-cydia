@@ -48,10 +48,10 @@ for archive in ("control.tar.gz", "data.tar.gz"):
             assert tar.extractfile("./Library/MobileSubstrate/DynamicLibraries/A6Status.dylib").read() == (path.parent / "A6Status.dylib").read_bytes()
             assert "./Library/MobileSubstrate/DynamicLibraries/A6Status.plist" in names
             info=plistlib.loads(tar.extractfile("./Applications/Amnezia6.app/Info.plist").read())
-            assert info["CFBundleVersion"]=="1.3.0" and info["MinimumOSVersion"]=="4.3"
+            assert info["CFBundleVersion"]=="1.3.3" and info["MinimumOSVersion"]=="4.3"
             assert "vpn" in info["CFBundleURLTypes"][0]["CFBundleURLSchemes"]
             assert info["CFBundleDocumentTypes"] and info["NSCameraUsageDescription"]
-            assert not any(n.endswith("profiles.plist") for n in names)
+            assert not any(n.endswith("profiles.plist") or n.endswith("qr-last-scan.plist") for n in names)
             for license in ("quirc-LICENSE","Senko-LICENSE","cJSON-LICENSE","WireGuard-MIT.txt"):
                 assert "./usr/share/doc/com.mak.amnezia6/"+license in names
 

@@ -1,7 +1,15 @@
-# Legacy Cydia — 2026-10-29
+# Legacy Cydia — current handoff
 
 Public source: https://fronik22.github.io/legacy-cydia/
 GitHub: https://github.com/fronik22/legacy-cydia
+
+## Current state — 2026-10-30 (supersedes historical notes below)
+
+- Write target: iPad mini2 / iPad4,5 / iOS 7.1.2 only. Preserve profiles, account hooks and app data. Do not modify iPad2/iOS6.
+- HUD 0.1.12 is installed. Selected refresh is restored; the 0.1.11 idle cap is withdrawn. Old AGX snapshot reads consume shared counters, so the earlier 30% reading and claimed savings were not wall-time utilization. Verified cumulative A7 state residency shows about 0.50% non-OFF time at the same 1 Hz HUD refresh. `GPU on` means powered-time, not shader occupancy; unsupported platforms retain qualified `GPUdrv` snapshots. See notes/HUD-CAUSAL-DIAGNOSIS.md, notes/GPU-COUNTER-SEMANTICS.md and projects/perfoverlay/verification-cumulative-ios7.json.
+- Amnezia 1.3.3 is installed. The same physical animated QR now opens the editor (user confirmed). Fixes include native iOS7 scanning/sticky errors, DNS template expansion/lists, current AWG3.1 keepalive ranges, timer consumers and authenticated padded keepalives. Full current native templates, generated two-part import, native timer/profile/protocol tests and ASAN/UBSan pass. Real authenticated VPN traffic was observed after user activity; preserve the newly changed profile/connection. Read notes/QR-OPTICAL-FIX.md and versioned test receipts before repeating investigation.
+- Current release artifacts: Amnezia 1.3.3 and HUD 0.1.12, matching source kits/catalog; 13-package validation and clean extracted-source tests pass. Publication verification receipt is saved separately at `private/published-verification-20261030.json` after live checks. Source kits also now include three project-owned minimal libSystem ABI declarations; Apple SDK stubs remain excluded.
+- GPU temporary probes and shared temporary UI helpers were backed up and removed after QR tests. Permanent device-access helper remains installed. HUD stays enabled; no redundant respring or VPN action during final doc-only package synchronization. All26 installed HUD payload files match the final DEB. Older-device optical tests and exhaustive protocol conformance remain unchecked.
 
 ## Published baseline
 
@@ -38,3 +46,13 @@ Current release artifacts: Amnezia1.3.0 SHA2561bca33f1f5946d963f8c25b5699769703a
 HUD0.1.11 installed on mini2/7.1.2. Original geometry retained; tight-window experiment discarded after noGPU improvement. Changed text only, idle redraw caponce/5s while sampling continues at configured interval; active content retains normal refresh. Native Settings frames0.993→0.192/s, mean driverGPU29.82→6.28%, periodicpeak46%; Home active10.055fps.11-case policy self-check/package tests pass. Final installed dylib and Settings metadata match package; restored as-foundHUDOFF/Home and removed all ownprobes. Raw private/hud-render-20261029; verification-idle-ios7.json. GPU percentages are driver snapshots, no calibrated watts/peak capacity. New behavior on otherOS hardware/game sessions remains untested.
 
 RAM native VM64 identity reconciles548.41MiB as177.56anonymous+256.35occupiedfile-backed+114.50wired,427.12free. LargestRSS SpringBoard80/kernel80/Settings18MiB; no500MiB process. VPNdaemon0.31MiB, PowerLogger1.61MiB. Cached iOS6 same-formula174MiB on a different512MiB iPad2 is not a controlled OS comparison. See notes/RAM-IOS7-ATTRIBUTION.md. No service disabled or memory purged; no iOS6 device operation.
+
+## Important correction: GPU counter semantics / refresh rollback
+
+User rejected0.1.11 throttling.0.1.12 is installed restoringselectedrefresh; no acceptedGPU-costrepairyet. Nativepairedreads prove PerformanceStatistics is consumptive (53/53positivefirstsamplesimmediatelyzeroonsecond; rendercountsum270→0). EarlierrawpercentmeanscannotquantifywalltimeGPUutilizationorphysicalGPU/batterysavings. Equal-ratebasicrendercontrolslooksimilar, noMetal/64bitrewrite justification. IndependentIOReportreader in cachedPowerlogframeworks is beingvalidated. Read notes/HUD-CAUSAL-DIAGNOSIS.md beforecontinuing; do not reapplythrottling or replaceitwithunvalidatedaveraging.
+
+## Final correction and QR follow-up —2026-10-29
+
+HUD0.1.12 installed: userselectedrefresh restored, noidlecap. 53/53 pairedAGXreads consumedpositivecounters; do not interpretoldraw30%aswallload oroldthrottlemeansasGPU/batterysavings. IndependentIOReportGPUPerformanceStates prove~0.4973%non-OFFtime atsame1HzHUD; totalpartition/Machratio.99967–1.00036. NewUI explicitlyGPUon(poweredtime, notshaderoccupancy), knowniOS7arm64/A7schemaonly; otherplatformsGPUdrvqualifiedsnapshot. ActualSpringBoard10sampletrace usesnewcounter atselected1s,lastsettled.504%; math/nativeUID501/reset/packagechecks pass. Armv7newprivatebackend unavailable anddeliberatelygatedoff. NoMetal/64bitrewrite; alreadyarm64, Metalneeds8. GPUTime.h +ownedminimalUnwindstub shippedwithsource.
+
+Amnezia1.3.1 installed, source/debhashes in TEST-RESULTS-1.3.1.json. Native7metadataQRprimary+AF,legacyfallback, strictpadded/unpaddedtails, confirmedhiddencompletionerrorloop fixedwithstickycamera-stoperror. Userreports1/2loop; actualsender rootcause/opticalverification stillpendingfreshscan. Privacy-safe qr-last-scan.plist under Preferences/Amnezia6 storesonlyfixedcodes/counts/sizes,0600bounded. Syntheticdiagcleared; appcleanlyrestartedmain; no profile/key/networkactivationchanges. Optionaluserquestionasksfreshscanoutcome; noansweryet. Preserveexisting /var/tmp/hud-causal/{RunasMobile,Launch,hud-control} untilretest/cleanup. Readnotes/QR-OPTICAL-FIX.md andHUD-CAUSAL-DIAGNOSIS.md; don'trepeatrejectedthrottling orclaimsyntheticcamera replayisopticalproof.

@@ -9,15 +9,15 @@
 <p><strong>FPS / CPU / RAM / GPU HUD for iOS 4.3–9</strong></p>
 <p>FPS / CPU / RAM / GPU HUD for iOS 4-9.</p>
 <p>Shows live system counters in a small non-interactive overlay. Includes an NCSettings toggle on iOS 5/6.</p>
-<p><span class="badge">0.1.11 avoids redundant text assignments and caps redraws on static screens toonce/5s; sampling and active-content refresh keep the chosen interval. Native7.1.2 Settings frames0.993→0.192/s; mean AGX driver snapshot29.82→6.28% with brief peaks. Original geometry/rotation and metrics retained. RAM548MiB comprises178anonymous+256occupiedfile-backed+114wired; no500MiB process. OtherOS hardware/game/battery savings untested.</span></p>
+<p><span class="badge">0.1.12 restores selected refresh; removes rejected idle slowdown. AGX point-stat reads consume counters, so earlier30%means did not establish wall-time load. Independent same1HzHUD GPU performance-state residency is~0.50%. New verifiediOS7 arm64/A7 backend shows GPU on (non-OFF time), not shader occupancy; other platforms show qualified GPUdrv snapshots. Counter delta/clock/overflow guards, UID501/nativeUI tests pass. No Metal rewrite or rootdaemon.</span></p>
 <h2>Details</h2>
 <ul>
 <li>Package: <code>local.perfoverlay</code></li>
-<li>Version: <code>0.1.11</code></li>
+<li>Version: <code>0.1.12</code></li>
 <li>Section: Tweaks</li>
 <li>Requires: <code>mobilesubstrate, preferenceloader, firmware (&gt;= 4.3), firmware (&lt;&lt; 10.0)</code></li>
 </ul>
 <h2>Source</h2>
 <p><code>projects/perfoverlay</code> — license: GPL-3.0</p>
-<p><a href="https://github.com/fronik22/legacy-cydia/raw/refs/heads/main/source-archives/perfoverlay-0.1.11-source.zip">Corresponding source ZIP</a></p>
+<p><a href="https://github.com/fronik22/legacy-cydia/raw/refs/heads/main/source-archives/perfoverlay-0.1.12-source.zip">Corresponding source ZIP</a></p>
 </body></html>

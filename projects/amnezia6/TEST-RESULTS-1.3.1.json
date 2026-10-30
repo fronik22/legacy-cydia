@@ -1,0 +1,21 @@
+{
+  "version": "1.3.1",
+  "date": "2026-10-29",
+  "host_regressions": "make test passed",
+  "package": "Debian archive paths/payload/modes/licenses/private profile and diagnostic exclusion passed",
+  "package_sha256": "40b838bf0a2ed4a48a2ff3148c4e4080db86844f965c1c2ed51ff37119b2255d",
+  "installed_app_sha256": "5c6ef094076a90de06509325fe6c6986568416f568f3fcd19d52b4a627e454c7",
+  "binary": "armv7, minimum iOS4.3, LC_UNIXTHREAD, QR metadata type weak imported and runtime class checked",
+  "device": "iPad4,5 iOS7.1.2/11D257",
+  "native_capture": "system QR metadata available/configured, rear1280x720, continuous autofocus2; production quirc delegate disabled in native mode",
+  "device_regression": "27 diagnostic-only physical sample callbacks; native metadata objects + BGRA callback replay -> four-part assembly -> review, lifecycle stop/restart passed",
+  "padded_two_part": "canonical padded/unpadded compressed two-part tails with = and ==, reverse order, duplicate and malformed/excess pad passed on host and actual iOS7 runtime",
+  "completion_errors": "completed rejected profile stops camera; further single/multiple metadata callbacks cannot overwrite error; no review/save",
+  "private_diagnostic": "fixed codes/capped counts/header indexes/lengths only, mode0600/<8KiB verified, max1Hz/120 periodic writes plus final",
+  "profile_hashes_unchanged": true,
+  "daemon": "idle tx0 rx0",
+  "clean_relaunch_helpers_removed": true,
+  "optical_animated_scan": "Fresh actual user sender completed2/2:23 decoded frames/21 duplicates; profile validation rejectedDNS, confirmed by bounded diagnostic",
+  "sender_root_cause": "Remaining observed failure is DNS validation after actual optical assembly;1.3.2 adds official bundle DNS token expansion",
+  "older_os_camera": "iOS4/5/6 hardware not tested; quirc synthetic callback fallback runs on actual iOS7"
+}

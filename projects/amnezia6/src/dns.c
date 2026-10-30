@@ -1,5 +1,5 @@
 /*
- * Push the tunnel DNS server into the iOS dynamic store.
+ * Push the tunnel DNS servers into the iOS dynamic store.
  *
  * SCDynamicStore is public on macOS but marked unavailable in the iOS SDK.
  * iOS still exports the symbols, so resolve them at runtime instead of
@@ -74,7 +74,9 @@ static CFArrayRef one_string_array(const char *value) {
 static CFMutableDictionaryRef dns_dict(const char *ifname, const char *server) {
     CFMutableDictionaryRef d = CFDictionaryCreateMutable(NULL, 0,
         &kCFTypeDictionaryKeyCallBacks, &kCFTypeDictionaryValueCallBacks);
-    CFArrayRef addrs = one_string_array(server);
+    CFStringRef list = cfstr(server);
+    CFArrayRef addrs = list ? CFStringCreateArrayBySeparatingStrings(NULL, list, CFSTR(",")) : NULL;
+    if (list) CFRelease(list);
     CFStringRef iface = cfstr(ifname);
     if (!d || !addrs || !iface) {
         if (d) CFRelease(d);
